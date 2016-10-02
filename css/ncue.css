@@ -51,3 +51,7 @@ body {
 a.dt-button.blue {
     background-color: #0000FF;
 }
+
+.td1 {
+    font-weight: bold;
+}
