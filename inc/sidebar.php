@@ -16,7 +16,7 @@
                             <a href='#'><span class='masked'>單位差假狀況</span></a>
                           </li>
                           <li>
-                            <a href=''><span class='masked'>修改假單</span></a>
+                            <a href='#'><span class='masked'>修改假單</span></a>
                           </li>
                           <li>
                             <a href='#'><span class='masked'>取消國民旅遊</span></a>
