@@ -1,49 +1,8 @@
 <?
-session_start();
 $today  = getdate();
 $year    = $today["year"] - 1911;
 $month = $today["mon"];
 $day     = $today["mday"];
-
-(@!$_POST["byear"])  ? $byear=$year   : $byear=$_POST["byear"];
-(@!$_POST["bmonth"]) ? $bmonth=$month : $bmonth=$_POST["bmonth"];
-(@!$_POST["bday"])   ? $bday=$day     : $bday=$_POST["bday"]; //$bday-->temp
-
-(@!$_POST["eyear"])  ? $eyear =$year   : $eyear =$_POST["eyear"];
-(@!$_POST["emonth"]) ? $emonth=$month  : $emonth=$_POST["emonth"];
-(@!$_POST["eday"])   ? $eday  =$day    : $eday  =$_POST["eday"];
-
-//--------------------------------------------------------------------------------------------
-// 值是否有異動? session 未設 或 值有異動時 session 都要重給
-//--------------------------------------------------------------------------------------------
-$_SESSION['bmonth'] = $_SESSION['byear'] =
-$_SESSION['bday'] = $_SESSION['btime'] =
-$_SESSION['eyear'] = $_SESSION['emonth'] = $_SESSION['eday'] = $_SESSION['abroad'] = "";
-
-	if ($_SESSION["byear"]==""  || ($_SESSION['byear'] != ""  and  $_POST["byear"] != ""))
-	    $_SESSION["byear"]=$byear;
-	if ($_SESSION["bmonth"]==""  || ($_SESSION['bmonth'] != ""  and  $_POST["bmonth"] != ""))
-	    $_SESSION["bmonth"]=$bmonth;
-	if ($_SESSION["bday"]==""  || ($_SESSION['bday'] != ""  and  $_POST["bday"] != ""))
-	    $_SESSION["bday"]=$bday;
-
-	if ($_SESSION["btime"]=="" || ($_SESSION['btime'] != "" and  $_POST["btime"] != ""))
-        $_SESSION["btime"]=@$btime;
-
-	if ($_SESSION["eyear"]==""  || ($_SESSION['eyear'] != ""  and  $_POST["eyear"] != ""))
-	    $_SESSION["eyear"]=$eyear;
-	if ($_SESSION["emonth"]==""  || ($_SESSION['emonth'] != ""  and  $_POST["emonth"] != ""))
-	    $_SESSION["emonth"]=$emonth;
-	if ($_SESSION["eday"]==""  || ($_SESSION['eday'] != ""  and  $_POST["eday"] != ""))
-	    $_SESSION["eday"]=$eday;
-
-	if ($_SESSION["etime"]== "" || ($_SESSION['etime'] != "" and  $_POST["etime"] != ""))
-	    $_SESSION["etime"]=@$etime;
-
-	if ($_SESSION["abroad"]=="" || ($_SESSION['abroad'] != "" and  $_POST["abroad"] != ""))
-	    $_SESSION["abroad"]=@$abroad;//是否出國
-
-	//------------------------------------------------------------------
 ?>
 <? include("inc/header.php"); ?>
     <? include("inc/navi.php"); ?>
@@ -53,7 +12,7 @@ $_SESSION['eyear'] = $_SESSION['emonth'] = $_SESSION['eday'] = $_SESSION['abroad
                 <div class="container-fluid">
                     <? include ("inc/page-header.php"); ?>
                         <div class="row">
-                            <form id="holiday" class="form-horizontal" name="holiday_form" action="" method="POST">
+                            <form name="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" class="form-horizontal"  method="POST">
 															<fieldset>
 																<div class="form-group">
 																	<div class="col-lg-12">
@@ -63,77 +22,159 @@ $_SESSION['eyear'] = $_SESSION['emonth'] = $_SESSION['eday'] = $_SESSION['abroad
 			                                    <div class="panel-heading">
 			                                        國立彰化師範大學 教職員請假/出差作業
 			                                    </div>
+																					<?
+																					$empl_no = $_SESSION['empl_no'][0];
+																					$empl_name = $_SESSION['empl_name'][0];
+																					 ?>
 			                                    <div class="panel-body">
 			                                        <table class="table table-condensed table-hover table-bordered">
 			                                  					<tr>
 			                                  						<td class="td1">員工編號</td>
-			                                              <td><input type="hidden" name="userid">0000676</td>
+			                                              <td><input type="hidden" name="userid"><?=$empl_no ?></td>
 			                                              <td class="td1">姓名</td>
-									                                  <td><input type='hidden' name='name'>李_朗</td>
+									                                  <td><input type='hidden' name='name'><?=$empl_name ?></td>
 			                                  					</tr>
 			                                  					<tr>
 			                                  						<td class="td1">請選擇單位</td>
+																										<?
+																										  $sql = "SELECT dept_no,dept_full_name
+																														FROM  psfcrjb, stfdept
+																														WHERE crjb_empl_no = '$empl_no'
+																														AND   crjb_quit_date IS NULL
+																														AND  crjb_depart = dept_no
+																														ORDER BY crjb_seq DESC";
+																										?>
 			                                              <td>
-			                                                <select class="selectpicker" data-style="btn-default" name='depart' onChange='document.holiday.submit();'>
-			                                                  <option value=''>請選擇</option>
-			                                                  <option value=MQ5 selected>圖書與資訊處系統開發組</option>
-			                                                </select>
+			                                                <?=$_SESSION['dept_name'][0] ?>
 			                                              </td>
 			                                  						<td class="td1">職稱</td>
-			                                  						<td><input type='hidden' name='title' value='$title'>技正</td>
+																										<?
+																										//抓職稱名稱，根據單位有不一樣的職稱  103.04.22 加上  and   crjb_quit_date is null(舊記錄保留，防抓到)
+																										$depart = $_SESSION['depart'][0];
+																										$sql = "SELECT code_chn_item, code_field
+																															FROM  psfcrjb, psqcode
+																															where  crjb_empl_no = '$empl_no'
+																															and      crjb_quit_date IS NULL
+																															and      crjb_depart = '$depart'
+																															and      code_kind = '0202'
+																															and      code_field = crjb_title";
+																										$data = $db -> query_array($sql);
+																										$tname = $data['CODE_CHN_ITEM'][0];
+																										$title_code = $data['CODE_FIELD'][0];
+												                            // $_SESSION[title_name]=$tname;
+												                            // $_SESSION[title]=$title_code;
+																										?>
+			                                  						<td><input type='hidden' name='title' value='<?=$_SESSION['title'] ?>'><?=$tname ?></td>
 			                                  					</tr>
+                                                  <?
+                                        					 if (@$_POST["agentno"] == '0000000' or @$_POST['agent_flag'] == '1' ) {
+                                        					   @$_POST['agent_flag'] = '1';
+                                                     ?>
+                                        					<tr>
+                                        						 <td class="td1"><span style="color: red;">請選職務代理人單位</span></td>
+                                        						<?
+                                      						      $sql = "SELECT dept_no,dept_full_name
+                                      											FROM stfdept
+                                      											where use_flag is null
+                                      											and  substr(dept_no, 1, 1) between 'A' and 'Z'
+                                      											order by  dept_no";
+                                                        $data_1 = $db -> query_array($sql);
+
+                                      							    $sql = "SELECT dept_no,dept_full_name
+                                      											FROM stfdept
+                                      											where use_flag is null
+                                      											and  substr(dept_no, 1, 1) between '0' and '9'
+                                      											order by  dept_no";
+                                                        $data_2 = $db -> query_array($sql);
+
+                                        						?>
+                                        						 <td class="td1" colspan="3">
+                                        	              <select name='agent_depart' onChange='document.holiday.submit();'>
+                                        						    <option value=''>請選擇</option>
+                                                    <?
+                                        						    for ($i = 0; $i < count($data_1['DEPT_NO']); $i++){
+                                                          $depart_i = $data_1['DEPT_NO'][$i];
+                                                          $dept_name_i = $data_1['DEPT_FULL_NAME'][$i];
+
+                                          								if ($depart == @$_POST["agent_depart"])
+                                          									echo "<option value='$depart_i' selected>$dept_name</option>";
+                                          								else
+                                                            echo "<option value='$depart_i'>$dept_name</option>";
+                                        							  }
+
+                                                        for ($i = 0; $i < count($data_2['DEPT_NO']); $i++){
+                                                          $depart_i = $data_2['DEPT_NO'][$i];
+                                                          $dept_name_i = $data_2['DEPT_FULL_NAME'][$i];
+
+                                          								if ($depart == @$_POST["agent_depart"])
+                                          									echo "<option value='$depart_i' selected>$dept_name</option>";
+                                          								else
+                                                            echo "<option value='$depart_i'>$dept_name</option>";
+                                        							  }
+                                        						  ?>
+                                        						 </select>
+                                                   </td>
+                                                  </tr>
+                                        					<?
+                                                  }
+                                                  ?>
 			                                  					<tr>
 			                                  						<td class="td1">假別</td>
 			                                  						<td>
-			                                  							<select class="selectpicker" data-style="btn-default" id="leave">
-			                                                  <option value=** selected>假別種類</option>
-			                                                  <option value=01>出差</option>
-			                                                  <option value=02>公假(受訓或研習)</option>
-			                                                  <option value=03>公假(非受訓或研習)</option>
-			                                                  <option value=04>事假</option>
-			                                                  <option value=05>病假</option>
-			                                                  <option value=06>休假(教職員)</option>
-			                                                  <option value=07>婚假</option>
-			                                                  <option value=08>娩假</option>
-			                                                  <option value=09>喪假</option>
-			                                                  <option value=10>天災假</option>
-			                                                  <option value=11>加班補休</option>
-			                                                  <option value=12>公傷</option>
-			                                                  <option value=14>陪產假</option>
-			                                                  <option value=15>流產假</option>
-			                                                  <option value=16>產前假</option>
-			                                                  <option value=17>延長病假</option>
-			                                                  <option value=21>暑休</option>
-			                                                  <option value=22>寒休</option>
-			                                                  <option value=23>特休(勞基法)</option>
-			                                                  <option value=24>勞動節(勞基法)</option>
-			                                                  <option value=25>寒假(未兼行政教師出國旅遊)</option>
-			                                                  <option value=26>暑假(未兼行政教師出國旅遊)</option>
-			                                                  <option value=27>公假(監考、試務工作等)</option>
-			                                                  <option value=28>出國(進修研究、休假研究)</option>
-			                                                  <option value=29>例假日出國</option>
-			                                                  <option value=30>家庭照顧假</option>
-			                                                  <option value=31>事假(因故無法參加學校慶典)</option>
-			                                                  <option value=32>生理假</option>
-			                                                  <option value=33>原住民歲時祭放假</option>
-			                                                  <option value=34>其他(留職停薪..)</option>
-			                                                  <option value=35>產檢假(勞基法)</option>
-			                                                  <option value=36>公出(短程公務外出)</option>
+			                                  							<select class="selectpicker" data-style="btn-default" name="vtype" id="leave" onChange='document.holiday.submit();'>
+																											<?
+																										  $sql = "SELECT code_field, code_chn_item
+																											FROM psqcode
+																											where code_kind = '0302'
+																											order by code_field";
+																										  $data = $db -> query_array($sql);
+																											for ($i = 0; $i < count($data['CODE_FIELD']); $i++){
+																												$code = $data['CODE_FIELD'][$i];
+																												$item = $data['CODE_CHN_ITEM'][$i];
+
+																												if ($code == @$_POST['vtype'])
+																													  echo "<option value='$code' selected>$item</option>";
+																												else
+																														echo "<option value='$code'>$item</option>";
+																											}
+																											?>
 			                                  							</select>
 			                                  						</td>
 			                                  						<td class="td1">職務代理人</td>
 			                                              <td>
 			                                                <select class="selectpicker" data-style="btn-default" name='agentno' onChange='document.holiday.submit();'>
 			                                                  <option value='' selected="">請選擇</option>
-			                                                  <option value='0000929'>陳_德</option>
-			                                                  <option value='0001083'>林_銘</option>
-			                                                  <option value='0000845'>韋_忠</option>
-			                                                  <option value='0001060'>施_男</option>
-			                                                  <option value='0001077'>何_叡</option>
-			                                                  <option value='5000852'>洪_賢</option>
-			                                                  <option value='7000200'>許_維</option>
-			                                                  <option value='7000279'>胡_菁</option>
-			                                                  <option value='0000000'>其它單位</option>
+																												<?
+																												// 根據目前的empl_no找出所屬部門的所有代理人與其代理人號碼
+																												if (@$_POST['agentno'] == '0000000' or @$_POST['agent_flag'] == '1'){
+																														$sql = "SELECT  empl_no, empl_chn_name
+																																	FROM   psfempl, psfcrjb
+																																	where empl_no = crjb_empl_no
+																																	and   crjb_quit_date is null
+																																	and   crjb_depart = '$depart'
+																																	and   substr(empl_no, 1, 1) in ('0', '7', '5', '3', '4')
+																																	and   empl_no != '$empl_no'
+																																	order by crjb_depart, crjb_title, crjb_empl_no";
+																												}
+																												else {
+																													$sql = "SELECT  empl_no, empl_chn_name
+																																FROM   psfempl, psfcrjb
+																																where empl_no = crjb_empl_no
+																																and   crjb_quit_date IS NULL
+																																and   crjb_depart = '$depart'
+																																and   (substr(crjb_title, 1, 1) != 'B' or
+																																	   crjb_title = 'B60')
+																																and   substr(empl_no, 1, 1) in ('0', '7', '5', '3', '4')
+																																and   empl_no != '$empl_no'
+																																order by crjb_depart, crjb_title, crjb_empl_no";
+																												}
+																												$data = $db -> query_array($sql);
+																												for ($i = 0; $i < count($data['EMPL_NO']); $i++) {
+																													$agentno_i = $data['EMPL_NO'][$i];
+							   																					$agent_name = $data['EMPL_CHN_NAME'][$i];
+																													echo "<option value='$agentno_i' " . (($agentno_i == @$_POST['agentno']) ? 'selected' : '') . ">" . $agent_name . "</option>";
+																												}
+																												?>
 			                                                </select>
 			                                  					</tr>
 			                                  					<tr>
@@ -244,6 +285,42 @@ $_SESSION['eyear'] = $_SESSION['emonth'] = $_SESSION['eday'] = $_SESSION['abroad
 			                                  							</select>時
 																										</td>
 			                                  					</tr>
+																									<?
+																									if (in_array(@$_POST['vtype'], array('01', '02', '03', '06', '15', '17', '21', '22') )
+                                                  || @$_POST['depart'] =='M47' || @$_POST['depart'] == 'N20' || substr(@$_POST['depart'], 0, 2)=='M6'){ ?>
+																									<tr>
+  																									<td class='td1'>奉派文號或提簽日期或填'免'</td>
+  																									<td><input type='text' name='permit' size='30'  value=<?=@$_POST["permit"]?> ></td>
+																								    <td class='td1'>差假合計日數是否含例假日</td>
+																										<td>
+																										<?
+                                                    if (@$_POST['saturday'] == '1'){
+                                                      ?>
+                                                      <input type='radio' name='saturday' value='1' checked >是
+                                                      <?
+                                                    }
+																										 else {
+                                                       ?>
+                                                      <input type='radio' name='saturday' value='1' checked >是
+                                                       <?
+                                                     }
+
+                                                     if (@$_POST['saturday'] == '0'){
+                                                       ?>
+                                                       <input type='radio' name='saturday' value='0' checked >否
+                                                       <?
+                                                     }
+ 																										 else {
+                                                        ?>
+                                                       <input type='radio' name='saturday' value='0' checked >否
+                                                        <?
+                                                      }
+                                                      ?>
+																										</td>
+																									</tr>
+  																				          <?
+                                                    }
+                                                    ?>
 			                                  					<tr>
 																										<td class="td1">差假期間是否有課</font></td>
 																										<td >
