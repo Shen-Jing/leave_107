@@ -11,7 +11,7 @@
                                 </div>
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
-                                        頁面名稱
+                                        簽核
                                     </div>
                                     <div class="panel-body">
                                         <div class="alert alert-warning">

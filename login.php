@@ -1,7 +1,7 @@
 <?
 session_start();
 //include_once("/home/bob/common/redirect_ssl.php");
-if (strlen($_SESSION['_ID'])>=2)
+if (strlen(@$_SESSION['_ID']) >= 2)
     header("Location:index.php");
 ?>
 <!DOCTYPE html>
@@ -37,7 +37,7 @@ if (strlen($_SESSION['_ID'])>=2)
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">國立彰化師範大學 招生管理系統</h3>
+                        <h3 class="panel-title">國立彰化師範大學 人事差假管理系統</h3>
                     </div>
                     <div class="panel-body">
                         <form id="form" role="form" method="POST">
@@ -70,7 +70,7 @@ if (strlen($_SESSION['_ID'])>=2)
     <!-- Metis Menu Plugin JavaScript -->
     <script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
     <!-- Custom Theme JavaScript -->
-    <script src="dist/js/sb-admin-2.js"></script>    
+    <script src="dist/js/sb-admin-2.js"></script>
     <script src="js/toastr.min.js"></script>
     <script src="js/<?=basename(__FILE__, ".php")?>.js"></script>
 </body>
