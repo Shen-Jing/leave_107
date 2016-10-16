@@ -19,7 +19,7 @@
                             <a href='#'><span class='masked'>修改假單</span></a>
                           </li>
                           <li>
-                            <a href='#'><span class='masked'>取消國民旅遊</span></a>
+                            <a href='off_trip.php'><span class='masked'>取消國民旅遊</span></a>
                           </li>
                           <li>
                             <a href='#'><span class='masked'>個人差假統計資料</span></a>
