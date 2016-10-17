@@ -1,6 +1,7 @@
 <?php
-    include_once(dirname(__FILE__) . "/config.php"); //設定BASE_PATH及資料庫帳密   
-    include_once(dirname(__FILE__) . "/oracle.php");    
+    include_once(dirname(__FILE__) . "/config.php"); //設定BASE_PATH及資料庫帳密
+    include_once(dirname(__FILE__) . "/oracle.php");
+    putenv("NLS_LANG=TRADITIONAL CHINESE_TAIWAN.ZHT16BIG5");
     $db = new ORACLE($db_user, $db_passwd, $db_server);
 
     # 使用說明
