@@ -22,6 +22,9 @@
                             <a href='off_trip.php'><span class='masked'>取消國民旅遊</span></a>
                           </li>
                           <li>
+                            <a href='holiday_view.php'><span class='masked'>個人差假狀況(上)</span></a>
+                          </li>
+                          <li>
                             <a href='#'><span class='masked'>個人差假統計資料</span></a>
                           </li>
                           <li>
