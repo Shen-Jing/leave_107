@@ -54,7 +54,7 @@
                             <a href='#'><span class='masked'>加班已審核</span></a>
                           </li>
                           <li>
-                            <a href='#'><span class='masked'>加班資料修改</span></a>
+                            <a href='p_search_overtime_idx.php'><span class='masked'>加班資料修改</span></a>
                           </li>
                         </ul>
                       </li>
