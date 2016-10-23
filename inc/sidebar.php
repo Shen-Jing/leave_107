@@ -1,4 +1,4 @@
-        <!-- Sidebar wrapper over SB Admin 2 sidebar -->
+﻿        <!-- Sidebar wrapper over SB Admin 2 sidebar -->
         <div id="sidebar-wrapper">
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
@@ -16,7 +16,7 @@
                             <a href='#'><span class='masked'>單位差假狀況</span></a>
                           </li>
                           <li>
-                            <a href='#'><span class='masked'>修改假單</span></a>
+                            <a href='update.php'><span class='masked'>修改假單</span></a>
                           </li>
                           <li>
                             <a href='off_trip.php'><span class='masked'>取消國民旅遊</span></a>
