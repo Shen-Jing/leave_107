@@ -34,10 +34,10 @@
                             <a href='#'><span class='masked'>上下班刷卡資料</span></a>
                           </li>
                           <li>
-                            <a href='#'><span class='masked'>加班申請作業</span></a>
+                            <a href='overtime.php'><span class='masked'>加班申請作業</span></a>
                           </li>
                           <li>
-                            <a href='#'><span class='masked'>加班記錄查詢</span></a>
+                            <a href='overtime_query.php'><span class='masked'>加班記錄查詢</span></a>
                           </li>
                         </ul>
                       </li>
