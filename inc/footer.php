@@ -32,7 +32,7 @@
     <script src="js/buttons.html5.min.js"></script>
     <script src="js/buttons.print.min.js"></script>
 
-    <!-- <script src="js/<?=basename($_SERVER['PHP_SELF'], ".php")?>.js"></script> -->
+    <script src="js/<?=basename($_SERVER['PHP_SELF'], ".php")?>.js"></script>
 
 </body>
 
