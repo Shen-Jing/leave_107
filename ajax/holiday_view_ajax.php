@@ -40,7 +40,7 @@ switch($_POST['tbid']){
 
 HOILDAY_LIST_PASSING:
 $sqlStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,
-                 h.POVDATEB,h.POVDATEE,
+                 h.POVDATEB,h.POVDATEE,h.poremark,
 			     h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,
                  h.agentsignd,h.onesignd,h.twosignd
 		  FROM   psfempl p,holidayform h,psqcode pc
@@ -64,7 +64,8 @@ for ($i=0; $i < sizeof($data['EMPL_CHN_NAME']); $i++) {
                $data['POVTIMEE'][$i],
                $data['AGENTSIGND'][$i],
                $data['ONESIGND'][$i],
-               $data['TWOSIGND'][$i]);
+               $data['TWOSIGND'][$i],
+               $data['POREMARK'][$i]);
 }
 
 echo json_encode($a);
@@ -117,7 +118,7 @@ exit;
 HOILDAY_LIST_DEALING:
 
 $sqlStr = "SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,h.POVDATEE,
-		          h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD,h.AGENTNO,		h.serialno,h.CURENTSTATUS,h.agentsignd,h.onesignd,h.twosignd, h.THREESIGND,h.poremark
+		          h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD,h.AGENTNO,h.serialno,h.CURENTSTATUS,h.agentsignd,h.onesignd,h.twosignd, h.THREESIGND,h.poremark
 		   FROM   psfempl p,holidayform h,psqcode pc
 		   WHERE  h.POCARD IN ('$userid','$id_no') 
            AND    p.empl_no=h.pocard
@@ -142,7 +143,8 @@ for ($i=0; $i < sizeof($data['EMPL_CHN_NAME']); $i++) {
         $data['POVDAYS'][$i]."天".$data['POVHOURS'][$i]."時",
         $data['AGENTSIGND'][$i],
         $data['ONESIGND'][$i],
-        $data['TWOSIGND'][$i]
+        $data['TWOSIGND'][$i],
+        $data['POREMARK'][$i]
     );
 }
 echo json_encode($a);

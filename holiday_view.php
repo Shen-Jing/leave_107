@@ -7,15 +7,15 @@
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
-                 <? include ("inc/page-header.php"); ?>
+            <? include ("inc/page-header.php"); ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="panel panel-primary">
-                        <div class="panel-heading">個人差假狀況(上)</div>
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                請選擇查詢年度
+                            </div>
                             <div class="panel-body">
-                                
-                                <p>請選擇查詢年度：</p>
-                                <select id=sel_years onChange=sel_years_onchange()>
+                                <select id=sel_years class="form-control" onChange=sel_years_onchange()>
                                 <?
                                     $today  = getdate();
                                     $year   = $today["year"] - 1911;
@@ -23,10 +23,19 @@
                                         echo "<option value=".$j.">".$j."</option>";   
                                 ?>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary">
+                        <div class="panel-heading">個人差假狀況(上)</div>
+                            <div class="panel-body">
                                 
                                 <div id="hl_canceled">
                                     <H3>已取消假單</H3>
-
                                     <table id="Btable_canceled" class="table table-striped table-bordered" width="100%" cellspacing="0">
                                         <thead>
                                             <tr style="font-weight:bold">
@@ -63,6 +72,7 @@
                                                 <th>代理簽核</th>
                                                 <th>直屬簽核</th>
                                                 <th>單位簽核</th>
+                                                <th>備註</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -110,6 +120,7 @@
                                                 <th>代理簽核</th>
                                                 <th>直屬簽核</th>
                                                 <th>單位簽核</th>
+                                                <th>備註</th>
                                             </tr>
                                         </thead>
                                         <tbody>
