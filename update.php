@@ -12,7 +12,10 @@
                     <div class="col-lg-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">修改假單</div>
-                            <div class="panel-body"></div>
+                            <div class="panel-body">
+                                <table id="jqGrid"></table>
+                                <div id="jqGridPager"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
