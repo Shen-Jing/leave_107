@@ -23,7 +23,7 @@
                             </div>
                             <!-- /.col-lg-12 -->
                         </div>
-                        <!-- /
+
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="panel panel-primary">
@@ -31,10 +31,10 @@
                                         本年度加班記錄
                                     </div>
                                     <div class="panel-body ">
-                                        
+
                                             <!--<fieldset>-->
                                                 <div class="form-group">
-                                                    <div>     
+                                                    <div>
                                                     </div>
                                                     <!--link rel="stylesheet" href="style.css"-->
                                                     <div id="_content">
@@ -50,4 +50,4 @@
                 <!-- /.container-fluid -->
             </div>
             <!-- /#page-wra
-            <? include("inc/footer.php"); ?>    
+            <? include("inc/footer.php"); ?>
