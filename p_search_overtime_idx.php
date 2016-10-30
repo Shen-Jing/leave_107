@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
-                                        加班資料修改
+                                        加班資料
                                     </div>
                                     <div class="panel-body" id="container">
                                         <table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%">
