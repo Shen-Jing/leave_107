@@ -39,6 +39,7 @@ $now = basename($_SERVER['REQUEST_URI']);
      <link href="css/dataTables_sorticon.css" rel="stylesheet"/>
      <link href="css/buttons.dataTables.min.css" rel="stylesheet"/>
      <link href="css/responsive.dataTables.min.css" rel="stylesheet"/>
+     <link href="css/ui.jqgrid-bootstrap.css" rel="stylesheet"/>
 
     <!-- Custom Fonts -->
     <link href="css/ncue.css" rel="stylesheet" type="text/css">
