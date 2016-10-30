@@ -83,9 +83,9 @@
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">
                                                     關閉
                                                 </button>
-                                                <button id="btn-save" type="button" class="btn btn-primary">
+                                                <!-- <button id="btn-save" type="button" class="btn btn-primary">
                                                     儲存
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
                                     </div>

@@ -45,7 +45,7 @@
                     <tbody id="_overtime-data">
                     </tbody>
                 </table>
-                <div id="loading" class="text-center" style="display:none">
+                <div id="modal-loading" class="text-center" style="display:none">
                     <img src="images/loading.gif">
                 </div>
             </div>

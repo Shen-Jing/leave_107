@@ -35,11 +35,12 @@ $( // 表示網頁完成後才會載入
     }
 );
 
-function CRUD(oper) {
-    if (oper == 3){
-      if (!confirm("是否確定要刪除?"))
-        return false;
-    }
+function CRUD(oper, over_date) {
+    over_date = over_date || ''; // 預設值
+    // if (oper == 3){
+    //   if (!confirm("是否確定要刪除?"))
+    //     return false;
+    // }
 
     $.ajax({
         url: 'ajax/overtime_data_ajax.php',
@@ -47,6 +48,9 @@ function CRUD(oper) {
             oper: oper,
             empl_name: $('#empl_name').text(),
             empl_no: $('#empl_no').text(),
+            over_date: over_date,
+            nouse_time: $('#nouse_time' + over_date).val(),
+            due_date: $('#due_date' + over_date).val(),
             qry_year: $('#qry_year').val() || '1'
         },
         type: 'POST',
@@ -70,11 +74,11 @@ function CRUD(oper) {
                         // 加班結束時間
                         row = row + "<td>" + JData.DO_TIME_2[i] + "</td>";
                         // 目前剩餘時數（input: 可修改）
-                        row = row + "<td><input value='" + JData.NOUSE_TIME[i] + "' type='text' class='form-control'></td>";
+                        row = row + "<td><input value='" + JData.NOUSE_TIME[i] + "' type='number' min='0' max='99' id='nouse_time" + JData.OVER_DATE[i] + "' class='form-control'></td>";
                         // 到期日期（input: 可修改）
-                        row = row + "<td><input value='" + JData.DUE_DATE[i] + "' type='text' class='form-control'></td>";
+                        row = row + "<td><input value='" + JData.DUE_DATE[i] + "' type='text' id='due_date" + JData.OVER_DATE[i] + "' class='form-control'></td>";
                         // 修改儲存按鈕
-                        row = row + "<td><button type='button' class='btn-success' name='modify' id='modify' title='修改儲存'><i class='fa fa-save'></i> </button></td>";
+                        row = row + "<td><button type='button' class='btn-success' name='modify' id='modify' title='修改儲存' onclick='CRUD(2, " + JData.OVER_DATE[i] + ")'><i class='fa fa-save'></i> </button></td>";
                         row = row + "</tr>";
                         $('#_overtime-data').append(row);
                     }
@@ -91,10 +95,10 @@ function CRUD(oper) {
             }
         },
         beforeSend: function() {
-            $('#loading').show();
+            $('#modal-loading').show();
         },
         complete: function() {
-            $('#loading').hide();
+            $('#modal-loading').hide();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             console.log(xhr.responseText);
