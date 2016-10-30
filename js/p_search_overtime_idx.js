@@ -31,14 +31,6 @@ $( // 表示網頁完成後才會載入
             }
         );
 
-        $('#qry_year').change( // 抓取區域選完的資料
-            function(e) {
-                if ($(':selected', this).val() !== '') {
-                    CRUD(0); //query
-                }
-            }
-        );
-
         // 改變滑鼠游標樣式
         $('#container tbody').on('mouseover', 'tr', function() {
             this.style.cursor = 'pointer';
@@ -82,8 +74,6 @@ function CRUD(oper) {
         url: 'ajax/p_search_overtime_idx_ajax.php',
         data: {
             oper: oper,
-            empl_no: empl_no,
-            empl_name: empl_name,
             dept_id: $('#qry_dept').val() || '1',
         },
         type: 'POST',
