@@ -54,7 +54,7 @@
                                         </tbody>
                                     </table>
 
-                                    <br><hr>
+                                    <hr>
                                 </div>
                                 
                                 <div id="hl_dealing">
@@ -78,7 +78,7 @@
                                         <tbody>
                                         </tbody>
                                     </table>
-                                    <br><hr>
+                                    <hr>
                                 </div>
                                 
                                 <div id="hl_rejected">
@@ -100,10 +100,10 @@
                                         <tbody>
                                         </tbody>
                                     </table>
-                                    <br><hr>
+                                    <hr>
                                 </div>
 
-                                <br>
+                                
                                 
                                 <div id="hl_passing">
                                     <H3>已核准假單</H3>

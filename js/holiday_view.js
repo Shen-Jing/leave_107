@@ -61,7 +61,7 @@ function init_table()
         'print','pdf','excel'
         ],
         "select" : true,
-        "dom": '<"top"l>Bftrip'
+        "dom": 't'
     });
 
     otable_dealing = 
@@ -85,7 +85,7 @@ function init_table()
         'print','pdf','excel'
         ],
         "select" : true,
-        "dom": '<"top"l>Bftrip'
+       "dom": 't'
     });
 
     otable_rejected = 
@@ -109,7 +109,7 @@ function init_table()
         'print','pdf','excel'
         ],
         "select" : true,
-        "dom": '<"top"l>Bftrip'
+        "dom": 't'
     });
 }
 
