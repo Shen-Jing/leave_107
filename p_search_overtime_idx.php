@@ -1,14 +1,6 @@
 <? include("inc/header.php"); ?>
     <? include("inc/navi.php"); ?>
         <? include("inc/sidebar.php"); ?>
-            <?
-            @$_POST['department'] = $_GET['dept'];
-
-            if (@$_POST['department'] == '' and $_SESSION['depart'] == '')
-                $_SESSION['dept'] = 'M80';
-            else if (@$_POST['department'] != '' and $_SESSION['depart'] != '' )
-                $_SESSION['dept'] = @$_POST['department'];
-            ?>
             <!-- Page Content -->
             <div id="page-wrapper">
                 <div class="container-fluid">
