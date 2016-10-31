@@ -1,12 +1,10 @@
 <?php
 	  session_start();
 		include_once("../inc/connect.php");
-    //include_once("/home/bob/common/common_func.php");
 
+	 	$user = trim($_POST['userid']);
 
-	 $user = trim($_POST['userid']);
-
-   $pwd = trim($_POST['password']);
+   	$pwd = trim($_POST['password']);
 
    //930127 add!!  ****隱碼....
    //$user=ereg_replace("'","XXX",$user);
@@ -22,7 +20,7 @@
 							  WHERE empl_no = crjb_empl_no
 							  AND crjb_depart = dept_no
 							  AND crjb_seq = '1'
-							  AND substr(empl_no, 1, 1) !='A'
+							  AND substr(empl_no, 1, 1) != 'A'
 							  AND crjb_quit_date IS NULL
 							  AND psfempl.email = '" . $user . "@cc.ncue.edu.tw'";
         $data = $db -> query_array($sql);
@@ -32,15 +30,15 @@
             // 0ob
 						$_SESSION['_ID'] = $_POST['userid'];
             // 圖書與資訊處系統開發組
-						$_SESSION['dept_name'] = $data['DEPT_FULL_NAME'];
+						$_SESSION['dept_name'] = $data['DEPT_FULL_NAME'][0];
             // 李_朗
-						$_SESSION['empl_name'] = $data['EMPL_CHN_NAME'];
+						$_SESSION['empl_name'] = $data['EMPL_CHN_NAME'][0];
             // 0000676
-						$_SESSION['empl_no'] = $data['EMPL_NO'];
+						$_SESSION['empl_no'] = $data['EMPL_NO'][0];
             // MQ5
-						$_SESSION['depart'] = $data['CRJB_DEPART'];
+						$_SESSION['depart'] = $data['CRJB_DEPART'][0];
             // F50
-						$_SESSION['title_id'] = $data['CRJB_TITLE'];
+						$_SESSION['title_id'] = $data['CRJB_TITLE'][0];
 						$_SESSION['logout'] = 0;
 
             $message = array("error_code"=>0,"error_message"=>0,"sql"=>"");
