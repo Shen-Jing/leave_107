@@ -48,7 +48,7 @@
                             <a href='#'><span class='masked'>國民旅遊名單</span></a>
                           </li>
                           <li>
-                            <a href='#'><span class='masked'>加班審核</span></a>
+                            <a href='overtime_check.php'><span class='masked'>加班審核</span></a>
                           </li>
                           <li>
                             <a href='#'><span class='masked'>加班已審核</span></a>
