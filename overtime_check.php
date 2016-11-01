@@ -79,7 +79,7 @@
                                                     <span aria-hidden="true">&times;</span>
                                                     <span class="sr-only">Close</span>
                                                 </button>
-                                                <h4 class="modal-title" id="myModalLabel">加班名單</h4>
+                                                <h4 class="modal-title" id="myModalLabel">刷卡記錄</h4>
                                             </div>
                                             <!-- Modal Body -->
                                             <div class="modal-body">
