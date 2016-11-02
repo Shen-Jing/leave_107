@@ -1,6 +1,5 @@
 <?php
-	session_start();
-  include '../inc/connect.php';
+  include '../inc/check.php';
 
   // 查詢年份與系所
   if ($_POST['oper'] == "qry_year_and_dept"){
@@ -52,10 +51,56 @@
 							AND    substr(crjb_depart, 1, 2) = substr('$dept', 1, 2)
 							AND    person_check = '0'";
 		}
-    $data = $db -> query_array ($sql);
+    $data = $db -> query_array($sql);
 
     echo json_encode($data);
     exit;
   }
+
+	// 修改時數
+	if ($_POST['oper'] == 2){
+		$sql = "SELECT lpad(to_char(sysdate, 'yyyymmdd') - '19110000', 7, '0') ndate
+				  FROM dual";
+		$data = $db -> query_array($sql);
+		// 誰審核通過的
+		$ndate = $_SESSION['empl_no'] . $data['NDATE'][0];
+		// 欲修改成的時數
+    $nouse = $_POST['nouse_time'];
+    $empl_no = $_POST['empl_no'];
+    // 加班日期
+    $over_date = $_POST['over_date'];
+
+		$sql = "UPDATE overtime
+				 SET nouse_time = '$nouse', time_date = '$ndate'
+				 WHERE empl_no = '$empl_no'
+				 AND over_date = '$over_date'";
+
+		$data = $db -> query($sql);
+
+		$message = array("error_code" => $data['code'], "error_message" => $data['message'], "sql" => $sql);
+		echo json_encode($message);
+	}
+
+	// 審核加班
+	if ($_POST['oper'] == 4){
+		$empl_no = @$_POST['empl_no'];
+	  $over_date = @$_POST['over_date'];
+
+		$sql = "SELECT lpad(to_char(sysdate, 'yyyymmdd') - '19110000', 7, '0') ndate
+				  FROM dual";
+		$data = $db -> query_array($sql);
+
+		// 誰審核通過的 + 系統日期
+		$ndate = $_SESSION['empl_no'] . $data['NDATE'][0];
+		$sql = "UPDATE overtime
+						SET person_check = '1', check_date = '$ndate'
+						WHERE empl_no = '$empl_no'
+						AND   over_date = '$over_date'";
+		$data = $db -> query($sql);
+		// $message = array("error_code" => $data['code'], "error_message" => $data['message'], "sql" => $sql);
+    echo json_encode($data);
+    exit;
+	}
+
 
 ?>

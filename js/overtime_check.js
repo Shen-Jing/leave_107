@@ -58,6 +58,7 @@ $( // 表示網頁完成後才會載入
     });
 
 function view_card(empl_no, over_date) {
+  alert(empl_no);
     // 取得詳細刷卡記錄
     $.ajax({
         url: 'ajax/view_card.php',
@@ -78,15 +79,18 @@ function view_card(empl_no, over_date) {
     });
 }
 
-function CRUD(oper, id) {
-    id = id || ''; //預設值
+function CRUD(oper, empl_no, over_date) {
     if (oper == 3)
         if (!confirm("是否確定要刪除?")) return false;
-
+    if (oper == 4)
+        if (!confirm("要通過審核嗎?")) return false;
     $.ajax({
         url: 'ajax/overtime_check_ajax.php',
         data: {
             oper: oper,
+            empl_no: empl_no,
+            over_date: over_date,
+            nouse_time: $('#nouse_time' + over_date).val(),
             year: $('#qry_year').val(),
             dept: $('#qry_dept').val()
         },
@@ -104,7 +108,10 @@ function CRUD(oper, id) {
 
                     }
                     else {
+                        var day_list = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
                         for (var i = 0; i < JData.DRAW_DATE.length; i++) {
+                            var date = JData.OVER_DATE[i].substr(0, 3) + '/' + JData.OVER_DATE[i].substr(3, 2) + '/' + JData.OVER_DATE[i].substr(5, 2);
+                            var day = new Date(date).getDay();
                             var row = "<tr>";
                             // 單位（系統開發組）
                             row = row + "<td>" + JData.DEPART[i] + "</td>";
@@ -115,8 +122,7 @@ function CRUD(oper, id) {
                             // 文號（原因：1234/值班/免）
                             row = row + "<td>" + JData.REASON[i] + "</td>";
                             // 加班日（日期 星期X）
-                            // TODO
-                            row = row + "<td>" + JData.OVER_DATE[i] + "</td>";
+                            row = row + "<td>" + JData.OVER_DATE[i] + day_list[day] + "</td>";
                             // 開始時間（1700）
                             row = row + "<td>" + JData.DO_TIME_1[i] + "</td>";
                             // 結束時間（2035）
@@ -125,11 +131,11 @@ function CRUD(oper, id) {
                             row = row + "<td><input value='" + JData.NOUSE_TIME[i] + "' type='number' min='0' max='99' id='nouse_time" + JData.OVER_DATE[i] + "' class='form-control'></td>";
                             // 功能區
                             // 查看刷卡記錄（info button）
-                            row = row + "<td><button type='button' class='btn-info' name='card' title='刷卡記錄' onclick='view_card(" + JData.EMPL_NO[i] + ", " + JData.OVER_DATE[i] + ")'><i class='fa fa-info'></i> </button>";
+                            row = row + "<td><button type='button' class='btn-info' name='card' title='刷卡記錄' onclick='view_card(\"" + JData.EMPL_NO[i] + "\", \"" + JData.OVER_DATE[i] + "\")'><i class='fa fa-info'></i> </button>";
                             // 審核加班
-                            row = row + "    <button type='button' class='btn-warning' name='check' title='審核加班' onclick='check_overtime(2, " + JData.OVER_DATE[i] + ")'><i class='fa fa-check'></i> </button>";
+                            row = row + "    <button type='button' class='btn-warning' name='check' title='審核加班' onclick='CRUD(4, \"" + JData.EMPL_NO[i] + "\", \"" + JData.OVER_DATE[i] + "\")'><i class='fa fa-check'></i> </button>";
                             // 修改儲存按鈕
-                            row = row + "    <button type='button' class='btn-success' name='modify' id='modify' title='修改儲存' onclick='CRUD(2, " + JData.OVER_DATE[i] + ")'><i class='fa fa-save'></i> </button></td>";
+                            row = row + "    <button type='button' class='btn-success' name='modify' id='modify' title='修改儲存' onclick='CRUD(2, \"" + JData.EMPL_NO[i] + "\", \"" + JData.OVER_DATE[i] + "\")'><i class='fa fa-save'></i> </button></td>";
                             row = row + "</tr>";
                             $('#_content').append(row);
                         }
@@ -143,6 +149,9 @@ function CRUD(oper, id) {
                     CRUD(0); //reload
                 } else if (oper == 3) { //刪除
                     toastr["success"]("資料刪除成功!");
+                    CRUD(0); //reload
+                } else if (oper == 4) { //審核加班
+                    toastr["success"]("資料審核成功!");
                     CRUD(0); //reload
                 }
             }
