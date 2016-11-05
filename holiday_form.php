@@ -3,10 +3,10 @@
         <? include("inc/sidebar.php"); ?>
         <?
         $userid = $_SESSION['_ID'];
-        $empl_no = $_SESSION['empl_no'][0];
-        $empl_name = $_SESSION['empl_name'][0];
-				$title_id = $_SESSION['title_id'][0];
-        $depart = $_SESSION['depart'][0];
+        $empl_no = $_SESSION['empl_no'];
+        $empl_name = $_SESSION['empl_name'];
+				$title_id = $_SESSION['title_id'];
+        $depart = $_SESSION['depart'];
 
         $today  = getdate();
         $year = $today["year"] - 1911;
@@ -55,6 +55,12 @@
     																<div class="form-group">
     																	<div class="col-lg-12">
     			                                <div id="message">
+                                            <!-- 特休之類的訊息 -->
+                                            <div class="alert alert-info">
+                                                <i class="fa fa-info" style="float:left"></i>
+                                                  <ul>
+                                                  </ul>
+                                            </div>
     			                                </div>
     			                                <div class="panel panel-primary">
     			                                    <div class="panel-heading">
@@ -77,179 +83,26 @@
       			                                  						<td class="td1">職稱</td>
       			                                  						<td id="qry_title"><input type="hidden" name="title" value="<?=$title_id ?>" ></td>
     			                                  					</tr>
-                                                      <?
-                                            					 if (@$_POST["agentno"] == '0000000' || @$_POST['agent_flag'] == '1' ) {
-                                            					   @$_POST['agent_flag'] = '1';
-                                                      ?>
-                                            					<tr>
-                                              						 <td class="td1"><span style="color: red;">請選職務代理人單位</span></td>
-                                              						 <td class="td1" colspan="3">
-                                                	              <select class="selectpicker" name="agent_depart" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-                                                						    <option value=''>請選擇</option>
-                                                            <?
-                                                                $sql = "SELECT dept_no,dept_full_name
-                                                                    FROM stfdept
-                                                                    WHERE use_flag IS NULL
-                                                                    AND  substr(dept_no, 1, 1) BETWEEN 'A' AND 'Z'
-                                                                    ORDER BY  dept_no";
-                                                                $data_1 = $db -> query_array($sql);
-
-                                                                $sql = "SELECT dept_no,dept_full_name
-                                                                    FROM stfdept
-                                                                    WHERE use_flag IS NULL
-                                                                    AND  substr(dept_no, 1, 1) BETWEEN '0' AND '9'
-                                                                    ORDER BY  dept_no";
-                                                                $data_2 = $db -> query_array($sql);
-
-                                                						    for ($i = 0; $i < count($data_1['DEPT_NO']); $i++){
-                                                                  $depart_i = $data_1['DEPT_NO'][$i];
-                                                                  $dept_name_i = $data_1['DEPT_FULL_NAME'][$i];
-
-                                                  								if ($depart == @$_POST["agent_depart"])
-                                                  									echo "<option value='$depart_i' selected>$dept_name</option>";
-                                                  								else
-                                                                    echo "<option value='$depart_i'>$dept_name</option>";
-                                                							  }
-
-                                                                for ($i = 0; $i < count($data_2['DEPT_NO']); $i++){
-                                                                  $depart_i = $data_2['DEPT_NO'][$i];
-                                                                  $dept_name_i = $data_2['DEPT_FULL_NAME'][$i];
-
-                                                  								if ($depart == @$_POST["agent_depart"])
-                                                  									echo "<option value='$depart_i' selected>$dept_name</option>";
-                                                  								else
-                                                                    echo "<option value='$depart_i'>$dept_name</option>";
-                                                							  }
-                                                						  ?>
-                                                						    </select>
-                                                          </td>
-                                                      </tr>
-                                            					<?
-                                                      }
-                                                      ?>
     			                                  					<tr>
     			                                  						<td class="td1">假別</td>
     			                                  						<td>
 																													<select name="vtype" id="qry_vtype" class="form-control">
     			                                  							</select>
     			                                  						</td>
-                                                        <?
-                                                        if ($empl_no == '7000082' && @$_POST["vtype"] == '23'){  // 今年 已請特休假天數  103.04. 21 add
-                                                            $sql = "SELECT    trunc(sum(nvl(POVDAYS,0)) + sum(nvl(POVHOURS,0))/8) days , mod(sum(nvl(POVHOURS,0)),8) hours
-                                                                  FROM       holidayform
-                                                                  WHERE      povtype='23'
-                                                                  AND        substr(POVDATEB,1,3)='@$_POST[byear]'
-                                                                  AND        condition IN ('0','1')
-                                                                  AND        pocard IN ('$userid', '$empl_no')";
-                                                            $data = $db -> query_array($sql);
-                                                            $days = $data['DAYS'][0];
-                                                            $hours = $data['HOURS'][0];
-
-                                                            //年資  empl_ser_date_beg
-                                                            //$sql="select    nvl(empl_arrive_sch_date,'$year')  empl_arrive_sch_date
-                                                            $sql = "SELECT   nvl(empl_ser_date_beg, '$year')  empl_arrive_sch_date
-                                                                  FROM    psfempl
-                                                                  WHERE  empl_no='$empl_no'";
-                                                            $data = $db -> query_array($sql);
-                                                            $arrive_date = $data['EMPL_ARRIVE_SCH_DATE'][0];
-                                                            $sens = $year - substr($arrive_date, 0, 3) - 1;
-
-                                                            //---------------------------------------------------
-                                                            // 是否滿第一年
-                                                            //^^^^^^^^
-                                                            if (strlen($month) < 2)
-                                                              $m = '0' . $month;
-                                                            if (strlen($day) < 2)
-                                                              $d = '0' . $day;
-                                                            if ( substr($arrive_date,3,4) == $m.$d  AND $sens == 0)  //同月同日
-                                                              $apps = 7 * (13 - substr($arrive_date, 3, 2)) / 12 ;  //是否要加 1 ?
-                                                            //----------------------------------------------------------------------------
-                                                            /*一、一年以上三年未滿者七日。
-                                                            二、三年以上五年未滿者十日。
-                                                            三、五年以上十年未滿者十四日。
-                                                            四、十年以上者，每一年加給一日，加至三十日為止*/
-                                                            //可休天數
-                                                            if ($sens >= 1  && $sens < 3)
-                                                              $apps = 7;
-                                                            elseif ($sens >= 3 && $sens < 5)
-                                                              $apps = 10;
-                                                            elseif ($sens >= 5 && $sens < 10)
-                                                              $apps =14;
-                                                            elseif ($sens >= 10)
-                                                              $apps = $sens + 5;   // 第10年15天，第10年16天.......;
-
-                                                             echo "<span style='font-size:11pt;color:red'>至去年年底您的在校年資 $sens 年，今年有 $apps 天特休假，目前已休 $days 天 $hours 小時。</span>";
-                                                          }
-                                                            //正式職員
-                                                            if ($userid == '0000676' && @$_POST["vtype"] == '06'){  // 今年 已請特休假天數  103.04. 21 add
-                                                            $sql=" SELECT    trunc(sum(nvl(POVDAYS,0)) + sum(nvl(POVHOURS,0))/8)   days, mod(sum(nvl(POVHOURS,0)),8) hours
-                                                                  FROM       holidayform
-                                                                  WHERE      povtype='06'
-                                                                  AND        substr(POVDATEB,1,3)='@$_POST[byear]'
-                                                                  AND        condition IN ('0','1')
-                                                                  AND        pocard IN ('$userid','$empl_no')";
-                                                            $data = $db -> query_array($sql);
-                                                            $days = $data['DAYS'][0];
-                                                            $hours = $data['HOURS'][0];
-
-                                                            //年資 及可休天數
-                                                            $sql="SELECT    holiday_senior   sen, shall_holiday shall
-                                                                 FROM   ps_senior
-                                                                 WHERE  empl_no = '$userid'";
-                                                            $sens = $data['SEN'][0]; // 年資
-                                                            $apps = $data['SHALL'][0]; // 可休天數
-                                                              /*公務人員:
-                                                                1.	服務滿一年者，第二年起，每年應給休假七日；
-                                                                2.	服務滿三年者，第四年起，每年應給休假十四日；
-                                                                3.	滿六年者，第七年起，每年應給休假二十一日；
-                                                                4.	滿九年者，第十年起，每年應給休假二十八日；
-                                                                5.	滿十四年者，第十五年起，每年應給休假三十日
-                                                              */
-                                                            echo "<span style='font-size:11pt;color:red'>您目前在校年資  $sens 年，今年有 $apps 天休假，目前已休 $days 天  $hours 小時。</span>";
-                                                      }
-                                                      ?>
-
     			                                  						<td class="td1">職務代理人</td>
     			                                              <td>
-    			                                                <select class="selectpicker" name="agentno" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-    			                                                  <option value='' selected="">請選擇</option>
-    																												<?
-    																												// 根據目前的empl_no找出所屬部門的所有代理人與其代理人號碼
-    																												if (@$_POST['agentno'] == '0000000' or @$_POST['agent_flag'] == '1'){
-    																														$sql = "SELECT  empl_no, empl_chn_name
-    																																	FROM   psfempl, psfcrjb
-    																																	WHERE empl_no = crjb_empl_no
-    																																	AND   crjb_quit_date IS NULL
-    																																	AND   crjb_depart = '$depart'
-    																																	AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
-    																																	AND   empl_no != '$empl_no'
-    																																	ORDER BY crjb_depart, crjb_title, crjb_empl_no";
-                                                                      // echo "<script>console.log('$sql')</script>";
-
-    																												}
-    																												else {
-    																													$sql = "SELECT  empl_no, empl_chn_name
-    																																FROM   psfempl, psfcrjb
-    																																WHERE empl_no = crjb_empl_no
-    																																AND   crjb_quit_date IS NULL
-    																																AND   crjb_depart = '$depart'
-    																																AND   (substr(crjb_title, 1, 1) != 'B' OR
-    																																	   crjb_title = 'B60')
-    																																AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
-    																																AND   empl_no != '$empl_no'
-    																																ORDER BY crjb_depart, crjb_title, crjb_empl_no";
-                                                                    // echo "<script>console.log('$sql')</script>";
-
-    																												}
-    																												$data = $db -> query_array($sql);
-    																												for ($i = 0; $i < count($data['EMPL_NO']); $i++) {
-    																													$agentno_i = $data['EMPL_NO'][$i];
-    							   																					$agent_name = $data['EMPL_CHN_NAME'][$i];
-    																													echo "<option value='$agentno_i' " . (($agentno_i == @$_POST['agentno']) ? 'selected' : '') . ">" . $agent_name . "</option>";
-    																												}
-    																												?>
+                                                          <!-- 根據目前的empl_no找出所屬部門的所有代理人與其代理人號碼 -->
+                                                          <select name="agentno" id="qry_agentno" class="form-control">
     			                                                </select>
+                                                        </td>
     			                                  					</tr>
+                                            					<tr id="agent_depart">
+                                      						      <td class="td1"><span style="color: red;">請選職務代理人單位</span></td>
+                                            						<td colspan="3">
+                                                            <select name="depart" id="qry_agent_depart" class="form-control">
+                                              						  </select>
+                                                        </td>
+                                                      </tr>
     			                                  					<tr>
     			                                  						<td class="td1">請假開始日期</td>
     			                                              <td>
@@ -441,88 +294,36 @@
                                                       || @$_POST['depart'] =='M47' || @$_POST['depart'] == 'N20' || substr(@$_POST['depart'], 0, 2)=='M6'){ ?>
     																									<tr>
       																									<td class='td1'>奉派文號或提簽日期或填「免」</td>
-      																									<td><input type="text" name="permit" size="30" value=<?=@$_POST["permit"]?> ></td>
+      																									<td><input type="text" name="permit" size="30"></td>
     																								    <td class='td1'>差假合計日數是否含例假日</td>
     																										<td>
-    																										<?
-                                                        if (@$_POST['saturday'] == '1'){
-                                                          ?>
-                                                          <input type='radio' name='saturday' value='1' checked>是
-                                                          <?
-                                                        }
-    																										 else {
-                                                           ?>
-                                                          <input type='radio' name='saturday' value='1' checked>是
-                                                           <?
-                                                         }
-
-                                                         if (@$_POST['saturday'] == '0'){
-                                                           ?>
-                                                           <input type='radio' name='saturday' value='0' checked>否
-                                                           <?
-                                                         }
-     																										 else {
-                                                            ?>
-                                                           <input type='radio' name='saturday' value='0' checked>否
-                                                            <?
-                                                          }
-                                                          ?>
+                                                          <input type='radio' name='saturday' value='1'>是
+                                                          <input type='radio' name='saturday' value='0' checked>否
     																										</td>
     																									</tr>
       																				          <?
                                                         }
                                                         ?>
     			                                  					<tr>
-    																										<td class="td1">差假期間是否有課</font></td>
+    																										<td class="td1">差假期間是否有課</td>
     																										<td>
-                                                        <?
-                                                          if (@$_POST['haveclass'] == '1')
-                                              						  echo "<input type='radio' name='haveclass' value='1' checked >是";
-                                              						else
-                                              						  echo "<input type='radio' name='haveclass' value='1'  >是";
-
-                                              						if (@$_POST['haveclass'] == '0')
-                                              						  echo "<input type='radio' name='haveclass' value='0' checked >否";
-                                              						else
-                                              						  echo "<input type='radio' name='haveclass' value='0'  >否";
-                                                        ?>
+                                              						<input type='radio' name='haveclass' value='1'>是
+                                              						<input type='radio' name='haveclass' value='0' checked>否
     																										</td>
     																										<td class="td1">是否出國</td>
     			                                  						<td>
-                                                        <?
-                                                          if (@$_POST['abroad'] == '1')
-                                              						  echo "<input type='radio' name='abroad' value='1' onClick='document.holiday.submit();' checked>是";
-                                              						else
-                                              						  echo "<input type='radio' name='abroad' value='1'   onClick='document.holiday.submit();'>是";
-
-                                              						if (@$_POST['abroad'] == '0')
-                                              						  echo "<input type='radio' name='abroad' value='0' onClick='document.holiday.submit();' checked> 否";
-                                              						else
-                                              						  echo "<input type='radio' name='abroad' value='0'   onClick='document.holiday.submit();'> 否";
-                                                        ?>
+                                              						<input type='radio' name='abroad' value='1'>是
+                                              						<input type='radio' name='abroad' value='0' checked>否
     			                                  						</td>
     			                                  					</tr>
-                                                      <?
-                                                        if (@$_POST['vtype'] == '06'){
-                                            					?>
-                                            					<tr>
-                                            						<td><span style="color: darkred;"> 是否刷國民旅遊卡</span></td>
+                                            					<tr id="trip">
+                                            						<td class="td1"><span style="color: red;">是否刷國民旅遊卡</span></td>
                                             						<td>
-                                            					<?
-                                                        if (@$_POST['trip'] == '1')
-                                            						  echo "<input type='radio' name='trip' value='1' checked >是";
-                                            						else
-                                            						  echo "<input type='radio' name='trip' value='1'>是";
-
-                                            						if (@$_POST['trip']  == '0')
-                                            						  echo "<input type='radio' name='trip' value='0' checked >否";
-                                            						 else
-                                            						  echo "<input type='radio' name='trip' value='0'>否";
-                                                      ?>
+                                            						  <input type='radio' name='trip' value='1'>是
+                                            						  <input type='radio' name='trip' value='0' checked>否
                                             						</td>
                                             					</tr>
                                                       <?
-                                                    }// if (@$_POST['vtype'] == '06')
 
                                           					if (@$_POST['vtype'] =='01' || @$_POST['vtype'] == '02' || @$_POST['vtype'] == '03'){
                                           						$place = array('請選擇或填寫', '基隆市', '台北市', '新北市', '桃園市', '新竹縣', '新竹市',
@@ -562,8 +363,8 @@
                                                                 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                                             				    if (@$_POST['vtype'] == '11'){  //補休
                                             					?>
-                                                      <tr>
-                                            						<td class="td1"><span style="color: darkred;">可補休之加班時數</span></td>
+                                                      <tr id="nouse">
+                                            						<td class="td1"><span style="color: red;">可補休之加班時數</span></td>
                                             						<td colspan="3">
                                             						<?
                                             						  $sql = "SELECT over_date,nouse_time,
@@ -588,7 +389,7 @@
                                                           }
                                             						?>
                                             						<br>
-                                                        <span style="color: darkred;">
+                                                        <span style="color: red;">
                                             						以上顯示資料格式：加班日期(可補休剩餘時數)。<br>
                                             						注意！人事室審核過的加班日期才會顯示，系統自動由最前面的日期扣除補休之時數。
                                                         </span>
