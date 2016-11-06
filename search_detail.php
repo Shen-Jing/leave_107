@@ -21,9 +21,7 @@
                                           <font STYLE="font-family:微軟正黑體">請選擇查詢年度</font>
                                       </div>
                                       <div class="panel-body">
-                                        <select class="form-control" name="p_menu" id="detail_year">
-                                    
-                                        </select>
+                                        <select class="form-control" name="p_menu" id="p_menu" onChange=''></select>
                                       </div>
                                     </div>
                                       <div class="table-responsive">
