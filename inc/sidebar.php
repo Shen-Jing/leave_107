@@ -31,7 +31,7 @@
                             <a href='search_detail.php'><span class='masked'>個人差假明細資料</span></a>
                           </li>
                           <li>
-                            <a href='#'><span class='masked'>上下班刷卡資料</span></a>
+                            <a href='search_card.php'><span class='masked'>上下班刷卡資料</span></a>
                           </li>
                           <li>
                             <a href='overtime.php'><span class='masked'>加班申請作業</span></a>
