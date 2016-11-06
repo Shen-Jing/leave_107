@@ -1,7 +1,7 @@
-
-  alert("Js Connect! 1");
-  function p_menu_onChange()
+$(
+function ()
   {
+      alert("test");
       var yycho ;
       var yyval;
       var mmcho ;
@@ -35,4 +35,4 @@
 
 
   }
-alert("Js Connect!");
+);
