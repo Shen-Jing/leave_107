@@ -4,13 +4,13 @@
 	//加班作業  1000429
 	//**********************************************************
     //require("check.php");
-    $empl_no = $_SESSION['empl_no'][0];
-    $empl_name = $_SESSION['empl_name'][0];
+    $empl_no = $_SESSION['empl_no'];
+    $empl_name = $_SESSION['empl_name'];
 
 	//------------------------------------------------------------
 	//抓職稱名稱
 	//------------------------------------------------------------
-	$title = $_SESSION['title'][0];
+	$title = $_SESSION['title_id'];
 	$SQLStr = "SELECT code_chn_item
 		FROM  psqcode
 		where code_kind = '0202'
@@ -23,7 +23,7 @@
 	//------------------------------------------------------------
 	//抓單位名稱
 	//------------------------------------------------------------
-	$depart = $_SESSION['depart'][0];
+	$depart = $_SESSION['depart'];
 	$sql = "select dept_short_name
 			from   stfdept
 			where  dept_no = '$depart'";
@@ -80,15 +80,7 @@
 if($_POST['oper'] == "qry_first")
 {
 
-    $data = array(
-       "year" => array("$year"),
-       "month" => array("$month"),
-       "date" => array("$day"),
-       "empl_no" => array("$empl_no"),
-       "empl_name" => array("$empl_name"),
-       "dname" => array("$dname"),
-       "tname" => array("$tname")
-    );
+    $data = array("year" => $year,"month" => $month,"date" => $day,"empl_no" => $empl_no,"empl_name" => $empl_name,"dname" => $dname,"tname" => $tname );
 
 	echo json_encode($data);
     exit;
@@ -139,8 +131,9 @@ if( $_POST['oper'] == "etime")
 
 }
 
-if( $_POST['oper'] == "time" )
+if( $_POST['oper'] == "timesum" )
 {
+
 	$btime = $_POST["btime"];
 	$etime = $_POST["etime"];
 	$bmonth = $_POST["bmonth"];
@@ -153,6 +146,12 @@ if( $_POST['oper'] == "time" )
 	$eyear = $_POST["eyear"];
 	$uyear = $_POST["uyear"];
 	$reason = $_POST["reason"];
+	//$reason = "";
+	//$reason='echo"<script>document.holiday.reason.value;</script>"';
+
+	//for($i = 0 ; $i < count($reasonstr) ; $i++)
+	//	$reason .= chr( $reasonstr[$i] );
+
 	//------------------------------------------------------------
     //確定送出處理求加班時數
 	//------------------------------------------------------------
@@ -160,6 +159,7 @@ if( $_POST['oper'] == "time" )
 	//------------------------------------------------------------
 	// 選擇的日期
 	//------------------------------------------------------------
+
 	if(strlen($bmonth)<2)
 		$bmonth='0'.$bmonth;
 	if(strlen($bday)<2)
@@ -179,11 +179,14 @@ if( $_POST['oper'] == "time" )
 	 $over_date2=$eyear.$emonth.$eday;//加班跨隔日
 	 $draw_date =$uyear.$umonth.$uday;//提簽日期
 
+	/* $time_1=$btime;
+		$time_2=$etime;
 
-	
-   	if( !( empty($btime) ) && !( empty($etime) ) && !( empty($reason) ) )
+	echo json_encode($reason);
+    exit;*/
+   	if( !( empty($btime) ) && !( empty($etime) ) && ! ( empty( $reason ) ) )
 	{
-		
+
 		//------------
 		//計算加班時數
 		//------------
@@ -205,44 +208,38 @@ if( $_POST['oper'] == "time" )
 		$_SESSION["tot"]=$tot; //採計到時
 		$time_1=$btime;
 		$time_2=$etime;
-		
+
         //104/08/26 update! 改成6個月
 		if (substr($over_date,3,2)>'06')
 			$due_date = substr($over_date,0,3)+1 . substr($over_date,3,2)-6 . substr($over_date,5,2);
 		else
 			$due_date = substr($over_date,0,3) . substr($over_date,3,2)+6 . substr($over_date,5,2);
      	//寫入檔案
-	  	$SQLStr = "insert into overtime (EMPL_NO,OVER_DATE,DO_TIME_1,DO_TIME_2,NOUSE_TIME,PERSON_CHECK,DRAW_DATE,DUE_DATE,ALL_TIME,REASON)";
-	  	$SQLStr .= " values ('$empl_no','$over_date','$time_1','$time_2','$tot','0','$draw_date','$due_date','$tot','$reason')";
+	  	$SQLStr = "insert into overtime (EMPL_NO,OVER_DATE,DO_TIME_1,DO_TIME_2,NOUSE_TIME,PERSON_CHECK,DRAW_DATE,DUE_DATE,ALL_TIME,REASON) values ('$empl_no','$over_date','$time_1','$time_2','$tot','0','$draw_date','$due_date','$tot','$reason')";
 
       	$value = $db -> query($SQLStr);
+
+/*echo json_encode("$SQLStr");
+    exit;*/
       	//$s=print_r($value);
 
       	//echo"<script>console.log($s); </script>";
 
       	if ( !empty($value["message"])  )
-		 	$data = array(
-       			"message" => array("資料重複申請或儲存有問題，請洽管理者。")
-       		);
+		 	$data = array("資料重複申請或儲存有問題，請洽管理者。");
 
 		else
-			$data = array(
-       			"message" => array("資料儲存完畢。")
-       		);
+			$data = array("資料儲存完畢。");
 
 
 	}
-	else if ( empty($reason) )
+	else if ( empty( $reason ) )
 	{
-		$data = array(
-		       			"message" => array("請輸入加班原因!")
-		       		);
+		$data = array("請輸入加班原因!");
 	}
 	else
 	{
-		$data = array(
-		       			"message" => array("請選擇刷卡時間!"),
-		       		);
+		$data = array("請選擇刷卡時間!");
 	}
 
 	echo json_encode($data);

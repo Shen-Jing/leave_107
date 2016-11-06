@@ -12,17 +12,17 @@ $( // 表示網頁完成後才會載入
             dataType: "json",
             success: function(JData) {
 
-                $('#empl_no').append(JData["empl_no"][0]);
-                $('#empl_name').append(JData["empl_name"][0]);
-                $('#dname').append(JData["dname"][0]);
-                $('#tname').append(JData["tname"][0]);
+                $('#empl_no').append(JData["empl_no"]);
+                $('#empl_name').append(JData["empl_name"]);
+                $('#dname').append(JData["dname"]);
+                $('#tname').append(JData["tname"]);
 
                 //年份
                 var row0 = "<option selected disabled class='text-hide'>請選擇年份</option>";
                 $('#uyear,#byear,#eyear').append(row0);
 
-                for (var i = parseInt( JData["year"][0] ) -1 ; i <= parseInt( JData["year"][0] ) + 1 ; i++) {
-                    if (i == parseInt( JData["year"][0] ))
+                for (var i = parseInt( JData["year"] ) -1 ; i <= parseInt( JData["year"] ) + 1 ; i++) {
+                    if (i == parseInt( JData["year"] ))
                         var row = "<option value=" + i + " selected>" + i + "</option>";
                     else
                         var row = "<option value=" + i + ">" + i + " </option>";
@@ -34,7 +34,7 @@ $( // 表示網頁完成後才會載入
                 $('#umonth,#bmonth,#emonth').append(row0);
 
                 for (var i = 1 ; i <= 12 ; i++) {
-                    if (i == parseInt( JData["month"][0] ))
+                    if (i == parseInt( JData["month"] ))
                         var row = "<option value=" + i + " selected>" + i + "</option>";
                     else
                         var row = "<option value=" + i + ">" + i + " </option>";
@@ -46,12 +46,12 @@ $( // 表示網頁完成後才會載入
                 $('#uday,#bday,#eday').append(row0);
 
                 var monthday = ["31","28","31","30","31","30","31","31","30","31","30","31"];
-                var bmd = monthday[ JData["month"][0] - 1 ];    //開始那個月的日數
-                            if( JData["month"][0] == 2 && ( ( ( JData["month"][0] + 1911 ) %4 == 0  && ( JData["year"][0] + 1911 ) % 100 != 0 ) ) || ( JData["year"][0] + 1911 ) % 400 == 0 )//閏年且為二月
+                var bmd = monthday[ JData["month"] - 1 ];    //開始那個月的日數
+                            if( JData["month"] == 2 && ( ( ( JData["month"] + 1911 ) %4 == 0  && ( JData["year"] + 1911 ) % 100 != 0 ) ) || ( JData["year"] + 1911 ) % 400 == 0 )//閏年且為二月
                                 bmd = bmd + 1;
 
                 for (var i = 0 ; i <= bmd ; i++) {
-                    if (i == parseInt( JData["date"][0] ))
+                    if (i == parseInt( JData["date"] ))
                         var row = "<option value=" + i + " selected>" + i + "</option>";
                     else
                         var row = "<option value=" + i + ">" + i + " </option>";
@@ -136,16 +136,9 @@ $( // 表示網頁完成後才會載入
                 $('#etime').append(row0);
 
             },
-            error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+            error: function(xhr, ajaxOptions, thrownError) {/*console.log(xhr.responseText);alert(xhr.responseText);*/}
         });
 
-        /*$('uyear,#byear,#eyear,#umonth,#bmonth,#emonth,#uday,#bday,#eday').change( // 抓取區域選完的資料
-            function(e) {
-                if ($(':selected', this).val() !== '') {
-                    CRUD(0); //query
-                }
-            }
-        );*/
     }
 );
 
@@ -189,17 +182,20 @@ function timesum()
     etcho = document.holiday.etime.selectedIndex;
     etval = document.holiday.etime.options[etcho].value;
 
-    var reason = document.holiday.reason.value;
 
+    //var reasonstr = document.holiday.reason.value;
+    var reason = $('#reason').val();
+    /*for(var i = 0 ; i<=reasonstr.length ;i++)
+        reason[i] = parseInt( reasonstr.charCodeAt(i) );*/
+    //alert(reason);
 
     $.ajax({
         url: 'ajax/overtime_ajax.php',
-        data:{  oper: 'time' ,
+        data:{  oper: 'timesum' ,
                 uyear: uyval, umonth: umval, uday: udval,
                 byear: byval, bmonth: bmval, bday: bdval,
                 eyear: eyval, emonth: emval, eday: edval,
-                btime: btval, etime: etval,
-                reason: reason
+                btime: btval, etime: etval, reason: reason
             },
         type: 'POST',
         dataType: "json",
@@ -208,9 +204,9 @@ function timesum()
                 toastr["error"](JData.error_message);
             else
             {
-                alert(JData["message"][0]);
+                alert(JData);
             }
         },
-        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+        error: function(xhr, ajaxOptions, thrownError) {/*console.log(xhr.responseText);alert(xhr.responseText);*/}
     });
 }

@@ -1,7 +1,7 @@
 <?php
   session_start();
   include '../inc/connect.php';
-  $empl_no = $_SESSION['empl_no'][0];
+  $empl_no = $_SESSION['empl_no'];
 
   $today  = getdate();
   $year    = $today["year"] - 1911;
@@ -14,15 +14,6 @@
 
       $data = $db -> query_array($sql);
 
-      /*if (!IsSet($_SESSION['yy'])){
-                $end_year = $year;
-                $_SESSION['yy']=$year;
-                $sel_y=$year;
-      }
-      else{ //page updated then restore,because $end_year must be reflashed ;
-            $end_year=$_SESSION['yy'];
-            @$_POST['p_menu']=$_GET['yval'];
-      } */
 
       if (@$_POST['p_menu']=='')
             $_POST['p_menu']=$year;
