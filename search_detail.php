@@ -24,14 +24,20 @@
                                         <select class="form-control" name="p_menu" id="p_menu" onChange=''></select>
                                       </div>
                                     </div>
+                                    </div>
+                                    <div class="panel-body">
+                                      <div class="panel panel-primary">
+                                      <div class="panel-heading">
+                                          <font STYLE="font-family:微軟正黑體">差假資料查詢</font>
+                                      </div>
                                       <div class="table-responsive">
-                                        <table class="table table-striped table-bordered" width="100%" cellspacing="0">
+                                        <table class="table table-striped table-bordered dt-responsive nowrap" >
 
                                         <tr style="font-weight:bold">
                                             <td id="start_end"></td>
                                         </tr>
                                     </table>
-                                        <table class="table table-striped table-bordered" width="100%" cellspacing="0">
+                                        <table class="table table-striped table-bordered dt-responsive nowrap" >
 
                                     <thead>
 
@@ -44,23 +50,16 @@
 
                                     </thead>
 
-                                    <tbody>
-                                      <table id="Table_Detail" class="table table-striped table-bordered" width="100%" cellspacing="0">
 
+                                      <table id="Table_Detail" class="table table-striped table-bordered dt-responsive nowrap" width="100%" ></table>
 
-
-
-
-
-
-
-
-                                      </table>
-                                    </tbody>
                                   </table>
                                       </div>
 
-                                    </div>
+                                      </div>
+                                      </div>
+
+
                                     <!--<div class="panel-footer">
                                     </div>-->
                                 </div>
