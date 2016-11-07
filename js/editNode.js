@@ -13,11 +13,15 @@ $(function(){
     onDrop: function (cEl, container, _super) {
       var o_id = cEl.attr('id');
       var n_id = cEl.parent().parent().attr('id');
-      var index = $('#' + n_id + ' > ol > li').index(cEl) + 1;
-      if (index < 10)
-        n_id = n_id + '0' + index;
-      else
-        n_id = n_id + index;
+      if (n_id === undefined)
+        n_id = String.fromCharCode($('.root > li').index(cEl) + 65);
+      else {
+        var index = $('#' + n_id + ' > ol > li').index(cEl) + 1;
+        if (index < 10)
+          n_id = n_id + '0' + index;
+        else
+          n_id = n_id + index;
+      }
       $.ajax({
         url: 'ajax/updateNode.php',
         type: 'POST',
