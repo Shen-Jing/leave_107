@@ -44,6 +44,8 @@ $now = basename($_SERVER['REQUEST_URI']);
     <!-- Custom Fonts -->
     <link href="css/ncue.css" rel="stylesheet" type="text/css">
 
+    <link type="text/css" rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <link href="css/<?=basename($_SERVER['PHP_SELF'], ".php")?>.css" rel="stylesheet"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

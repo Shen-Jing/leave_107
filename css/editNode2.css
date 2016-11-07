@@ -1,0 +1,59 @@
+@charset "utf-8";
+body, ul, dl, dd, dt, ol, li, p, h1, h2, h3, h4, h5, h6, textarea, form, select, fieldset, table, td, div, input {margin:0;padding:0;-webkit-text-size-adjust: none}
+h1, h2, h3, h4, h5, h6 {
+  font-size:12px;
+  font-weight:normal;
+}
+.root ul, li {
+  list-style-type: none;
+  color: #000;
+  border: 1px solid #3f3f3f;
+}
+.root ul.sTree, ul {
+  background-color: #fff;
+}
+.root ul.sTree2 li, ul#sortableListsBase li {
+  padding-left: 35px;
+  margin: 5px;
+  border: 1px solid #3f3f3f;
+  background-color: #3f3f3f;
+}
+.root li div {
+  padding: 7px;
+  background-color: #CAFFFF;
+}
+.root li, ul, div {
+  border-radius: 3px;
+}
+
+.currElemClass {
+  background-color: #fff;
+}
+.root .right {
+  float:right;
+  z-index: 9999;
+}
+/*
+.sTree2 {
+    position: relative;
+    height: auto;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    padding: 18px;
+    border: 1px solid #DDDDDD;
+    background-color: #fff;
+}
+.sTree2 > li {
+  margin: 0px 0px 25px 0px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: move;
+  transition: box-shadow 0.2s;
+}
+.sTree2 > li:hover {
+  border: 1px solid #92cd3a;
+  box-shadow: 0 0 2px 0 #ccc;
+}
+*/

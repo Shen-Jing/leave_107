@@ -34,6 +34,7 @@
     <script src="js/grid.locale-tw.js" type="text/ecmascript" ></script>
     <script src="js/jquery.jqGrid.min.js" type="text/ecmascript"></script>
     <script src="js/bootbox.min.js"></script>
+    <script src="js/jquery-sortable-min.js"></script>
 
 
     <script src="js/<?=basename($_SERVER['PHP_SELF'], ".php")?>.js"></script>
