@@ -1,5 +1,8 @@
 $( 
 	function() {
+		$("body").tooltip({
+            selector: "[title]"
+        });
 		init_table();
 	}
     
@@ -18,17 +21,11 @@ function init_table()
     //table <thead> is necessary.
     otable_passing = 
     $('#Btable_passing').DataTable({
-        "scrollCollapse": true,
-        "displayLength": 10,
-        "paginate": true,
-        "lengthChange": true,
-        "processing": false,
-        "serverSide": false,
         "ajax": {
             url: 'ajax/holiday_view_ajax.php',
-            data: function (d){
-                d.tbid = 1,
-                d.year = sel_year;
+            data: {
+                tbid : 1,
+                year : sel_year
             },
             type: 'POST',
             dataType: 'json'
@@ -36,18 +33,11 @@ function init_table()
         "buttons": [
         'print','pdf','excel'
         ],
-        "select" : true,
         "dom": '<"top"l>Bftrip'
     });
 
     otable_canceled = 
      $('#Btable_canceled').DataTable({
-        "scrollCollapse": true,
-        "displayLength": 10,
-        "paginate": true,
-        "lengthChange": true,
-        "processing": false,
-        "serverSide": false,
         "ajax": {
             url: 'ajax/holiday_view_ajax.php',
             data: function (d){
@@ -57,21 +47,11 @@ function init_table()
             type: 'POST',
             dataType: 'json'
         },
-        "buttons": [
-        'print','pdf','excel'
-        ],
-        "select" : true,
         "dom": 't'
     });
 
     otable_dealing = 
     $('#Btable_dealing').DataTable({
-        "scrollCollapse": true,
-        "displayLength": 10,
-        "paginate": true,
-        "lengthChange": true,
-        "processing": false,
-        "serverSide": false,
         "ajax": {
             url: 'ajax/holiday_view_ajax.php',
             data: function (d){
@@ -81,21 +61,11 @@ function init_table()
             type: 'POST',
             dataType: 'json'
         },
-        "buttons": [
-        'print','pdf','excel'
-        ],
-        "select" : true,
        "dom": 't'
     });
 
     otable_rejected = 
     $('#Btable_rejected').DataTable({
-        "scrollCollapse": true,
-        "displayLength": 10,
-        "paginate": true,
-        "lengthChange": true,
-        "processing": false,
-        "serverSide": false,
         "ajax": {
             url: 'ajax/holiday_view_ajax.php',
             data: function (d){
@@ -105,10 +75,6 @@ function init_table()
             type: 'POST',
             dataType: 'json'
         },
-        "buttons": [
-        'print','pdf','excel'
-        ],
-        "select" : true,
         "dom": 't'
     });
 }
