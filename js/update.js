@@ -1,15 +1,10 @@
-$.jgrid.defaults.responsive = true;
-$.jgrid.defaults.styleUI = 'Bootstrap';
-$.jgrid.useJSON = true;
-
 $(
     function() {
+		var oGrid =
         $("#jqGrid").jqGrid({
             url: 'ajax/update_ajax.php',
 			editurl: 'ajax/update_ajax.php',
-            // we set the changes to be made at client side using predefined word clientArray
-			mtype: 'POST',
-            datatype: "json",
+            pager: "#jqGridPager",
             colModel: [{
                     label: 'ID',
                     name: 'SERIALNO',
@@ -58,29 +53,15 @@ $(
                     name: 'AGENTNO',
                     editable: true
                 }
-            ],
-            viewrecords: true,
-            rowNum: 10,
-            pager: "#jqGridPager",
-            autowidth: true,
-            height: 'auto'
+            ]
         });
 
-        $('#jqGrid').jqGrid("navGrid", '#jqGridPager', {
-			edit: true,
-			del: true,
-			add: false,
-			search: true,
-			refresh: true, 
-			view: true,
+        oGrid.jqGrid("navGrid", '#jqGridPager', {
 			},
             // options for the Edit Dialog
             {
-				resize: false,
-				checkOnSubmit: true,
-				recreateForm: true,
-				closeAfterEdit: true,
 				afterSubmit: function(response, postdata) { 
+					oGrid.jqGrid('setGridParam', {datatype:'json'}).trigger('reloadGrid'); //Reload after submit
 					if(response.responseText == null){ 
 						bootbox.alert({
 							message: '錯誤',
@@ -91,8 +72,10 @@ $(
 					else{ 
 						bootbox.alert({
 							message: '成功',
-							backdrop: true
-						}); 
+							backdrop: true,
+							size: 'small'
+						});
+						
 						return [true,"OK"]; 
 					}
 				}
@@ -103,8 +86,7 @@ $(
             },
             // options for the Delete Dailog
             {
-                resize: false,
-				checkOnSubmit: true
+				
             });
     }
 );
