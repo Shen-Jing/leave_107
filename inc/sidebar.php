@@ -27,11 +27,11 @@ $d = $db -> query_array($sql);
                           {
                             $len = strlen($parent_previous) - strlen($parent_folder) ;
                             if ($len==5)//ex. A07 -- >"" 相差2層
-                              echo "</ol></li>\r\n</ol></li>\r\n</li>";
+                              echo "</ul></li>\r\n</ul></li>\r\n</li>";
                             if ($len==3)//ex. A07 -- >"" 相差2層
-                              echo "</ol></li>\r\n</ol></li>\r\n";
+                              echo "</ul></li>\r\n</ul></li>\r\n";
                             else //ex. A07-->A
-                              echo "</ol></li>\r\n";
+                              echo "</ul></li>\r\n";
                           }
 
                           echo "<li>\r\n";
