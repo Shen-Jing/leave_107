@@ -10,6 +10,10 @@ $(function(){
       else
         return true;
     },
+    onCancel: function (cEl, container, _super)
+    {
+      return confirm("此動作可能無法復原，你確定要拖曳嗎？");
+    },
     onDrop: function (cEl, container, _super) {
       var o_id = cEl.attr('id');
       var n_id = cEl.parent().parent().attr('id');
@@ -103,20 +107,26 @@ $(function(){
       success: function(result){
         toastr["success"]("成功~~");
         console.log(result);
+        var text = "<li id='" + $('#add-id').val() + "' url='" + $('#add-url').val() + "' type='" + $('#add-type').val() + "'>\r\n<span><i class='fa $folder_img fa-fw'></i> " + $('#add-name').val() + "</span><span class='right'><button class='edit-opener btn btn-info btn-xs'>編輯</button> <button class='delete btn btn-danger btn-xs'>刪除</button></span>";
+        if ($('#add-url').val() === '')
+          text += "<ol></ol>";
         if ($('#add-id').val().length > 2)
-          $('#' + $('#add-id').val().slice(0, -2) + ' > ol').append("<li id='" + $('#add-id').val() + "'>\r\n<span>" + $('#add-name').val() + "</span><span class='right'><button class='edit-opener btn btn-info btn-sm'>編輯</button> <button class='delete btn btn-danger btn-sm'>刪除</button></span>");
+          $('#' + $('#add-id').val().slice(0, -2) + ' > ol').append(text);
         else
-          $('.root').append("<li id='" + $('#add-id').val() + "'>\r\n<span>" + $('#add-name').val() + "</span><span class='right'><button class='edit-opener btn btn-info btn-sm'>編輯</button> <button class='delete btn btn-danger btn-sm'>刪除</button></span>");
+          $('.root').append(text);
       },
       error: function(jqXHR, textStatus, errorThrown)
       {
         toastr["error"]("失敗 QAQ");
         console.log(JSON.stringify(jqXHR));
         console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+        var text = "<li id='" + $('#add-id').val() + "' url='" + $('#add-url').val() + "' type='" + $('#add-type').val() + "'>\r\n<span><i class='fa $folder_img fa-fw'></i> " + $('#add-name').val() + "</span><span class='right'><button class='edit-opener btn btn-info btn-xs'>編輯</button> <button class='delete btn btn-danger btn-xs'>刪除</button></span>";
+        if ($('#add-url').val() === '')
+          text += "<ol></ol>";
         if ($('#add-id').val().length > 2)
-          $('#' + $('#add-id').val().slice(0, -2) + ' > ol').append("<li id='" + $('#add-id').val() + "'>\r\n<span>" + $('#add-name').val() + "</span><span class='right'><button class='edit-opener btn btn-info btn-sm'>編輯</button> <button class='delete btn btn-danger btn-sm'>刪除</button></span>");
+          $('#' + $('#add-id').val().slice(0, -2) + ' > ol').append(text);
         else
-          $('.root').append("<li id='" + $('#add-id').val() + "'>\r\n<span>" + $('#add-name').val() + "</span><span class='right'><button class='edit-opener btn btn-info btn-sm'>編輯</button> <button class='delete btn btn-danger btn-sm'>刪除</button></span>");
+          $('.root').append(text);
       }
     });
     $("#modal-add").modal("hide");
@@ -133,14 +143,14 @@ $(function(){
       success: function(result){
         toastr["success"]("成功~~");
         console.log(result);
-        $('#' + $('#edit-id').val() + ' > span:not(.right)').html($('#edit-name').val());
+        $('#' + $('#edit-id').val() + ' > span:not(.right)').html("<i class='fa " + $('#edit-img').val() + " fa-fw'></i> " + $('#edit-name').val());
       },
       error: function(jqXHR, textStatus, errorThrown)
       {
         toastr["error"]("失敗 QAQ");
         console.log(JSON.stringify(jqXHR));
         console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
-        $('#' + $('#edit-id').val() + ' > span:not(.right)').html($('#edit-name').val());
+        $('#' + $('#edit-id').val() + ' > span:not(.right)').html("<i class='fa " + $('#edit-img').val() + " fa-fw'></i> " + $('#edit-name').val());
       }
     });
     $("#modal-edit").modal("hide");
@@ -153,6 +163,10 @@ $(function(){
   $(".edit-opener").click(function() {
     $("#modal-edit .modal-title").html($(this).parent().parent().attr('id') + " - 編輯節點");
     $("#edit-id").val($(this).parent().parent().attr('id'));
+    $("#edit-name").val($(this).parent().prev().text().slice(1));
+    $("#edit-url").val($(this).parent().parent().attr('url'));
+    $("#edit-type").prop('checked', $(this).parent().parent().attr('type'));
+    $("#edit-img").val($(this).parent().prev().children('i').attr('class').slice(3, -6));
     $("#modal-edit").modal("show");
   });
 
