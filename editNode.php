@@ -26,7 +26,13 @@ $d = $db -> query_array($sql);
 
           if($i>0 && $parent_folder<>$parent_previous)//換根節點
           {
-            echo "</ol></li>\r\n";
+            $len = strlen($parent_previous) - strlen($parent_folder) ;
+            if ($len==5)//ex. A07 -- >"" 相差2層
+              echo "</ol></li>\r\n</ol></li>\r\n</li>";
+            if ($len==3)//ex. A07 -- >"" 相差2層
+              echo "</ol></li>\r\n</ol></li>\r\n";
+            else //ex. A07-->A
+              echo "</ol></li>\r\n";
           }
 
           echo "<li id='$pgmid' url='$pgmurl' type='$pgmtype'>\r\n<span><i class='fa $folder_img fa-fw'></i> $pgmname</span><span class='right'><button class='edit-opener btn btn-info btn-xs'>編輯</button>";
