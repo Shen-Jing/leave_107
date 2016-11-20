@@ -15,20 +15,20 @@
 
         $vocdate = '';
 
-        if (strlen(@$_POST['bmonth']) < 3)
-          $vocdate = '0' . @$_POST['byear'];
-        else
-          $vocdate = @$_POST['byear'];
-
-        if (strlen(@$_POST['bmonth']) < 2)
-          $vocdate = $vocdate . '0' . @$_POST['bmonth'];
-        else
-         	$vocdate = $vocdate . @$_POST['bmonth'];
-
-        if (strlen(@$_POST['bday']) < 2)
-          $vocdate = $vocdate . '0' . @$_POST['bday'];
-        else
-          $vocdate = $vocdate . @$_POST['bday'];
+        // if (strlen(@$_POST['bmonth']) < 3)
+        //   $vocdate = '0' . @$_POST['byear'];
+        // else
+        //   $vocdate = @$_POST['byear'];
+        //
+        // if (strlen(@$_POST['bmonth']) < 2)
+        //   $vocdate = $vocdate . '0' . @$_POST['bmonth'];
+        // else
+        //  	$vocdate = $vocdate . @$_POST['bmonth'];
+        //
+        // if (strlen(@$_POST['bday']) < 2)
+        //   $vocdate = $vocdate . '0' . @$_POST['bday'];
+        // else
+        //   $vocdate = $vocdate . @$_POST['bday'];
 
         //----------------------------------------------
         //   970813 add  判斷是否為寒暑假期間
@@ -69,6 +69,7 @@
     			                                    <div class="panel-body">
     			                                        <table class="table table-condensed table-hover table-bordered">
     			                                  					<tr>
+                                                          <td id="hide-depart" style="display:none"><?=$depart ?></td>
       			                                  						<td class="td1">員工編號</td>
       			                                              <td><span id="empl_no"><?=$empl_no ?></span></td>
       			                                              <td class="td1">姓名</td>
@@ -106,51 +107,12 @@
     			                                  					<tr>
     			                                  						<td class="td1">請假開始日期</td>
     			                                              <td>
-    			                                                <select class="selectpicker" name="byear" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-    			                                    						<?
-                                                          if (@$_POST['byear'] === null){
-                                                            @$_POST['byear'] = $year;
-                                                          }
-
-    			                                    						for ($i = $year - 1; $i <= $year + 1; $i++)
-    			                                                	echo "<option value='$i'" . ((@$_POST['byear'] == $i) ? 'selected' : '') . ">$i</option>";
-    			                                    						?>
-    			                                                </select>年
-    			                                                <select class="selectpicker" name='bmonth' data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-    			                                                <?
-                                                          if ( @$_POST['bmonth'] === null ){
-                                                            @$_POST['bmonth'] = $month;
-                                                          }
-
-    																											// 若跨年
-    			                                    						if (@$_POST["byear"] > $year)
-    			                                    						   for ($i = 1; $i <= 12; $i++)
-    																												 		echo "<option value='$i'" . ((@$_POST['bmonth'] == $i) ? 'selected' : '') . ">$i</option>";
-    			                                    						else
-    			                                    						   for ($i = 1; $i <= 12; $i++)
-    																												 		echo "<option value='$i'" . ((@$_POST['bmonth'] == $i) ? 'selected' : '') . ">$i</option>";
-    																											?>
-    																											</select>月
-    			                                    						<select class="selectpicker" name="bday" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-    																											<?
-                                                          $monthday = array("31", "28", "31", "30", "31", "30", "31", "31", "30", "31", "30", "31");
-    			                                    						$bmd = $monthday[@$_POST['bmonth'] - 1];	//開始該月的日數
-    			                                    						if (@$_POST["bmonth"] == 2 && date('L', mktime(0, 0, 0, 1, 1, @$_POST["byear"])) )//閏年且為二月
-    			                                    							$bmd = $bmd + 1;
-
-                                                          if ( @$_POST['bday'] === null ){
-                                                            @$_POST['bday'] = $day;
-                                                          }
-
-    			                                    						if (@$_POST["bmonth"] == $month && @$_POST["byear"] == $year)
-    			                                    								for ($i = 1; $i <= $bmd; $i++)
-    																												 		echo "<option value='$i'" . ((@$_POST['bday'] == $i) ? 'selected' : '') . ">$i</option>";
-    			                                    						else
-    																													for ($i = 1; $i <= $bmd; $i++)
-    																												 		echo "<option value='$i'" . ((@$_POST['bday'] == $i) ? 'selected' : '') . ">$i</option>";
-    																											?>
-    			                                    						</select>日
-
+                                                          <div class='input-group date' id='leave-start'>
+                                                              <input type='text' class="form-control" />
+                                                              <span class="input-group-addon">
+                                                                  <span class="glyphicon glyphicon-calendar"></span>
+                                                              </span>
+                                                          </div>
     			                                    					</td>
     		                                  							<td class="td1">請假開始時間</td>
     			                                  						<td>
@@ -210,45 +172,14 @@
     			                                  					</tr>
     			                                  					<tr>
     			                                  						<td class="td1">請假結束日期</h3>
-    			                                  						</td>
-    																										<td>
-                                                          <select class="selectpicker" name="eyear" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-    																											<?
-    																											for ($i = $year; $i <= ($year + 1); $i++)
-    																												echo "<option value='$i'" . ((@$_POST['eyear'] == $i) ? 'selected' : '') . ">$i</option>";
-    																											?>
-    																											</select>年
-
-    																											<select class="selectpicker" name="emonth" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-    																											<?
-    																											if (@$_POST["eyear"] > @$_POST["byear"])//跨年
-    																												for ($i = 1; $i <= 12; $i++)
-    																													echo "<option value='$i'" . ((@$_POST['emonth'] == $i) ? 'selected' : '') . ">$i</option>";
-    																											else//同年
-    																												for ($i = @$_POST["bmonth"]; $i <= 12; $i++)
-    																													echo "<option value='$i'" . ((@$_POST['emonth'] == $i) ? 'selected' : '') . ">$i</option>";
-    																											?>
-    																											</select>月
-
-    																											<select class="selectpicker" name='eday' data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-    																											<?
-                                                          if ( @$_POST['emonth'] === null ){
-                                                            @$_POST['emonth'] = @$_POST['bmonth'];
-                                                          }
-
-                                                          $emd = $monthday[@$_POST['emonth'] - 1];	//結束該月的日數
-    			                                    						if (@$_POST['emonth'] == 2 && date('L', mktime(0, 0, 0, 1, 1, @$_POST["byear"])) )//閏年且為二月
-    			                                    							$emd = $emd + 1;
-
-    																											if (@$_POST["emonth"] == @$_POST["bmonth"] && @$_POST["eyear"] == @$_POST["byear"]) //同年同月開始且結束
-    																									   		for ($i = @$_POST['bday']; $i <= $emd; $i++)
-    																										 			echo "<option value='$i'" . ((@$_POST['eday'] == $i) ? 'selected' : '') . ">$i</option>";
-    																											else
-    																												for ($i = 1; $i <= $emd; $i++)
-    																													echo "<option value='$i'" . ((@$_POST['eday'] == $i) ? 'selected' : '') . ">$i</option>";
-    																											?>
-    																											</select>日
-    																										</td>
+                                                        <td>
+                                                          <div class='input-group date' id='leave-end'>
+                                                              <input type='text' class="form-control" />
+                                                              <span class="input-group-addon">
+                                                                  <span class="glyphicon glyphicon-calendar"></span>
+                                                              </span>
+                                                          </div>
+    			                                    					</td>
     																							      <td class="td1">請假結束時間</td>
     																								   	<td>
     																											<select class="selectpicker" name="etime" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
@@ -289,68 +220,44 @@
     			                                  							</select>時
     																										</td>
     			                                  					</tr>
-    																									<?
-    																									if (in_array(@$_POST['vtype'], array('01', '02', '03', '06', '15', '17', '21', '22') )
-                                                      || @$_POST['depart'] =='M47' || @$_POST['depart'] == 'N20' || substr(@$_POST['depart'], 0, 2)=='M6'){ ?>
-    																									<tr>
-      																									<td class='td1'>奉派文號或提簽日期或填「免」</td>
-      																									<td><input type="text" name="permit" size="30"></td>
-    																								    <td class='td1'>差假合計日數是否含例假日</td>
+    																									<tr class="permit-row">
+      																									<td class='td1'><span style="color: red;">奉派文號或提簽日期或填「免」</span></td>
+      																									<td><input type="text" class="form-control" size="50" name="permit" value="" maxlength="50"></td>
+    																								    <td class='td1'><span style="color: red;">差假合計日數是否含例假日</span></td>
     																										<td>
                                                           <input type='radio' name='saturday' value='1'>是
                                                           <input type='radio' name='saturday' value='0' checked>否
     																										</td>
     																									</tr>
-      																				          <?
-                                                        }
-                                                        ?>
-    			                                  					<tr>
-    																										<td class="td1">差假期間是否有課</td>
+    			                                  					<tr class="permit-row">
+    																										<td class="td1"><span style="color: red;">差假期間是否有課</span></td>
     																										<td>
                                               						<input type='radio' name='haveclass' value='1'>是
                                               						<input type='radio' name='haveclass' value='0' checked>否
     																										</td>
-    																										<td class="td1">是否出國</td>
+    																										<td class="td1"><span style="color: red;">是否出國</span></td>
     			                                  						<td>
                                               						<input type='radio' name='abroad' value='1'>是
                                               						<input type='radio' name='abroad' value='0' checked>否
     			                                  						</td>
     			                                  					</tr>
-                                            					<tr id="trip">
+                                            					<tr id="trip-row">
                                             						<td class="td1"><span style="color: red;">是否刷國民旅遊卡</span></td>
                                             						<td>
                                             						  <input type='radio' name='trip' value='1'>是
                                             						  <input type='radio' name='trip' value='0' checked>否
                                             						</td>
                                             					</tr>
-                                                      <?
-
-                                          					if (@$_POST['vtype'] =='01' || @$_POST['vtype'] == '02' || @$_POST['vtype'] == '03'){
-                                          						$place = array('請選擇或填寫', '基隆市', '台北市', '新北市', '桃園市', '新竹縣', '新竹市',
-                                                      '苗栗縣', '台中市', '彰化縣', '彰化市', '南投縣', '雲林縣', '嘉義縣',
-                                                      '嘉義市', '台南市', '高雄市', '屏東縣', '宜蘭縣', '花蓮縣', '台東縣',
-                                                      '連江縣', '澎湖縣', '金門縣', '自己輸入');
-                                          						echo "<tr>"; //此段 logic changed by liru
-                                          						echo "<td class='td1'><span style='color: darkred;''>出差(公假)地點</span></td>";
-                                          						echo "<td colspan='3'>";
-                                          						if(@$_POST['abroad'] == '0') //未出國
-                                          						{
-                                          	            if (@$_POST['eplace'] == '自己輸入'){
-                                          								echo	"<input type='text' name='eplace' value='" . @$_POST['eplace']."'>";
-                                          								echo "</td>";
-                                          							}
-                                          							else {
-                                          								echo "<select class='selectpicker' name='eplace' data-width='fit' data-style='btn-default' data-live-search='true' onChange='document.holiday.submit();'>";//liru move
-                                          								for ($i = 0; $i < count($place); $i++)
-                                          								  echo "<option value='". $place[$i]. "'". ((@$_POST['eplace'] == $place[$i]) ? 'selected' : '') . ">" . $place[$i] . "</option>";
-                                          								echo "</select>";
-                                                        }
-                                          						}
-                                          						else{
-                                          						  echo	"<input type='text' name='eplace' value='" . @$_POST['eplace'] . "'>";
-                                          						  echo	"</td>";
-                                          						}
-
+                                                      <tr id="place-row">
+                                                        <td class="td1"><span style="color: red;">出差/公假地點</span></td>
+                                                        <td>
+                                                          <select name="eplace" id="qry_eplace" class="form-control">
+                                                          </select>
+    																									  <td colspan="2">
+    																											<input type="text" class="form-control" size="50" name="eplace" value="" maxlength="50" placeholder="請自行輸入地點" disabled="true">
+    																										</td>
+                                                      </tr>
+<!--
                                           						  //echo	"<td align='center'><font color='darkred'>是否使用研發處經費</td>";
                                           						  //echo	"<td align='center'>";
                                           						 // echo	"<input type='radio' name='research' value='1'"; if($_SESSION["research"]==1) echo checked; echo ">是";
@@ -362,7 +269,7 @@
                                             					}
                                                                 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                                             				    if (@$_POST['vtype'] == '11'){  //補休
-                                            					?>
+                                            					?> -->
                                                       <tr id="nouse">
                                             						<td class="td1"><span style="color: red;">可補休之加班時數</span></td>
                                             						<td colspan="3">
@@ -395,9 +302,6 @@
                                                         </span>
                                                         </td>
                                             				   </tr>
-                                                               <?
-                                                                //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                            					} ?>
     			                                  					<tr>
     																										<td class="td1">備註</td>
     																									  <td colspan="3">
@@ -407,7 +311,7 @@
     			                                  					<tr>
     			                                  						<td colspan="4" style="text-align: center;">
     			                                  							<button type="submit" class="btn btn-default">確 定</button>
-    			                                  							<button type="reset" class="btn btn-default">重 填</button>
+    			                                  							<button type="reset" class="btn btn-default" onclick="return confirm_reset();">重 填</button>
     			                                  						</td>
     			                                  					</tr>
     			                                  					<tr>
