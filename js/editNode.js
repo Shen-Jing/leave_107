@@ -114,6 +114,7 @@ $(function(){
           $('#' + $('#add-id').val().slice(0, -2) + ' > ol').append(text);
         else
           $('.root').append(text);
+        $('#' + $('#add-id').val() + ' .edit-opener').click(edit_event);
       },
       error: function(jqXHR, textStatus, errorThrown)
       {
@@ -160,7 +161,7 @@ $(function(){
     $("#modal-add").modal("show");
   });
 
-  $(".edit-opener").click(function() {
+  var edit_event = function() {
     $("#modal-edit .modal-title").html($(this).parent().parent().attr('id') + " - 編輯節點");
     $("#edit-id").val($(this).parent().parent().attr('id'));
     $("#edit-name").val($(this).parent().prev().text().slice(1));
@@ -168,7 +169,8 @@ $(function(){
     $("#edit-type").prop('checked', $(this).parent().parent().attr('type'));
     $("#edit-img").val($(this).parent().prev().children('i').attr('class').slice(3, -6));
     $("#modal-edit").modal("show");
-  });
+  };
+  $(".edit-opener").click(edit_event);
 
   $(".delete").click(function(event) {
     var id = $(this).parent().parent().attr('id');
