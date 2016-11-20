@@ -27,20 +27,7 @@
                                                       <!--link rel="stylesheet" href="style.css"-->
                                                       <div>
                                                         <H3>國民旅遊名單</H3>
-                                                        <table id="trip_dealing" class="table table-striped table-bordered" width="100%" cellspacing="0">
-
-
-
-
-
-
-
-
-
-
-
-                                                            
-                                                        </table>
+                                                        <table id="trip_dealing" class="table table-striped table-bordered" width="100%" cellspacing="0"></table>
                                                       </div>
                                                   </div>
                                               <!--</fieldset>-->
@@ -48,25 +35,9 @@
                                         <div class="form-group">
 
                                             <!--link rel="stylesheet" href="style.css"-->
-                                            <div id="trip_canceled">
+                                            <div>
                                               <H3>已取消國民旅遊名單</H3>
-                                              <table id="Btable_canceled" class="table table-striped table-bordered" width="100%" cellspacing="0">
-                                                  <thead>
-                                                      <tr style="font-weight:bold">
-                                                          <th>姓名</th>
-                                                          <th>單位</th>
-                                                          <th>職稱</th>
-                                                          <th>起始日期</th>
-                                                          <th>終止日期</th>
-                                                          <th>起始時間</th>
-                                                          <th>終止時間</th>
-                                                          <th>天數</th>
-                                                          <th>完成註記</th>
-                                                      </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                  </tbody>
-                                              </table>
+                                              <table id="trip_canceled" class="table table-striped table-bordered" width="100%" cellspacing="0"></table>
                                             </div>
                                         </div>
 

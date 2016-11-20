@@ -20,7 +20,7 @@ $sql="SELECT empl_id_no
       FROM 	 psfempl
       WHERE  empl_no='$userid'";
 $id_no = $db -> query_first_row($sql)[0];
-if($_POST['tbid'] == 0)
+if($_POST['oper'] == "dealing")
 {
 $SQLStr ="SELECT empl_chn_name,h.POCARD,pc.CODE_CHN_ITEM,h.POVDATEB,h.POVDATEE,
           h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD,h.AGENTNO,
@@ -38,12 +38,25 @@ $SQLStr ="SELECT empl_chn_name,h.POCARD,pc.CODE_CHN_ITEM,h.POVDATEB,h.POVDATEE,
           and  pc.CODE_FIELD=h.POVTYPE
           and  s.dept_no=h.depart
           order by h.POCARD,h.POVDATEB,h.POVHOURS";
-          $data = $db -> query_array ($SQLStr);
+          $data = $db -> query_array($SQLStr);
           //echo $data["EMPL_CHN_NAME"][0];
           echo json_encode($data);
 
 
           exit;
-        }
+        }else if($_POST['oper']=='canceled')
+      {
+        $SQLStr ="SELECT empl_chn_name,h.POCARD,pc.CODE_CHN_ITEM,h.POVDATEB,h.POVDATEE,
+      	h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD,h.AGENTNO,
+          h.serialno,h.CURENTSTATUS,h.DEPART
+      	FROM psfempl p,holidayform h,psqcode pc
+      	where trip=-1 and condition <> -1
+      	and  p.empl_no=h.pocard
+      	and  pc.CODE_KIND='0302'
+      	and  pc.CODE_FIELD=h.POVTYPE
+      	order by h.POCARD,h.POVDATEB,h.POVHOURS";
+        $data = $db -> query_array($SQLStr);
+        echo json_encode($data);
+      }
 
 ?>
