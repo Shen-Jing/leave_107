@@ -1,7 +1,7 @@
 <?
 include '../inc/connect.php';
 
-if (isset($_POST['id']) && isset($_POST['name']) && isset($_POST['url']) && isset($_POST['type']) && isset($_POST['img']))
+if (isset($_POST['id']))
 {
   $id = $_POST['id'];
 
