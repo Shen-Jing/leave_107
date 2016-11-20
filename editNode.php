@@ -12,6 +12,7 @@ $d = $db -> query_array($sql);
 <div id="page-wrapper">
   <div class="container-fluid">
     <? include ("inc/page-header.php"); ?>
+    <button id="add-opener" class="btn btn-success">新增程式</button><br><br>
     <ol class="root vertical"><!-- content -->
       <?
         $parent_previous = "";
@@ -21,6 +22,7 @@ $d = $db -> query_array($sql);
           $pgmname =  $d['PGMNAME'][$i] ;
           $parent_folder = $d['PARENT_FOLDER'][$i] ; //父節點
           $folder_img = $d['FOLDER_IMG'][$i] ; //節點圖示
+          $pgmtype = $d['PGMTYPE'][$i];
 
           if($i>0 && $parent_folder<>$parent_previous)//換根節點
           {
@@ -33,20 +35,25 @@ $d = $db -> query_array($sql);
               echo "</ol></li>\r\n";
           }
 
-          echo "<li id='$pgmid'>\r\n<span>$pgmname</span><span class='right'><button class='edit-opener btn btn-info btn-sm'>編輯</button> <button class='delete btn btn-danger btn-sm'>刪除</button></span>";
+          echo "<li id='$pgmid' url='$pgmurl' type='$pgmtype'>\r\n<span><i class='fa $folder_img fa-fw'></i> $pgmname</span><span class='right'><button class='edit-opener btn btn-info btn-xs'>編輯</button>";
+
+          if(!($pgmurl == "" && strcmp($d['PARENT_FOLDER'][$i+1], $pgmid) == 0))
+            echo " <button class='delete btn btn-danger btn-xs'>刪除</button>";
+          echo "</span>";
           if ($pgmurl == "")
             echo "<ol>\r\n";
           else
             echo "</li>\r\n";
 
-          $parent_previous = $parent_folder  ;
-          if($pgmurl=="") $parent_previous = $pgmid ; //目前的根節點
+          $parent_previous = $parent_folder;
+          if($pgmurl == "")
+            if (strcmp($d['PARENT_FOLDER'][$i+1], $pgmid) == 0)
+              $parent_previous = $pgmid;
+            else
+              echo "</ol></li>\r\n";
         }
       ?>
     </ol>
-    </ol>
-    </ol>
-    <button id="add-opener" class="btn btn-success">新增</button>
 
     <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
