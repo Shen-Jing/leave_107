@@ -142,46 +142,41 @@ $( // 表示網頁完成後才會載入
     }
 );
 
+
 function timesum()
 {
-    var uycho, umcho, udcho, uyval, umval, udval;
-    var bycho, bmcho, bdcho, byval, bmval, bdval;
-    var eycho, emcho, edcho, eyval, emval, edval;
-    var btcho, btval, etcho, etval;
+    var uyval, umval, udval;
+    var byval, bmval, bdval;
+    var eyval, emval, edval;
+    var btval, etval, reval;
 
-    uycho = document.holiday.uyear.selectedIndex;
-    uyval = document.holiday.uyear.options[uycho].value;
+    uyval = $('#uyear').val();
 
-    umcho = document.holiday.umonth.selectedIndex;
-    umval = document.holiday.umonth.options[umcho].value;
+    umval = $('#umonth').val();
 
-    udcho = document.holiday.uday.selectedIndex;
-    udval = document.holiday.uday.options[udcho].value;
+    udval = $('#uday').val();
 
-    bycho = document.holiday.byear.selectedIndex;
-    byval = document.holiday.byear.options[bycho].value;
+    byval = $('#byear').val();
 
-    bmcho = document.holiday.bmonth.selectedIndex;
-    bmval = document.holiday.bmonth.options[bmcho].value;
+    bmval = $('#bmonth').val();
 
-    bdcho = document.holiday.bday.selectedIndex;
-    bdval = document.holiday.bday.options[bdcho].value;
+    bdval = $('#bday').val();
 
-    eycho = document.holiday.eyear.selectedIndex;
-    eyval = document.holiday.eyear.options[eycho].value;
+    eyval = $('#eyear').val();
 
-    emcho = document.holiday.emonth.selectedIndex;
-    emval = document.holiday.emonth.options[emcho].value;
+    emval = $('#emonth').val();
 
-    edcho = document.holiday.eday.selectedIndex;
-    edval = document.holiday.eday.options[edcho].value;
+    edval = $('#eday').val();
 
-    btcho = document.holiday.btime.selectedIndex;
-    btval = document.holiday.btime.options[btcho].value;
+    btval = $('#btime').val();
 
-    etcho = document.holiday.etime.selectedIndex;
-    etval = document.holiday.etime.options[etcho].value;
+    etval = $('#etime').val();
 
+    //var row0="<option value=' " + reasonstr + "'>" + reasonstr + "</option>"
+    //$('#reason_sub').append(row0);
+
+    //recho = document.holiday.etime.selectedIndex;
+    //reval = document.holiday.etime.options[recho].value;
 
     //var reasonstr = document.holiday.reason.value;
     var reason = $('#reason').val();
@@ -207,6 +202,6 @@ function timesum()
                 alert(JData);
             }
         },
-        error: function(xhr, ajaxOptions, thrownError) {/*console.log(xhr.responseText);alert(xhr.responseText);*/}
+        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
     });
 }

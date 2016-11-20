@@ -31,10 +31,12 @@ $now = basename($_SERVER['REQUEST_URI']);
 
     <link href="css/sbadmin2-sidebar-toggle.css" rel="stylesheet" type="text/css">
 
+    <!-- bootstrap datepicker -->
+    <link href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
     <!-- Custom Fonts -->
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
      <link href="css/toastr.min.css" rel="stylesheet"/>
-
      <link href="css/dataTables.bootstrap.min.css" rel="stylesheet"/>
      <link href="css/dataTables_sorticon.css" rel="stylesheet"/>
      <link href="css/buttons.dataTables.min.css" rel="stylesheet"/>

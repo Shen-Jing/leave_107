@@ -1,5 +1,5 @@
 $( // 表示網頁完成後才會載入
-    function p_menu_onChange(){
+    function(){
 
         $("body").tooltip({
             selector: "[title]"
@@ -66,27 +66,27 @@ function CRUD(oper, id) {
                     else{
                             var row0 ="";
                             row0 = row0 + "<table class='table table-bordered col-md-8'><tbody><tr>";
-                            row0 = row0 + "<td align=\"center\">加班日期</td>";
-                            row0 = row0 + "<td align=\"center\">加班起始時間</td>";
-                            row0 = row0 + "<td align=\"center\">加班結束時間</td>";
-                            row0 = row0 + "<td align=\"center\">目前剩餘時數</td>";
-                            row0 = row0 + "<td align=\"center\">到期日期</td>";
-                            row0 = row0 + "<td align=\"center\">人事審核</td>";
-                            row0 = row0 + "<td align=\"center\">刪除</td>";
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>加班日期</td>";
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>加班起始時間</td>";
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>加班結束時間</td>";
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>目前剩餘時數</td>";
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>到期日期</td>";
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>人事審核</td>";
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>刪除</td>";
 
                             for(var i=0;i<JData.OVER_DATE.length;i++){
 
-                                row0 = row0 + "<tr><td align='center'>" ;
+                                row0 = row0 + "<tr><td  style='text-align:center;'>" ;
                                 row0 = row0 + JData.OVER_DATE[i] ;
-                                row0 = row0 + "</td><td>" ;
+                                row0 = row0 + "</td><td  style='text-align:center;'>" ;
                                 row0 = row0 + JData.DO_TIME_1[i] ;
-                                row0 = row0 + "</td><td>" ;
+                                row0 = row0 + "</td><td  style='text-align:center;'>" ;
                                 row0 = row0 + JData.DO_TIME_2[i] ;
-                                row0 = row0 + "</td><td>" ;
+                                row0 = row0 + "</td><td  style='text-align:center;'>" ;
                                 row0 = row0 + JData.NOUSE_TIME[i] ;
-                                row0 = row0 + "</td><td>" ;
+                                row0 = row0 + "</td><td  style='text-align:center;'>" ;
                                 row0 = row0 + JData.DUE_DATE[i] ;
-                                row0 = row0 + "</td><td>" ;
+                                row0 = row0 + "</td><td  style='text-align:center;'>" ;
                                 var p_checkn="";
                                 if (JData.PERSON_CHECK[i]=='1')
                                     p_checkn='已審核';
@@ -94,7 +94,7 @@ function CRUD(oper, id) {
                                     p_checkn='待審核';
 
                                 row0 = row0 + p_checkn ;
-                                row0 = row0 + "</td><td>" ;
+                                row0 = row0 + "</td><td  style='text-align:center;'>" ;
 
                                 if (JData.PERSON_CHECK[i]=='1')
                                     row0 = row0  + "已審核無法刪除";

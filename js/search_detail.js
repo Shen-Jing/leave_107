@@ -65,7 +65,7 @@ function CRUD(oper) {
         dataType: "json",
         success: function(JData) {
           $('#start_end').empty();
-          $('#start_end').append("日期:"+yyval+"0101~"+yyval+"1231");
+          $('#start_end').append("日期:"+yyval+"年1月1日~"+yyval+"年12月31日");
             if (JData.error_code)
                 toastr["error"](JData.error_message);
             else{

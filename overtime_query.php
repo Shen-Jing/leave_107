@@ -1,4 +1,3 @@
-<? include("inc/check.php");?>
 <? include("inc/header.php"); ?>
     <? include("inc/navi.php"); ?>
         <? include("inc/sidebar.php"); ?>
@@ -49,5 +48,5 @@
                 </div>
                 <!-- /.container-fluid -->
             </div>
-            <!-- /#page-wra
+            <!-- /#page-wrapper -->
             <? include("inc/footer.php"); ?>
