@@ -1,10 +1,3 @@
-<?
-  	include 'inc/connect.php';
-	include("inc/check.php");
-?>
-
-
-<!--=============================================================================================-->
 <? include("inc/header.php"); ?>
     <? include("inc/navi.php"); ?>
         <? include("inc/sidebar.php"); ?>
@@ -36,23 +29,23 @@
 				<table class="table table-bordered" id="table1">
 					<thead>
 						<tr>
-							<td class="col-md-2" align="center">員工編號</td>
+							<td class="col-md-2 td1" align="center">員工編號</td>
 							<td class="col-md-4" id="empl_no"></td>
-							<td class="col-md-2" align="center">姓名</td>
+							<td class="col-md-2 td1" align="center">姓名</td>
 							<td class="col-md-4" id="empl_name"></td>
 						</tr>
 
 						<tr>
-							<td class="col-md-2" align="center"> 單位</td>
+							<td class="col-md-2 td1" align="center"> 單位</td>
 							<td class="col-md-4" id="dname"></td>
-							<td class="col-md-2" align="center"> 職稱</td>
+							<td class="col-md-2 td1" align="center"> 職稱</td>
 							<td class="col-md-4" id="tname"></td>
 						</tr>
 					</thead>
 
 					<thead>
 					<tr>
-						<td class="col-md-2" align="center">加班原因</td>
+						<td class="col-md-2 td1" align="center">加班原因</td>
 						<td class="col-md-4" colspan=3>
 							<div class='form-group'>
 								<div class='col-md-12'>
@@ -65,20 +58,21 @@
 
 							<div class='form-group'>
 								<div class='col-md-12'>
-									加班簽呈文號：<input type="text" name="reason" value="" size="25" maxlength="30" required><font size='2' color='darkred'> (學校統一加班無提簽文號者，請說明加班原因)</font>
+									加班簽呈文號：<input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" required><font size='2' color='darkred'> (學校統一加班無提簽文號者，請說明加班原因)</font>
 
 									<div style="font-size:15px">　<input type="radio" name="pay_type" value="1" checked style="border:none">6個月內補休
 										<input type="radio" name="pay_type" value="2"  style="border:none" onclick="javascript:alert('因本校無該項經費及預算，請勾選加班補休。');holiday.pay_type[0].checked='true';">請領加班費
 									</div>
 								</div>
 						 	</div>
+
 						</td>
 					</tr>
 					</thead>
 
 					<thead>
 					<tr>
-						<td align="center">加班日期</td>
+						<td class="td1" align="center">加班日期</td>
 						<td colspan="3"><font size="4">
 							<select class='form-control' style='width:auto; display: inline-block;' id='byear' name='byear' onChange=''></select>年
 							<select class='form-control' style='width:auto; display: inline-block;' id='bmonth' name='bmonth' onChange=''></select>月
@@ -92,7 +86,7 @@
 
 					<thead>
 					<tr>
-						<td align="center">加班刷卡時間</td>
+						<td class="td1" align="center">加班刷卡時間</td>
 						<td class="col-md-5">
 							<div class='form-group'>
 								<div class='col-md-6'>
@@ -106,7 +100,7 @@
 							</div>
 						</td>
 
-						<td colspan="2">
+						<td class="col-md-5" colspan="2">
 							<div class='form-group'>
 								<div class='col-md-6'>
 									<font color='darkred' size='2'>結束加班刷卡資料
@@ -120,7 +114,7 @@
 					</tr>
 					<tr>
 						<td colspan="4" align="center">
-							<button class="btn btn-primary"  name="check" onclick='timesum();''>送出計算</button>
+							<button class="btn btn-primary" name="check" onclick='timesum();'>送出計算</button>
 						</td>
 					</tr>
 					<tr>

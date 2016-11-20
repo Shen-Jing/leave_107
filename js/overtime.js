@@ -142,12 +142,13 @@ $( // 表示網頁完成後才會載入
     }
 );
 
+
 function timesum()
 {
     var uycho, umcho, udcho, uyval, umval, udval;
     var bycho, bmcho, bdcho, byval, bmval, bdval;
     var eycho, emcho, edcho, eyval, emval, edval;
-    var btcho, btval, etcho, etval;
+    var btcho, btval, etcho, etval, recho, reval;
 
     uycho = document.holiday.uyear.selectedIndex;
     uyval = document.holiday.uyear.options[uycho].value;
@@ -182,6 +183,11 @@ function timesum()
     etcho = document.holiday.etime.selectedIndex;
     etval = document.holiday.etime.options[etcho].value;
 
+    //var row0="<option value=' " + reasonstr + "'>" + reasonstr + "</option>"
+    //$('#reason_sub').append(row0);
+
+    //recho = document.holiday.etime.selectedIndex;
+    //reval = document.holiday.etime.options[recho].value;
 
     //var reasonstr = document.holiday.reason.value;
     var reason = $('#reason').val();
@@ -207,6 +213,6 @@ function timesum()
                 alert(JData);
             }
         },
-        error: function(xhr, ajaxOptions, thrownError) {/*console.log(xhr.responseText);alert(xhr.responseText);*/}
+        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
     });
 }

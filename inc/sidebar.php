@@ -45,6 +45,9 @@
                         <a href='#'><i class='fa fa-car fa-fw'></i><span class='masked'>差勤管理<span class='fa arrow'></span></span></a>
                         <ul class="nav nav-second-level">
                           <li>
+                            <a href='all.php'><span class='masked'>查詢所有差假狀況</span></a>
+                          </li>
+                          <li>
                             <a href='#'><span class='masked'>國民旅遊名單</span></a>
                           </li>
                           <li>

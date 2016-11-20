@@ -1,5 +1,5 @@
 $( // 表示網頁完成後才會載入
-    function p_menu_onChange(){
+    function (){
 
         $("body").tooltip({
             selector: "[title]"
@@ -68,7 +68,7 @@ function CRUD(oper, id) {
                 if (oper == "0")
                 { //查詢
 
-                    //$('#_content').empty();
+                    $('#_content').empty();
 
                     var i = 0;
                     var z = 0;
@@ -116,30 +116,30 @@ function CRUD(oper, id) {
 
                     var row0 ="";
                     row0 = row0 + "<table class='table table-striped table-bordered dt-responsive nowrap col-md-8' width='100%'><tbody><tr>";
-                    row0 = row0 + "<td class='td1' align=\"center\">日期</td>";
-                    row0 = row0 + "<td class='td1' align=\"center\" colspan=\"6\">刷卡時間(含加班時間)</td>";
-                    row0 = row0 + "<td class='td1' align=\"center\">附註</td>";
+                    row0 = row0 + "<td class='td1' style='text-align:center;'>日期</td>";
+                    row0 = row0 + "<td class='td1' style='text-align:center;' colspan=\"6\">刷卡時間(含加班時間)</td>";
+                    row0 = row0 + "<td class='td1' style='text-align:center;'>附註</td>";
 
                     for (var l = 0 ; l <= z; l++)
                     {
-                        row0 = row0 + "<tr><td class='td1'>" + day_day[l] + "</td>";
+                        row0 = row0 + "<tr><td  style='text-align:center;'>" + day_day[l] + "</td>";
 
                         for (var m=0 ; m < 6 ; m++)
                         {
 
                             if ( ( typeof time[l][m] === "undefined" ) || time[l][m] == '' )
-                                row0 = row0 + "<td class='td1'>-----</td>";
+                                row0 = row0 + "<td  style='text-align:center;'>-----</td>";
                             else
-                                row0 = row0 + "<td class='td1'>" + time[l][m] + "</td>";
+                                row0 = row0 + "<td  style='text-align:center;'>" + time[l][m] + "</td>";
                         }
 
                         if (( typeof day_memo[l] === "undefined" ) || day_memo[l] == '')
-                            row0 = row0 + "<td class='td1'>-----</td></tr>";
+                            row0 = row0 + "<td  style='text-align:center;'>-----</td></tr>";
                         else
-                            row0 = row0 + "<td class='td1'>" + day_memo[l] + "</td></tr>";
+                            row0 = row0 + "<td  style='text-align:center;'>" + day_memo[l] + "</td></tr>";
                     }
 
-                    row0 = row0 + "<tr><td class='td1' colspan='8'><div class='alert alert-warning'><i class='fa fa-warning'>注意!";
+                    row0 = row0 + "<tr><td  style='text-align:center;' colspan='8'><div class='alert alert-warning'><i class='fa fa-warning'>注意!";
                     row0 = row0 + "<ol><li>加班應事先以書面專案簽准。</li></ol></i></div></td></tr></tbody></table>";
 
                     $('#_content').append(row0);
