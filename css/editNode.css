@@ -13,7 +13,7 @@ li {
 }
 /* 49 */
 .root li {
-  margin: 25px 0px 0px 0px;
+  margin: 7px 0px 0px 0px;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -29,7 +29,7 @@ li {
 /* 68 */
 .root .placeholder {
   height: 40px;
-  margin: 25px 0px 0px 0px;
+  margin: 7px 0px 0px 0px;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;

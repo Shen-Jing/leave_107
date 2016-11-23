@@ -85,7 +85,7 @@ $d = $db -> query_array($sql);
 <div id="page-wrapper">
   <div class="container-fluid">
     <? include ("inc/page-header.php"); ?>
-    <button id="add-opener" class="btn btn-success">新增程式</button><br><br>
+    <button class="add-opener btn btn-success">新增程式</button><br><br>
     <ol class="root vertical"><!-- content -->
       <?
         $parent_previous = "";
@@ -112,6 +112,8 @@ $d = $db -> query_array($sql);
 
           if(!($pgmurl == "" && strcmp($d['PARENT_FOLDER'][$i+1], $pgmid) == 0))
             echo " <button class='delete btn btn-danger btn-xs'>刪除</button>";
+          else
+            echo " <button class='add-opener btn btn-success btn-xs'>新增</button>";
           echo "</span>";
           if ($pgmurl == "")
             echo "<ol>\r\n";

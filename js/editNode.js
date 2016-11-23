@@ -96,6 +96,11 @@ $(function(){
   */
 
   $('#add-btn').click(function(event) {
+    if ($('#' + $('#add-id').val()).length > 0)
+    {
+      toastr['warning']('該 id 目前已被使用！');
+      return;
+    }
     $type = '';
     if ($('#add-type').prop("checked"))
       $type = '1';
@@ -157,7 +162,19 @@ $(function(){
     $("#modal-edit").modal("hide");
   });
 
-  $("#add-opener").click(function() {
+  $(".add-opener").click(function() {
+    if ($(this).parent().parent().children('ol').children('li').length)
+    {
+      var l;
+      if ($(this).parent().parent().children('ol').children('li').length + 1 < 10)
+        l = '0' + ($(this).parent().parent().children('ol').children('li').length + 1);
+      else
+        l = $(this).parent().parent().children('ol').children('li').length + 1;
+      $("#add-id").val($(this).parent().parent().attr('id') + l);
+      $("#add-id").prop('disabled', true);
+    }
+    else
+      $("#add-id").prop('disabled', false);
     $("#modal-add").modal("show");
   });
 
@@ -168,6 +185,10 @@ $(function(){
     $("#edit-url").val($(this).parent().parent().attr('url'));
     $("#edit-type").prop('checked', $(this).parent().parent().attr('type'));
     $("#edit-img").val($(this).parent().prev().children('i').attr('class').slice(3, -6));
+    if ($(this).parent().parent().children('ol').children('li').length)
+      $("#edit-url").prop('disabled', true);
+    else
+      $("#edit-url").prop('disabled', false);
     $("#modal-edit").modal("show");
   };
   $(".edit-opener").click(edit_event);
