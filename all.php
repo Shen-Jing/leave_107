@@ -58,6 +58,28 @@
                                             <!--<fieldset>-->
                                                 <!--link rel="stylesheet" href="style.css"-->
                                                 <div id="_content">
+                                                	<div class='table-responsive'>
+                                                		<table class='table table-bordered table-striped' id="Btable" cellspacing="0">
+                                                			<thead>
+                                                				<tr style="font-weight:bold">
+                                                					<th style='text-align:center;'>單位</th>
+                                                					<th style='text-align:center;'>姓名</th>
+                                                					<th style='text-align:center;'>假別</th>
+                                                					<th style='text-align:center;'>起始日</th>
+                                                					<th style='text-align:center;'>終止日</th>
+                                                					<th style='text-align:center;'>起始</th>
+                                                					<th style='text-align:center;'>天/時</th>
+                                                					<th style='text-align:center;'>單位簽</th>
+                                                					<th style='text-align:center;'>人事承辦</th>
+                                                					<th style='text-align:center;'>人事主任</th>
+                                                					<th style='text-align:center;'>秘書簽 </th>
+                                                					<th style='text-align:center;'>填寫日期</th>
+                                                				</tr>
+                                                			</thead>
+                                                			<tbody>
+                                                			</tbody>
+                                                		</table>
+                                                	</div>
                                                 </div>
                                             <!--</fieldset>-->
                                         </form>
