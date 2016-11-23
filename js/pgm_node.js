@@ -27,7 +27,7 @@ $(function(){
           n_id = n_id + index;
       }
       $.ajax({
-        url: 'ajax/updateNode.php',
+        url: 'ajax/pgm_update_ajax.php',
         type: 'POST',
         data: {o_id: o_id, n_id: n_id},
         success: function(result){
@@ -106,7 +106,7 @@ $(function(){
       $type = '1';
     //$.post('../ajax/insertNode.php', {id: $('#id').val(), name: $('#name').val(), url: $('#url').val(), type: $('#type').val(), img: $('#img').val()}, function(result){alert(result)});
     $.ajax({
-      url: 'ajax/insertNode.php',
+      url: 'ajax/pgm_insert_ajax.php',
       type: 'POST',
       data: {id: $('#add-id').val(), name: $('#add-name').val(), url: $('#add-url').val(), type: $type, img: $('#add-img').val()},
       success: function(result){
@@ -143,7 +143,7 @@ $(function(){
     if ($('#edit-type').prop("checked"))
       $type = '1';
     $.ajax({
-      url: 'ajax/updateNode.php',
+      url: 'ajax/pgm_update_ajax.php',
       type: 'POST',
       data: {id: $('#edit-id').val(), name: $('#edit-name').val(), url: $('#edit-url').val(), type: $type, img: $('#edit-img').val()},
       success: function(result){
@@ -196,7 +196,7 @@ $(function(){
   $(".delete").click(function(event) {
     var id = $(this).parent().parent().attr('id');
     $.ajax({
-      url: 'ajax/deleteNode.php',
+      url: 'ajax/pgm_delete_ajax.php',
       type: 'POST',
       data: {id: id},
       success: function(result){

@@ -35,7 +35,7 @@
                     <i class="fa fa-sitemap fa-fw"></i><span style="font-size:13px">系統控制台</span><i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="editNode.php"><i class="fa fa-plus-square fa-fw"></i> 選單編輯介面</a>
+                    <li><a href="pgm_node.php"><i class="fa fa-plus-square fa-fw"></i> 選單編輯介面</a>
                     </li>
                 </ul>
             </li>
