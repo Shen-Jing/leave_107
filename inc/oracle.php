@@ -109,11 +109,130 @@ class ORACLE{
 		}
 	}
 
-	function query_array($Qstr){
-		return $this->fetch_array($this->query($Qstr));
-	}
 	function query_first_row($Qstr){
 		return $this->fetch_row($this->query($Qstr));
+	}
+	
+	#####################################
+	# 2016.11.05 Write and test finishd #
+	#####################################
+	
+	/*
+	*	this function "query_array" has been rewrited
+	*	which can optionally returns JSON type array used for dataTable, jqGrid, ...etc.
+	*
+	*	@param  string $Qstr	  : SQL statement
+	*	@param  bool   $isRowMode : An optional parameter decide OCI_FETCH_MODE
+	*	@return array of data
+	*
+	*	usage:
+	*	Default. Column Mode:
+	*	$data = $db -> query_array($sql);
+	*	
+	*	For dataTable, jqGrid. Row Mode:
+	*	$aaData['rows'] = $db -> query_array($sql, true);
+	*/
+	function query_array($Qstr, $isRowMode = false){
+		$resource = $this->query($Qstr);
+		
+		if(!$isRowMode)
+			return $this->fetch_array($resource);
+		
+		$this->rows = oci_fetch_all($resource, $this->results,
+									0, -1, //skip, maxrows(-1 = all rows)
+									OCI_ASSOC + OCI_FETCHSTATEMENT_BY_ROW);
+		//Convert Encoding
+		for($i = 0 ; $i < sizeof($this->results) ; $i++){
+			array_walk(
+				$this->results[$i],
+				function(&$val){
+					$val = mb_convert_encoding($val, "UTF-8", "BIG5");
+				}
+			);
+		}
+		
+		return $this->results;
+	}
+	
+	function set_rowid(&$rsc, $col_id_name = ""){
+		if($col_id_name === ""){
+			for($i = 0 ; $i < sizeof($rsc) ; $i++){
+				$rsc[$i]['DT_RowId'] = $i + 1;
+			}
+		}
+		else{
+			$col_id_name = strtoupper($col_id_name);
+			for($i = 0 ; $i < sizeof($rsc) ; $i++){
+				$rsc[$i]['DT_RowId'] = $rsc[$i][$col_id_name];
+				unset($rsc[$i][$col_id_name]);
+			}
+		}
+	}
+
+	
+	/*
+	*	this function "fetch_cell" is used to fetch a datum.
+	*
+	*	@param  string $Qstr    : SQL statement
+	*	@param  bool   $colName : An optional parameter can be used to fetch a specific column.
+	*	@return mixed $ret
+	*
+	*	usage:
+	*	$val = $db -> fetch_cell($sql);
+	*	OR
+	*	$val = $db -> fetch_cell($sql [,string $Field_Name]);
+	*/
+	function fetch_cell($Qstr, $colName = ""){
+		return $colName === ""  ? oci_fetch_row($this->query($Qstr))[0]
+								: oci_fetch_assoc($this->query($Qstr))[strtoupper($colName)];
+	}
+	
+	########################################
+	# 2016.11.17 Rewrite and test finished #
+	########################################
+	
+	/*
+	*	this function "query_by_param", a Parameterized Query version, is derivatived from "query".
+	*	it's designed to avoid SQL Injection
+	*
+	*	@param  string $Qstr	  	: SQL statement
+	*	@param  bool   $data 		: An associative array of data
+	*	@return the error information as an associative array
+	*
+	*
+	*	usage:
+	*	$sql = "INSERT INTO table_name (col_name01, col_name02, ...) VALUES(:param01, :param02, ...)" //parameter name with colon
+	*	$data = array (
+	*		"param01" => val01,
+	*		"param02" => val02, ...
+	*		// key_name without colon
+	*	);
+	*
+	*	$err_msg = $db -> query_by_param($sql, $data);
+	*/
+	function query_by_param($Qstr, $data){
+		if ($Qstr) {
+			$this -> str = $Qstr;
+			
+			$stmt=oci_parse($this->rp, $Qstr); // parse sql to oracle statement
+			
+			foreach($data as $key => $val){
+				oci_bind_by_name(
+					$stmt, 
+					$key[0] === ":" ? $key : ":".$key, // parameter
+					mb_convert_encoding($val, "UTF-8", "BIG5")); //value
+			}
+
+			if (!@oci_execute($stmt,OCI_COMMIT_ON_SUCCESS)){ // execute and auto commit to database
+					//error occur and print error and sql
+					$oci_err=@oci_error($stmt);
+					return $oci_err; //add by boblee!
+					//echo "<p>資料處理失敗，錯誤訊息: " . $oci_err[message] . "<br>錯誤請求指令" . $this -> str ."</p><hr>";
+			}
+			else {
+				return $stmt;
+			}
+		}
 	}
 }
 ?>
