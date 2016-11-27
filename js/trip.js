@@ -63,6 +63,7 @@ function init_table()
 								var tname     =  JData.CRJB_TITLE[i];
 
 								row0=row0+"<tr><th>" + poname + "</th><th>" + deptname + "</th><th>" + tname + "</th><th>" + povdateB + "</th><th>"+povdatee + "</th><th>"+povtimeb + "</th><th>"
+								+povtimee + "</th><th>"+povdays+"/"+povhours+"</th><th>"+"<button type=\"button\" class=\"btn btn-default\" onclick='cancelc("+serialno+");'>處理完成</button></tr>";
 								//alert(poname);
 
 						}
