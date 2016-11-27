@@ -122,11 +122,11 @@
             if ($row['SECONE_SIGND'][$i] == '')
                 $row['SECONE_SIGND'][$i] = '-';
 
-            if (strlen( $row['POVDATEB'][$i]) > 2)
-                 $row['POVDATEB'][$i] = substr( $row['POVDATEB'][$i],0,2) . ":" . substr( $row['POVDATEB'][$i],2,2);
+            if (strlen( $row['POVTIMEB'][$i]) > 2)
+                 $row['POVTIMEB'][$i] = substr( $row['POVTIMEB'][$i],0,2) . ":" . substr( $row['POVTIMEB'][$i],2,2);
 
-            if (strlen($row['POVDATEE'][$i]) > 2)
-                $row['POVDATEE'][$i] = substr($row['POVDATEE'][$i],0,2) . ":" . substr($row['POVDATEE'][$i],2,2);
+            if (strlen($row['POVTIMEE'][$i]) > 2)
+                $row['POVTIMEE'][$i] = substr($row['POVTIMEE'][$i],0,2) . ":" . substr($row['POVTIMEE'][$i],2,2);
 
             $a['data'][] = array(
                 $row['DEPT_SHORT_NAME'][$i],

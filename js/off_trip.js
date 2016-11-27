@@ -27,3 +27,17 @@ $(document).ready(function()
 
     });
 });
+function cancelclick(serialno)
+{
+  $.ajax({
+      url: 'ajax/off_trip_ajax.php',
+      data:{  oper: 'canceled',
+              serialnoVar: serialno,
+          },
+      type: 'POST',
+      dataType: "json",
+      success:function(){alert("該國民旅遊已取消!!");
+      window.location.reload();},
+      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+  });
+}

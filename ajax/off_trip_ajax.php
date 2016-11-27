@@ -42,6 +42,7 @@ $row = $db -> query_array($SQLStr);
 $a['data']="";
 
 for($i = 0; $i < sizeof($row['EMPL_CHN_NAME']); ++$i){
+  $serialno=$row['SERIALNO'][$i];
   $a['data'][] = array(
     $row['EMPL_CHN_NAME'][$i],
     $row['CODE_CHN_ITEM'][$i],
@@ -51,10 +52,17 @@ for($i = 0; $i < sizeof($row['EMPL_CHN_NAME']); ++$i){
     $row['POVTIMEB'][$i],
     $row['POVDAYS'][$i]."天".$row['POVHOURS'][$i]."時",
     "",
-    "<button type=\"button\" class=\"btn btn-default\">取消</button>");
+    "<button type=\"button\" class=\"btn btn-default\" onclick='cancelclick($serialno);'>取消</button>");
 
 }
 
 echo json_encode($a);
+}
+
+if($_POST['oper'] == "canceled")
+{
+  $serialno=$_POST['serialnoVar'];
+  $SQLStr=  "update holidayform set trip=-1  where serialno = $serialno ";
+  $db -> query($SQLStr);
 }
 ?>
