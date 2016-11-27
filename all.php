@@ -6,6 +6,9 @@
             <div id="page-wrapper">
                 <div class="container-fluid">
                     <? include ("inc/page-header.php"); ?>
+                    <style type="text/css" media="screen">
+                        th.dt-center, td.dt-center { text-align: center; }
+                    </style>
                         <form class="form-inline" role="form" name="form1" id="form1" action="" method="post">
                         <div class="row">
                             <div class="col-md-12">

@@ -109,6 +109,9 @@ function CRUD(oper, id) {
         "processing": false,
         "serverSide": false,
         "destroy": true,
+        "columnDefs": [
+            {"className": "dt-center", "targets": "_all"}
+        ],
         "ajax": {
             url: 'ajax/all_ajax.php',
             data: { oper: 0, p_year: yyval, p_month: mmval, dpt: dptval, type: typeval },
