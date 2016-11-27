@@ -1,10 +1,12 @@
 <?php
-  include_once("../inc/check.php");
+  session_start();
+  include '../inc/connect.php';
 
   // 查詢欄位
   if ($_POST['oper'] == "qry_item") {
     $data = array();
     $empl_no = $_POST['empl_no'];
+    $vocdate = $_POST['vocdate'];
     $depart = $_SESSION['depart'];
 
     // 單位
@@ -68,6 +70,19 @@
 
     $data['qry_agent_depart'][] = $tmp_data_1;
     $data['qry_agent_depart'][] = $tmp_data_2;
+
+    // 可補休之加班時數
+    $sql = "SELECT over_date, nouse_time,
+            substr(over_date,1,3) || '/' || substr(over_date,4,2) || '/' || substr(over_date,6,2) over_date2
+            FROM   overtime
+            WHERE  empl_no='$empl_no'
+            AND    person_check='1'
+            AND    nouse_time > 0
+            AND    due_date >= '$vocdate'
+            ORDER BY over_date";
+    $tmp_data = $db -> query_array($sql);
+
+    $data['qry_nouse'] = $tmp_data;
 
     echo json_encode($data);
     exit;

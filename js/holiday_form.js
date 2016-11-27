@@ -2,19 +2,75 @@ $( // 表示網頁完成後才會載入
     function() {
         // 請假開始日期、結束日期
         $('#leave-start').datetimepicker({
-            format: 'YYYY/MM/DD HH'
+            format: 'YYYY/MM/DD'
         });
         $('#leave-end').datetimepicker({
-            format: 'YYYY/MM/DD HH'
+            format: 'YYYY/MM/DD'
             // useCurrent: false //Important! See issue #1075
         });
+        // 開始時間的選取值為結束時間的最小值
+        $("#leave-start").on("dp.change", function (e) {
+            $('#leave-end').data("DateTimePicker").minDate(e.date);
+        });
+        // 結束時間的選取值為開始時間的最大值
         $("#leave-end").on("dp.change", function (e) {
             $('#leave-start').data("DateTimePicker").maxDate(e.date);
         });
 
+        // 起訖時間
+        $('#bus-trip-start').datetimepicker({
+            format: 'YYYY/MM/DD HH時'
+        });
+        $('#bus-trip-end').datetimepicker({
+            format: 'YYYY/MM/DD HH時'
+            // useCurrent: false //Important! See issue #1075
+        });
+        // 開始時間的選取值為結束時間的最小值
+        $("#bus-trip-start").on("dp.change", function (e) {
+            $('#bus-trip-end').data("DateTimePicker").minDate(e.date);
+        });
+        // 結束時間的選取值為開始時間的最大值
+        $("#bus-trip-end").on("dp.change", function (e) {
+            $('#bus-trip-start').data("DateTimePicker").maxDate(e.date);
+        });
+
+        // 出國出入境時間
+        $('#depart-time').datetimepicker({
+            format: 'YYYY/MM/DD'
+        });
+        $('#immig-time').datetimepicker({
+            format: 'YYYY/MM/DD'
+            // useCurrent: false //Important! See issue #1075
+        });
+        // 開始時間的選取值為結束時間的最小值
+        $("#depart-time").on("dp.change", function (e) {
+            $('#immig-time').data("DateTimePicker").minDate(e.date);
+        });
+        // 結束時間的選取值為開始時間的最大值
+        $("#immig-time").on("dp.change", function (e) {
+            $('#depart-time').data("DateTimePicker").maxDate(e.date);
+        });
+
+        // 出國會議(研究)日程
+        $('#meeting-start').datetimepicker({
+            format: 'YYYY/MM/DD'
+        });
+        $('#meeting-end').datetimepicker({
+            format: 'YYYY/MM/DD'
+            // useCurrent: false //Important! See issue #1075
+        });
+        // 開始時間的選取值為結束時間的最小值
+        $("#meeting-start").on("dp.change", function (e) {
+            $('#meeting-end').data("DateTimePicker").minDate(e.date);
+        });
+        // 結束時間的選取值為開始時間的最大值
+        $("#meeting-end").on("dp.change", function (e) {
+            $('#meeting-start').data("DateTimePicker").maxDate(e.date);
+        });
+
         var date = new Date();
         var year = date.getFullYear() - 1911;
-        var month = date.getMonth();
+        var month = date.getMonth() + 1;
         var day = date.getDate();
         // 部門：MQ5等等的編號
         var depart = $('#hide-depart').text();
@@ -23,12 +79,7 @@ $( // 表示網頁完成後才會載入
             selector: "[title]"
         });
 
-        $('#message').hide();
-        $('.permit-row').hide();
-        $('#place-row').hide();
-        $('#trip-row').hide();
-        // 加班剩餘
-        $('#nouse').hide();
+        $('.bus-trip').hide();
         // 勞基特休 / 教職特休
         $("#qry_vtype").change(function(){
             if ($('#qry_vtype').val() == "23" || $('#qry_vtype').val() == "06") {
@@ -60,33 +111,38 @@ $( // 表示網頁完成後才會載入
             // 奉派文號、是否含例假日、是否有課、是否出國
             var vt = ['01', '02', '03', '06', '15', '17', '21', '22'];
             if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1 || depart == 'M47' || depart == 'N20' || depart.substr(0, 2) == 'M6') {
-                $('.permit-row').show();
+                $('#permit-row').show();
             }
             else {
-                $('.permit-row').hide();
+                $('#permit-row').hide();
             }
 
-            // 出差 => 出差公假地點
+            // 出差、公假1、公假2 => 出差公假地點、出差等相關資訊
             var vt = ['01', '02', '03'];
             if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1) {
-                var place = ['基隆市', '台北市', '新北市',
-                '桃園市', '新竹縣', '新竹市',
-                '苗栗縣', '台中市', '彰化縣',
-                '彰化市', '南投縣', '雲林縣',
-                '嘉義縣', '嘉義市', '台南市',
-                '高雄市', '屏東縣', '宜蘭縣',
-                '花蓮縣', '台東縣', '連江縣',
-                '澎湖縣', '金門縣', '自行輸入'];
-                var row0 = "<option selected disabled class='text-hide'>請選擇出差地點</option>";
-                $('#qry_eplace').append(row0);
-                for (var i = 0; i < place.length; i++) {
-                    var row = "<option value=" + i + ">" + place[i] + "</option>";
-                    $('#qry_eplace').append(row);
-                }
                 $('#place-row').show();
+                $('.bus-trip').show();
+                // hide備註
+                $('#remark').hide();
+
+                if ($('input[name="abroad"]:checked').val() == "0") {
+                    // 起訖時間
+                    $('#bus-trip-time').show();
+                    // 出國會議日程
+                    $('#meeting-date').hide();
+                }
+                else {
+                    $('#bus-trip-time').hide();
+                    $('#meeting-date').show();
+                }
             }
             else {
                 $('#place-row').hide();
+                $('.bus-trip').hide();
+                // show備註
+                $('#remark').show();
+                // 起訖時間
+                $('#bus-trip-time').hide();
             }
 
             // 若休假 => 是否刷國民旅遊卡
@@ -97,6 +153,31 @@ $( // 表示網頁完成後才會載入
                 $('#trip-row').hide();
             }
 
+            // 若加班補休 => 顯示可補休之加班時數
+            if ($('#qry_vtype').val() == "11") {
+                $('#nouse').show();
+            }
+            else {
+                $('#nouse').hide();
+            }
+
+            // 出差、公假1 => 經費來源
+            var vt = ['01', '02'];
+            if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1) {
+                $('#budget').show();
+            }
+            else {
+                $('#budget').hide();
+            }
+
+            // 非(出差、公假1、公假2) => 備註
+            var vt = ['01', '02', '03'];
+            if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1) {
+                $('#remark').hide();
+            }
+            else {
+                $('#remark').show();
+            }
         });
 
         // 職務代理人單位
@@ -117,6 +198,7 @@ $( // 表示網頁完成後才會載入
             // 若出差地點選擇「自行輸入」 => enable input text讓使用者輸入
             if ($('#qry_eplace').val() == "23") {
                 $('#place-row > td:nth-child(3) > input').prop("disabled", false);
+                $('#place-row > td:nth-child(3) > input').focus();
             }
             else {
                 $('#place-row > td:nth-child(3) > input').prop("disabled", true);
@@ -126,17 +208,50 @@ $( // 表示網頁完成後才會載入
         $("input[name='abroad']").change(function(){
             // 若選擇是否出國 => enable input text讓使用者輸入
             if ($('input[name="abroad"]:checked').val() == "1") {
+                // 出差地點show來填出國地點
+                $('#place-row').show();
                 $('#place-row > td:nth-child(3) > input').prop("disabled", false);
+                $('#place-row > td:nth-child(3) > input').focus();
                 // 並且將出差地點改為「自行輸入」一項
                 $('#qry_eplace').val("23");
                 // 並且出差地點不可更換
                 $('#qry_eplace').prop("disabled", true);
+
+                // 出入境時間
+                $('#depart-immig').show();
+                // 出國會議日程
+                var vt = ['01', '02', '03'];
+                if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1) {
+                    $('#meeting-date').show();
+                    // 起訖時間hide
+                    $('#bus-trip-time').hide();
+                }
+                else {
+                    $('#meeting-date').hide();
+                }
             }
             else {
                 // 若沒有要出國就不開放填寫
                 $('#place-row > td:nth-child(3) > input').prop("disabled", true);
                 // 且出差地點開放選取國內地點
                 $('#qry_eplace').prop("disabled", false);
+
+                // 出入境
+                $('#depart-immig').hide();
+                $('#meeting-date').hide();
+
+                // 起訖時間
+                var vt = ['01', '02', '03'];
+                if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1) {
+                    // hide起訖時間
+                    $('#bus-trip-time').show();
+                }
+                else {
+                    $('#bus-trip-time').hide();
+                    // 沒有要出國 且 沒有要出差 => hide出差地點
+                    $('#place-row').hide();
+                }
+
             }
         });
 
@@ -147,6 +262,7 @@ $( // 表示網頁完成後才會載入
             data: {
               oper: 'qry_item',
               empl_no: $('#empl_no').text(),
+              vocdate: "" + year + month + day
             },
             type: 'POST',
             dataType: "json",
@@ -191,12 +307,51 @@ $( // 表示網頁完成後才會載入
                     }
                 }
 
+                // 可補休之加班時數
+                $('#qry_nouse').append(row0);
+                var txt_append = "";
+                data_nouse = JData.qry_nouse;
+                for (var i = 0; i < data_nouse.OVER_DATE2.length; i++) {
+                    txt_append = "";
+                    if ( (i + 1) % 5 == 0)
+                        txt_append += data_nouse['OVER_DATE2'][i] + "(" + data_nouse['NOUSE_TIME'][i] + ") \n";
+                    else
+                        txt_append += data_nouse['OVER_DATE2'][i] + "(" + data_nouse['NOUSE_TIME'][i] + ") _";
+                    $('#nouse > td:nth-child(2)').append(txt_append);
+                }
+
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 // console.log(xhr.responseText);
             }
         });
 
+        // 若出差地點的option
+        var place = ['基隆市', '台北市', '新北市',
+        '桃園市', '新竹縣', '新竹市',
+        '苗栗縣', '台中市', '彰化縣',
+        '彰化市', '南投縣', '雲林縣',
+        '嘉義縣', '嘉義市', '台南市',
+        '高雄市', '屏東縣', '宜蘭縣',
+        '花蓮縣', '台東縣', '連江縣',
+        '澎湖縣', '金門縣', '自行輸入'];
+        var row0 = "<option selected disabled class='text-hide'>請選擇出差地點</option>";
+        $('#qry_eplace').append(row0);
+        for (var i = 0; i < place.length; i++) {
+            var row = "<option value=" + i + ">" + place[i] + "</option>";
+            $('#qry_eplace').append(row);
+        }
+
+        // 出差原因類型，供教卓系統抓資料之判別欄位
+        var extracase = ['演講', '研討會',
+        '學生課外活動指導', '國際合作', '協辦工作',
+        '校外服務', '其它'];
+        var row0 = "<option selected disabled class='text-hide'>請選擇出差原因</option>";
+        $('#qry_extracase').append(row0);
+        for (var i = 0; i < extracase.length; i++) {
+            var row = "<option value=" + i + ">" + extracase[i] + "</option>";
+            $('#qry_extracase').append(row);
+        }
     }
 );
 

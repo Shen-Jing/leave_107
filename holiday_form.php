@@ -7,43 +7,21 @@
         $empl_name = $_SESSION['empl_name'];
 				$title_id = $_SESSION['title_id'];
         $depart = $_SESSION['depart'];
-
-        $today  = getdate();
-        $year = $today["year"] - 1911;
-        $month = $today["mon"];
-        $day = $today["mday"];
-
-        $vocdate = '';
-
-        // if (strlen(@$_POST['bmonth']) < 3)
-        //   $vocdate = '0' . @$_POST['byear'];
-        // else
-        //   $vocdate = @$_POST['byear'];
-        //
-        // if (strlen(@$_POST['bmonth']) < 2)
-        //   $vocdate = $vocdate . '0' . @$_POST['bmonth'];
-        // else
-        //  	$vocdate = $vocdate . @$_POST['bmonth'];
-        //
-        // if (strlen(@$_POST['bday']) < 2)
-        //   $vocdate = $vocdate . '0' . @$_POST['bday'];
-        // else
-        //   $vocdate = $vocdate . @$_POST['bday'];
-
+        
         //----------------------------------------------
         //   970813 add  判斷是否為寒暑假期間
         //----------------------------------------------
-        $sql = "SELECT count(*) count
-        						FROM    t_card_time
-        				    WHERE   '$vocdate' BETWEEN afternoon_s AND afternoon_e";
-        $data = $db -> query($sql);
-        $cn = $data['COUNT'];
-        if ($cn > 0)
-        	$vocation = '1';
-        else
-        	$vocation = '0';
-
-        @$_POST['vocation'] = $vocation;
+        // $sql = "SELECT count(*) count
+        // 						FROM    t_card_time
+        // 				    WHERE   '$vocdate' BETWEEN afternoon_s AND afternoon_e";
+        // $data = $db -> query($sql);
+        // $cn = $data['COUNT'];
+        // if ($cn > 0)
+        // 	$vocation = '1';
+        // else
+        // 	$vocation = '0';
+        //
+        // @$_POST['vocation'] = $vocation;
         ?>
             <!-- Page Content -->
             <div id="page-wrapper">
@@ -54,7 +32,7 @@
   															<fieldset>
     																<div class="form-group">
     																	<div class="col-lg-12">
-    			                                <div id="message">
+    			                                <div id="message" style="display: none;">
                                             <!-- 特休之類的訊息 -->
                                             <div class="alert alert-info">
                                                 <i class="fa fa-info" style="float:left"></i>
@@ -220,7 +198,7 @@
     			                                  							</select>時
     																										</td>
     			                                  					</tr>
-    																									<tr class="permit-row">
+    																									<tr id="permit-row" style="display: none;">
       																									<td class='td1'><span style="color: red;">奉派文號或提簽日期或填「免」</span></td>
       																									<td><input type="text" class="form-control" size="50" name="permit" value="" maxlength="50"></td>
     																								    <td class='td1'><span style="color: red;">差假合計日數是否含例假日</span></td>
@@ -229,7 +207,7 @@
                                                           <input type='radio' name='saturday' value='0' checked>否
     																										</td>
     																									</tr>
-    			                                  					<tr class="permit-row">
+    			                                  					<tr>
     																										<td class="td1"><span style="color: red;">差假期間是否有課</span></td>
     																										<td>
                                               						<input type='radio' name='haveclass' value='1'>是
@@ -241,14 +219,14 @@
                                               						<input type='radio' name='abroad' value='0' checked>否
     			                                  						</td>
     			                                  					</tr>
-                                            					<tr id="trip-row">
+                                            					<tr id="trip-row" style="display: none;">
                                             						<td class="td1"><span style="color: red;">是否刷國民旅遊卡</span></td>
                                             						<td>
                                             						  <input type='radio' name='trip' value='1'>是
                                             						  <input type='radio' name='trip' value='0' checked>否
                                             						</td>
                                             					</tr>
-                                                      <tr id="place-row">
+                                                      <tr id="place-row" style="display: none;">
                                                         <td class="td1"><span style="color: red;">出差/公假地點</span></td>
                                                         <td>
                                                           <select name="eplace" id="qry_eplace" class="form-control">
@@ -257,52 +235,135 @@
     																											<input type="text" class="form-control" size="50" name="eplace" value="" maxlength="50" placeholder="請自行輸入地點" disabled="true">
     																										</td>
                                                       </tr>
-<!--
-                                          						  //echo	"<td align='center'><font color='darkred'>是否使用研發處經費</td>";
-                                          						  //echo	"<td align='center'>";
-                                          						 // echo	"<input type='radio' name='research' value='1'"; if($_SESSION["research"]==1) echo checked; echo ">是";
-                                          						  //echo	"<input type='radio' name='research' value='0'"; if($_SESSION["research"]==0) echo checked; echo ">否";
-                                          						  //echo	"</td>";
-                                          						  //103/10/17 麗秋要求取消"是否使用研發處經費"選項
-                                          						  echo "<input type='hidden' name='research' value='0'>";
-                                          						  echo	"</tr>";
-                                            					}
-                                                                //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                            				    if (@$_POST['vtype'] == '11'){  //補休
-                                            					?> -->
-                                                      <tr id="nouse">
+                                                      <tr id="nouse" style="display: none;">
                                             						<td class="td1"><span style="color: red;">可補休之加班時數</span></td>
-                                            						<td colspan="3">
-                                            						<?
-                                            						  $sql = "SELECT over_date,nouse_time,
-                                            					            substr(over_date,1,3) || '/' || substr(over_date,4,2) || '/' || substr(over_date,6,2) over_date2
-                                            						          FROM   overtime
-                                                								  WHERE  empl_no='$empl_no'
-                                                								  AND    person_check='1'
-                                                								  AND    nouse_time > 0
-                                                								  AND    due_date >= '$vocdate'
-                                                								  ORDER BY over_date";
-                                            						  $data = $db -> query($sql);
-                                            						   //echo "<option value=''>請選擇</option>";
-                                            						  $f = 0;
-                                            						  for ($i = 0; $i < count($data['OVER_DATE']); $i++){
-                                              							$over  = $dat['OVER_DATE'][$i];
-                                              							$over2 = $dat['OVER_DATE2'][$i];
-                                              							$nouse = $dat['NOUSE_TIME'][$i];
-                                                            if ( ($i + 1) % 5 == 0)
-                                             				   			  echo $over2 .'('.$nouse .')<br>';
-                                            							  else
-                                             				   			  echo $over2 .'('.$nouse .')';
-                                                          }
-                                            						?>
-                                            						<br>
-                                                        <span style="color: red;">
-                                            						以上顯示資料格式：加班日期(可補休剩餘時數)。<br>
-                                            						注意！人事室審核過的加班日期才會顯示，系統自動由最前面的日期扣除補休之時數。
-                                                        </span>
+                                            						<td></td>
+                                                        <td colspan="2">
+                                                          <span style="color: red;">
+                                              						顯示資料格式：加班日期(可補休剩餘時數)。<br>
+                                              						注意！人事室審核過的加班日期才會顯示，系統自動由最前面的日期扣除補休之時數。
+                                                          </span>
                                                         </td>
-                                            				   </tr>
-    			                                  					<tr>
+                                            				  </tr>
+
+
+                                                      <tr id="budget" style="display: none;">
+                                              					<td class="td1"><span style="color: red;">經費來源</td>
+                                              				  <td colspan="3">
+                                                          <input type="text" class="form-control" size="50" name="mark" value="" maxlength="25" placeholder="限25個中文字">
+                                              				  </td>
+                                                      </tr>
+                                                      <tr class="bus-trip">
+                                              				  <td colspan="4">
+                                                          <div class="alert alert-warning">
+                                                            <i class="fa fa-warning" style="float:left"></i>
+                                                            以下資料將提供「<a href="http://etress.ncue.edu.tw/index2.aspx" target="_blank">教師學術歷程檔案</a>」使用
+                                                          </div>
+                                              				  </td>
+                                              				</tr>
+                                                      <tr class="bus-trip">
+                                            				    <td class="td1">
+                                                          <span style="color:blue">出差原因類型</span>
+                                              				  </td>
+                                              				  <td colspan="3">
+                                                          <select name='extracase' id="qry_extracase" class="form-control">
+                                                          </select>
+                                              				  </td>
+                                          				    </tr>
+                                            				  <tr class="bus-trip">
+                                        				        <td class="td1">
+                                                          <span style="color:blue">出差服務單位</span>
+                                        				        </td>
+                                        				        <td colspan="3">
+                                                          <input type="text" class="form-control" size="50" name="on_dept" value="" maxlength="25" placeholder="限25個中文字">
+                                        				        </td>
+                                            				  </tr>
+                                            				  <tr class="bus-trip">
+                                            				    <td class="td1">
+                                                          <span style="color:blue">出差擔任職務</span>
+                                            				    </td>
+                                            				    <td colspan="3">
+                                                          <input type="text" class="form-control" size="50" name="on_duty" value="" maxlength="25" placeholder="限25個中文字">
+                          				                      </td>
+                                            				  </tr>
+                                        				      <tr class="bus-trip">
+                                                        <td class="td1">
+                                                          <span style="color:blue">事由或服務項目</span>
+                                                        </td>
+                                                        <td colspan="3">
+                                                          <input type="text" class="form-control" size="50" name="mark" value="" maxlength="50" placeholder="限50個中文字">
+                                                        </td>
+                                        				      </tr>
+                                                      <tr id="bus-trip-time" style="display: none;">
+    			                                  						<td class="td1">
+                                                          <span style="color:blue">起訖時間</span>
+                                                        </td>
+                                                        <td colspan="3">
+                                                          <div class='col-md-6'>
+                                                            <div class='input-group date' id='bus-trip-start'>
+                                                                <input type='text' class="form-control" placeholder="出差開始時間">
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                          </div>
+                                                          <div class='col-md-6'>
+                                                            <div class='input-group date' id='bus-trip-end'>
+                                                                <input type='text' class="form-control" placeholder="出差結束時間">
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                          </div>
+    			                                    					</td>
+                                                      </tr>
+                                                      <tr id="depart-immig" style="display: none;">
+                                                        <td class="td1">
+                                                          <span style="color: red">出國出入境時間</span>
+                                                        </td>
+                                                        <td colspan="3">
+                                                          <div class='col-md-6'>
+                                                            <div class='input-group date' id='depart-time'>
+                                                                <input type='text' class="form-control" placeholder="出境時間">
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                          </div>
+                                                          <div class='col-md-6'>
+                                                            <div class='input-group date' id='immig-time'>
+                                                                <input type='text' class="form-control" placeholder="入境時間">
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                          </div>
+                                                        </td>
+                                                      </tr>
+                                                      <tr id="meeting-date" style="display: none;">
+                                                        <td class="td1">
+                                                          <span style="color: red">出國會議(研究)日程</span>
+                                                        </td>
+                                                        <td colspan="3">
+                                                          <div class='col-md-6'>
+                                                            <div class='input-group date' id='meeting-start'>
+                                                                <input type='text' class="form-control" placeholder="出境時間">
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                          </div>
+                                                          <div class='col-md-6'>
+                                                            <div class='input-group date' id='meeting-end'>
+                                                                <input type='text' class="form-control" placeholder="入境時間">
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                          </div>
+                                                        </td>
+                                                      </tr>
+    			                                  					<tr id="remark">
     																										<td class="td1">備註</td>
     																									  <td colspan="3">
     																											<input type="text" class="form-control" size="50" name="mark" value="" maxlength="50" placeholder="限50個中文字">
