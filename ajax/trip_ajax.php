@@ -38,9 +38,12 @@ $SQLStr ="SELECT empl_chn_name,h.POCARD,pc.CODE_CHN_ITEM,h.POVDATEB,h.POVDATEE,
           and  pc.CODE_FIELD=h.POVTYPE
           and  s.dept_no=h.depart
           order by h.POCARD,h.POVDATEB,h.POVHOURS";
+
           $data = $db -> query_array($SQLStr);
+
+            echo json_encode($data);
           //echo $data["EMPL_CHN_NAME"][0];
-          echo json_encode($data);
+
 
 
           exit;
@@ -57,6 +60,11 @@ $SQLStr ="SELECT empl_chn_name,h.POCARD,pc.CODE_CHN_ITEM,h.POVDATEB,h.POVDATEE,
       	order by h.POCARD,h.POVDATEB,h.POVHOURS";
         $data = $db -> query_array($SQLStr);
         echo json_encode($data);
+      }else if($_POST['oper']=='canceledClick')
+      {
+        $serialno=$_POST['serialnoVar'];
+        $SQLStr=  "update holidayform set trip=2  where serialno = $serialno ";
+        $db -> query($SQLStr);
       }
 
 ?>

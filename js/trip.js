@@ -63,7 +63,6 @@ function init_table()
 								var tname     =  JData.CRJB_TITLE[i];
 
 								row0=row0+"<tr><th>" + poname + "</th><th>" + deptname + "</th><th>" + tname + "</th><th>" + povdateB + "</th><th>"+povdatee + "</th><th>"+povtimeb + "</th><th>"
-								+povtimee + "</th><th>"+povdays+"/"+povhours+"</th><th>"+"<a href=\"\">處理完成</a></th></tr>";
 								//alert(poname);
 
 						}
@@ -123,7 +122,7 @@ function init_table()
 								var tname     =  JData.CRJB_TITLE[i];
 
 								row0=row0+"<tr><th>" + poname + "</th><th>" + deptname + "</th><th>" + tname + "</th><th>" + povdateB + "</th><th>"+povdatee + "</th><th>"+povtimeb + "</th><th>"
-								+povtimee + "</th><th>"+povdays+"/"+povhours+"</th><th>"+"<a href=\"\">處理完成</a></th></tr>";
+								+povtimee + "</th><th>"+povdays+"/"+povhours+"</th><th>"+"<button type=\"button\" class=\"btn btn-default\" onclick='cancelc("+serialno+");'>處理完成</button></tr>";
 								//alert(poname);
 
 						}
@@ -135,4 +134,20 @@ function init_table()
 			error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
 	});
 
+
+
+}
+function cancelc(serialno)
+{
+	$.ajax({
+      url: 'ajax/trip_ajax.php',
+      data:{  oper: 'canceledClick',
+              serialnoVar: serialno,
+          },
+      type: 'POST',
+      dataType: "json",
+      success:function(){alert("該國民旅遊已處理完成!!");
+      window.location.reload();},
+      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+  });
 }
