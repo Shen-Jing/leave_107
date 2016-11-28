@@ -104,10 +104,6 @@ function CRUD(oper, id) {
         "scrollY": "500px",
         "scrollCollapse": true,
         "displayLength": 10,
-        "paginate": true,
-        "lengthChange": true,
-        "processing": false,
-        "serverSide": false,
         "destroy": true,
         "columnDefs": [
             {"className": "dt-center", "targets": "_all"}
