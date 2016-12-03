@@ -142,14 +142,13 @@ function holidaycheck()
                 toastr["error"](JData.error_message);
             else
             {
-                alert(JData);
-                // if(JData.length < 6)
-                //     toastr["success"](JData);
-                // else
-                //     toastr["error"](JData);
+                if(JData.length < 6)
+                    toastr["success"](JData);
+                else
+                    toastr["error"](JData);
             }
         },
-        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);/*alert(xhr.responseText);*/}
     });
 
 }
