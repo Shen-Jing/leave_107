@@ -33,6 +33,7 @@
     			                                        <table class="table table-condensed table-hover table-bordered">
     			                                  					<tr>
                                                           <td id="hide-depart" style="display:none"><?=$depart ?></td>
+                                                          <td id="hide-serial" style="display:none"></td>
       			                                  						<td class="td1">員工編號</td>
       			                                              <td><span id="empl_no"><?=$empl_no ?></span></td>
       			                                              <td class="td1">姓名</td>
@@ -157,7 +158,7 @@
                                                       <tr id="budget" style="display: none;">
                                               					<td class="td1"><span style="color: red;">經費來源</td>
                                               				  <td colspan="3">
-                                                          <input type="text" class="form-control" size="50" name="mark" value="" maxlength="25" placeholder="限25個中文字">
+                                                          <input type="text" class="form-control" size="50" name="budget" value="" maxlength="25" placeholder="限25個中文字">
                                               				  </td>
                                                       </tr>
                                                       <tr class="bus-trip">
@@ -278,7 +279,7 @@
     			                                  					</tr>
     			                                  					<tr>
     			                                  						<td colspan="4" style="text-align: center;">
-    			                                  							<button type="submit" class="btn btn-default">確 定</button>
+    			                                  							<button type="button" class="btn btn-default" onclick="return formCheck();">確 定</button>
     			                                  							<button type="reset" class="btn btn-default" onclick="return confirm_reset();">重 填</button>
     			                                  						</td>
     			                                  					</tr>

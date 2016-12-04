@@ -97,6 +97,12 @@
     $tmp_data = $db -> query_array($sql);
     $data['qry_party'] = $tmp_data;
 
+    // 送出表單用的serail_no
+    $sql = "SELECT max(serialno) serialno
+            FROM holidayform";
+    $tmp_data = $db -> query_array($sql);
+    $data['qry_serial'] = $tmp_data;
+
     echo json_encode($data);
     exit;
   }
@@ -174,6 +180,55 @@
       echo "至去年年底您的在校年資 $sens 年，今年有 $apps 天特休假，目前已休 $days 天 $hours 小時。";
       exit;
     }
+  }
+
+  if ($_POST['oper'] == "submit"){
+    $empl_no = $_POST['empl_no'];
+    $depart = $_SESSION["depart"];
+    // $class_depart = $_SESSION["class_depart"];
+    // $vocdate = $_POST['vocdate'];
+    $title = $_SESSION['title_id'];
+    $name = $_POST['empl_name'];    // 95/06/20 liru
+    $vtype = $_SESSION["vtype"];  //come from hliday_form.php  liru
+    $dept_name = $_POST['dept_name'];
+    $serialno = $_POST["this_serialno"];  //961109 add
+    $condi = 0;  // 請假是否成功
+    $flag = 0;
+
+    $agent_depart = $_POST['agent_depart'];
+    if ($agent_depart == '')
+      $agent_depart = $depart;
+    // 系統日期
+    $sql = "SELECT lpad(to_char(sysdate, 'yyyymmdd') - '19110000', 7, '0') ndate
+            FROM dual";
+    $data = $db -> query_array($sql);
+    $ndate = $data['NDATE'][0];
+
+    $eplace = $_POST['eplace'];
+    $extracase = $_POST['extracase'];
+    // 研發經費
+    $research = '0';
+    $haveclass = $_SESSION["haveclass"];
+    $mark =  $_POST["mark"];
+    $abroad = $_POST["abroad"];
+    $saturday = $_POST["saturday"];
+    $sunday = '0';//$_SESSION["sunday"];
+    $this_serialno = $_POST["this_serialno"];
+    $filestatus = $_POST["filestatus"];
+    $notefilename  = $_POST["notefilename"];
+    $budget = $_POST["budget"];
+    $trip = $_POST["trip"];
+    $permit = $_POST["permit"];
+    $on_dept = $_POST["on_dept"];
+    $on_duty = $_POST["on_duty"];
+
+
+
+
+
+
+
+
   }
 
 ?>

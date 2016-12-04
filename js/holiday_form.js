@@ -87,6 +87,11 @@ $( // 表示網頁完成後才會載入
                 else
                     $('#vocation').append('0');
 
+                // serialno
+                if (JData.qry_serial.SERIALNO[0])
+                    $('#hide-serial').append(JData.qry_serial.SERIALNO[0]);
+                else
+                    $('#hide-serial').append(1);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 // console.log(xhr.responseText);
@@ -122,10 +127,12 @@ $( // 表示網頁完成後才會載入
 
         // 請假開始日期、結束日期
         $('#leave-start').datetimepicker({
-            format: 'YYYY/MM/DD'
+            format: 'YYYY/MM/DD',
+            collapse: false,
         });
         $('#leave-end').datetimepicker({
             format: 'YYYY/MM/DD',
+            collapse: false,
             useCurrent: false //Important! See issue #1075
         });
         // 開始時間的選取值為結束時間的最小值
@@ -143,11 +150,13 @@ $( // 表示網頁完成後才會載入
         // 起訖時間
         $('#bus-trip-start').datetimepicker({
             format: 'YYYY/MM/DD HH時',
-            sideBySide: true
+            showClose: true,
+            // sideBySide: true
         });
         $('#bus-trip-end').datetimepicker({
             format: 'YYYY/MM/DD HH時',
-            sideBySide: true,
+            showClose: true,
+            // sideBySide: true,
             useCurrent: false  //Important! See issue #1075
         });
         // 開始時間的選取值為結束時間的最小值
@@ -161,10 +170,12 @@ $( // 表示網頁完成後才會載入
 
         // 出國出入境時間
         $('#depart-time').datetimepicker({
-            format: 'YYYY/MM/DD'
+            format: 'YYYY/MM/DD',
+            collapse: false,
         });
         $('#immig-time').datetimepicker({
             format: 'YYYY/MM/DD',
+            collapse: false,
             useCurrent: false //Important! See issue #1075
         });
         // 開始時間的選取值為結束時間的最小值
@@ -377,6 +388,48 @@ $( // 表示網頁完成後才會載入
 
     }
 );
+
+function formCheck(){
+    $.ajax({
+        url: 'ajax/holiday_form_ajax.php',
+        data: {
+          oper: 'submit',
+          empl_no: $('#empl_no').text(),
+          // class_depart: ,
+          empl_name: $('#empl_name').text(),
+          vtype: $('#qry_vtype').val(),
+          this_serialno: $('#hide-serial').val(),
+          agent_depart: $('#qry_agent_depart').val(),
+          // 請假開始日期
+          leave_start: $('#leave-start > input').val(),
+          leave_end: $('#leave-end > input').val(),
+          btime: $('#btime').val(),
+          etime: $('#etime').val(),
+          eplace: $('#qry_eplace').val(),
+          extracase: $('#qry_extracase').val(),
+          haveclass: $('input[name="haveclass"]:checked').val(),
+          mark: $('input[name="mark"]').val(),
+          abroad: $('input[name="abroad"]:checked').val(),
+          saturday: $('input[name="saturday"]:checked').val(),
+          sunday: '0',
+          budget: $('input[name="budget"]').val(),
+          trip: $('input[name="trip"]:checked').val(),
+          permit: $('input[name="permit"]').val(),
+          on_dept: $('input[name="on_dept"]').val(),
+          on_duty: $('input[name="on_duty"]').val(),
+
+
+        },
+        type: 'POST',
+        dataType: "text",
+        success: function(JData) {
+            $('#message > div > ul').html("<li>" + JData + "</li>");
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            // console.log(xhr.responseText);
+        }
+    });
+}
 
 function leave_time_option() {
     // 請假開始、結束時間
