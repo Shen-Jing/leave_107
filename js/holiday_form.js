@@ -1,12 +1,132 @@
 $( // 表示網頁完成後才會載入
     function() {
+        var date = new Date();
+        var year = date.getFullYear() - 1911;
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        // 部門：MQ5等等的編號
+        var depart = $('#hide-depart').text();
+
+        $("body").tooltip({
+            selector: "[title]"
+        });
+
+        // select內容，也就是不需根據select所選而有不同sql顯示資料的部分
+        // 可以一開始就ajax取內容的
+        $.ajax({
+            url: 'ajax/holiday_form_ajax.php',
+            data: {
+              oper: 'qry_item',
+              empl_no: $('#empl_no').text(),
+              vocdate: "" + year + month + day
+            },
+            type: 'POST',
+            dataType: "json",
+            success: function(JData) {
+                // 單位 select欄位
+                var row0 = "<option selected disabled class='text-hide'>請選擇單位</option>";
+                $('#qry_dept').append(row0);
+                for (var i = 0; i < JData.qry_dept.DEPT_NO.length; i++) {
+                    var row = "<option value=" + JData.qry_dept.DEPT_NO[i] + ">" + JData.qry_dept.DEPT_FULL_NAME[i] + "</option>";
+                    $('#qry_dept').append(row);
+                }
+                // 預先帶出第一個單位
+                $('#qry_dept').val("" + JData.qry_dept.DEPT_NO[0]);
+
+                // 職稱欄位
+                $('#qry_title').text(JData.qry_title.CODE_CHN_ITEM[0]);
+
+                // 假別 select欄位
+                var row0 = "<option selected disabled class='text-hide'>請選擇假別</option>";
+                $('#qry_vtype').append(row0);
+                for (var i = 0; i < JData.qry_vtype.CODE_FIELD.length; i++) {
+                    var row = "<option value=" + JData.qry_vtype.CODE_FIELD[i] + ">" + JData.qry_vtype.CODE_CHN_ITEM[i] + "</option>";
+                    $('#qry_vtype').append(row);
+                }
+
+                // 職務代理人
+                var row0 = "<option selected disabled class='text-hide'>請選擇職務代理人</option>";
+                $('#qry_agentno').append(row0);
+                for (var i = 0; i < JData.qry_agentno.EMPL_NO.length; i++) {
+                    var row = "<option value=" + JData.qry_agentno.EMPL_NO[i] + ">" + JData.qry_agentno.EMPL_CHN_NAME[i] + "</option>";
+                    $('#qry_agentno').append(row);
+                }
+                $('#qry_agentno').append("<option value='0000000'>其它單位</option>");
+
+                // 職務代理人單位
+                var row0 = "<option selected disabled class='text-hide'>請選擇職務代理人單位</option>";
+                $('#qry_agent_depart').append(row0);
+                for (var idx in JData.qry_agent_depart) {
+                    for (var i in JData.qry_agent_depart[idx]['DEPT_NO']) {
+                        var depart_no = JData.qry_agent_depart[idx]['DEPT_NO'][i];
+                        var depart_name = JData.qry_agent_depart[idx]['DEPT_FULL_NAME'][i];
+                        var row = "<option value=" + depart_no + ">" + depart_name + "</option>";
+                        $('#qry_agent_depart').append(row);
+                    }
+                }
+
+                // 可補休之加班時數
+                $('#qry_nouse').append(row0);
+                var txt_append = "";
+                data_nouse = JData.qry_nouse;
+                for (var i = 0; i < data_nouse.OVER_DATE2.length; i++) {
+                    txt_append = "";
+                    if ( (i + 1) % 5 == 0)
+                        txt_append += data_nouse['OVER_DATE2'][i] + "(" + data_nouse['NOUSE_TIME'][i] + ") \n";
+                    else
+                        txt_append += data_nouse['OVER_DATE2'][i] + "(" + data_nouse['NOUSE_TIME'][i] + ") _";
+                    $('#qry_nouse').append(txt_append);
+                }
+
+                // 是否為特殊工作人員
+                $('#party').append(JData.qry_party.EMPL_PARTY[0]);
+                // 是否為寒暑假期間
+                var cn = JData.qry_voc.COUNT[0];
+                if (cn > 0)
+                    $('#vocation').append('1');
+                else
+                    $('#vocation').append('0');
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                // console.log(xhr.responseText);
+            }
+        });
+
+        // 若出差地點的option
+        var place = ['基隆市', '台北市', '新北市',
+        '桃園市', '新竹縣', '新竹市',
+        '苗栗縣', '台中市', '彰化縣',
+        '彰化市', '南投縣', '雲林縣',
+        '嘉義縣', '嘉義市', '台南市',
+        '高雄市', '屏東縣', '宜蘭縣',
+        '花蓮縣', '台東縣', '連江縣',
+        '澎湖縣', '金門縣', '自行輸入'];
+        var row0 = "<option selected disabled class='text-hide'>請選擇出差地點</option>";
+        $('#qry_eplace').append(row0);
+        for (var i = 0; i < place.length; i++) {
+            var row = "<option value=" + i + ">" + place[i] + "</option>";
+            $('#qry_eplace').append(row);
+        }
+
+        // 出差原因類型，供教卓系統抓資料之判別欄位
+        var extracase = ['演講', '研討會',
+        '學生課外活動指導', '國際合作', '協辦工作',
+        '校外服務', '其它'];
+        var row0 = "<option selected disabled class='text-hide'>請選擇出差原因</option>";
+        $('#qry_extracase').append(row0);
+        for (var i = 0; i < extracase.length; i++) {
+            var row = "<option value=" + i + ">" + extracase[i] + "</option>";
+            $('#qry_extracase').append(row);
+        }
+
         // 請假開始日期、結束日期
         $('#leave-start').datetimepicker({
             format: 'YYYY/MM/DD'
         });
         $('#leave-end').datetimepicker({
-            format: 'YYYY/MM/DD'
-            // useCurrent: false //Important! See issue #1075
+            format: 'YYYY/MM/DD',
+            useCurrent: false //Important! See issue #1075
         });
         // 開始時間的選取值為結束時間的最小值
         $("#leave-start").on("dp.change", function (e) {
@@ -17,13 +137,18 @@ $( // 表示網頁完成後才會載入
             $('#leave-start').data("DateTimePicker").maxDate(e.date);
         });
 
+        // 請假開始時間、結束時間
+        leave_time_option();
+
         // 起訖時間
         $('#bus-trip-start').datetimepicker({
-            format: 'YYYY/MM/DD HH時'
+            format: 'YYYY/MM/DD HH時',
+            sideBySide: true
         });
         $('#bus-trip-end').datetimepicker({
-            format: 'YYYY/MM/DD HH時'
-            // useCurrent: false //Important! See issue #1075
+            format: 'YYYY/MM/DD HH時',
+            sideBySide: true,
+            useCurrent: false  //Important! See issue #1075
         });
         // 開始時間的選取值為結束時間的最小值
         $("#bus-trip-start").on("dp.change", function (e) {
@@ -39,8 +164,8 @@ $( // 表示網頁完成後才會載入
             format: 'YYYY/MM/DD'
         });
         $('#immig-time').datetimepicker({
-            format: 'YYYY/MM/DD'
-            // useCurrent: false //Important! See issue #1075
+            format: 'YYYY/MM/DD',
+            useCurrent: false //Important! See issue #1075
         });
         // 開始時間的選取值為結束時間的最小值
         $("#depart-time").on("dp.change", function (e) {
@@ -56,8 +181,8 @@ $( // 表示網頁完成後才會載入
             format: 'YYYY/MM/DD'
         });
         $('#meeting-end').datetimepicker({
-            format: 'YYYY/MM/DD'
-            // useCurrent: false //Important! See issue #1075
+            format: 'YYYY/MM/DD',
+            useCurrent: false //Important! See issue #1075
         });
         // 開始時間的選取值為結束時間的最小值
         $("#meeting-start").on("dp.change", function (e) {
@@ -68,20 +193,14 @@ $( // 表示網頁完成後才會載入
             $('#meeting-start').data("DateTimePicker").maxDate(e.date);
         });
 
-        var date = new Date();
-        var year = date.getFullYear() - 1911;
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        // 部門：MQ5等等的編號
-        var depart = $('#hide-depart').text();
-
-        $("body").tooltip({
-            selector: "[title]"
-        });
-
         $('.bus-trip').hide();
+
+
         // 勞基特休 / 教職特休
         $("#qry_vtype").change(function(){
+            $('#btime').empty();
+            $('#etime').empty();
+            leave_time_option();
             if ($('#qry_vtype').val() == "23" || $('#qry_vtype').val() == "06") {
                 $.ajax({
                     url: 'ajax/holiday_form_ajax.php',
@@ -255,105 +374,115 @@ $( // 表示網頁完成後才會載入
             }
         });
 
-        // select內容，也就是不需根據select所選而有不同sql顯示資料的部分
-        // 可以一開始就ajax取內容的
-        $.ajax({
-            url: 'ajax/holiday_form_ajax.php',
-            data: {
-              oper: 'qry_item',
-              empl_no: $('#empl_no').text(),
-              vocdate: "" + year + month + day
-            },
-            type: 'POST',
-            dataType: "json",
-            success: function(JData) {
-                // 單位 select欄位
-                var row0 = "<option selected disabled class='text-hide'>請選擇單位</option>";
-                $('#qry_dept').append(row0);
-                for (var i = 0; i < JData.qry_dept.DEPT_NO.length; i++) {
-                    var row = "<option value=" + JData.qry_dept.DEPT_NO[i] + ">" + JData.qry_dept.DEPT_FULL_NAME[i] + "</option>";
-                    $('#qry_dept').append(row);
-                }
 
-                // 職稱欄位
-                $('#qry_title').text(JData.qry_title.CODE_CHN_ITEM[0]);
-
-                // 假別 select欄位
-                var row0 = "<option selected disabled class='text-hide'>請選擇假別</option>";
-                $('#qry_vtype').append(row0);
-                for (var i = 0; i < JData.qry_vtype.CODE_FIELD.length; i++) {
-                    var row = "<option value=" + JData.qry_vtype.CODE_FIELD[i] + ">" + JData.qry_vtype.CODE_CHN_ITEM[i] + "</option>";
-                    $('#qry_vtype').append(row);
-                }
-
-                // 職務代理人
-                var row0 = "<option selected disabled class='text-hide'>請選擇職務代理人</option>";
-                $('#qry_agentno').append(row0);
-                for (var i = 0; i < JData.qry_agentno.EMPL_NO.length; i++) {
-                    var row = "<option value=" + JData.qry_agentno.EMPL_NO[i] + ">" + JData.qry_agentno.EMPL_CHN_NAME[i] + "</option>";
-                    $('#qry_agentno').append(row);
-                }
-                $('#qry_agentno').append("<option value='0000000'>其它單位</option>");
-
-                // 職務代理人單位
-                var row0 = "<option selected disabled class='text-hide'>請選擇職務代理人單位</option>";
-                $('#qry_agent_depart').append(row0);
-                for (var idx in JData.qry_agent_depart) {
-                    for (var i in JData.qry_agent_depart[idx]['DEPT_NO']) {
-                        var depart_no = JData.qry_agent_depart[idx]['DEPT_NO'][i];
-                        var depart_name = JData.qry_agent_depart[idx]['DEPT_FULL_NAME'][i];
-                        var row = "<option value=" + depart_no + ">" + depart_name + "</option>";
-                        $('#qry_agent_depart').append(row);
-                    }
-                }
-
-                // 可補休之加班時數
-                $('#qry_nouse').append(row0);
-                var txt_append = "";
-                data_nouse = JData.qry_nouse;
-                for (var i = 0; i < data_nouse.OVER_DATE2.length; i++) {
-                    txt_append = "";
-                    if ( (i + 1) % 5 == 0)
-                        txt_append += data_nouse['OVER_DATE2'][i] + "(" + data_nouse['NOUSE_TIME'][i] + ") \n";
-                    else
-                        txt_append += data_nouse['OVER_DATE2'][i] + "(" + data_nouse['NOUSE_TIME'][i] + ") _";
-                    $('#nouse > td:nth-child(2)').append(txt_append);
-                }
-
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                // console.log(xhr.responseText);
-            }
-        });
-
-        // 若出差地點的option
-        var place = ['基隆市', '台北市', '新北市',
-        '桃園市', '新竹縣', '新竹市',
-        '苗栗縣', '台中市', '彰化縣',
-        '彰化市', '南投縣', '雲林縣',
-        '嘉義縣', '嘉義市', '台南市',
-        '高雄市', '屏東縣', '宜蘭縣',
-        '花蓮縣', '台東縣', '連江縣',
-        '澎湖縣', '金門縣', '自行輸入'];
-        var row0 = "<option selected disabled class='text-hide'>請選擇出差地點</option>";
-        $('#qry_eplace').append(row0);
-        for (var i = 0; i < place.length; i++) {
-            var row = "<option value=" + i + ">" + place[i] + "</option>";
-            $('#qry_eplace').append(row);
-        }
-
-        // 出差原因類型，供教卓系統抓資料之判別欄位
-        var extracase = ['演講', '研討會',
-        '學生課外活動指導', '國際合作', '協辦工作',
-        '校外服務', '其它'];
-        var row0 = "<option selected disabled class='text-hide'>請選擇出差原因</option>";
-        $('#qry_extracase').append(row0);
-        for (var i = 0; i < extracase.length; i++) {
-            var row = "<option value=" + i + ">" + extracase[i] + "</option>";
-            $('#qry_extracase').append(row);
-        }
     }
 );
+
+function leave_time_option() {
+    // 請假開始、結束時間
+    var voc = $('#vocation').text();
+    var party = $('#party').text();
+    var vt = ['01', '02', '03'];
+    var bt = 8, et;
+    if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1 ) {
+        bt = 8;
+        et = 23;
+    }
+    else if (voc == '1'){
+        bt = 8;
+        et = 15;
+    }
+    else if (party == '1'){
+        bt = 13;
+        et = 21;
+    }//特殊上班人員
+    else {
+        bt = 8;
+        et = 16;
+    }
+
+    // 寒暑假
+    if (voc == '1'){
+        // 休假、寒暑休
+        vt = ['06', '21', '22'];
+        if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1 ) {
+            // 開始
+            var row0 = "<option selected disabled class='text-hide'></option>";
+            $('#btime').append(row0);
+            for (var i = bt; i <= 12; i += 4) {
+                var row = "<option value=" + i + ">" + i + "</option>";
+                $('#btime').append(row);
+            }
+            $('#btime').append("<option value='1230'> 12:30 </option>");
+
+            // 結束
+            var row0 = "<option selected disabled class='text-hide'></option>";
+            $('#etime').append(row0);
+            for (var i = 12; i <= 16; i += 4) {
+                var row = "<option value=" + i + ">" + i + "</option>";
+                $('#etime').append(row);
+            }
+            $('#etime').append("<option value='1630'> 16:30 </option>");
+        }
+        else {
+            var row0 = "<option selected disabled class='text-hide'></option>";
+            $('#btime').append(row0);
+            for (var i = bt; i <= et; ++i) {
+                var row = "<option value=" + i + ">" + i + "</option>";
+                $('#btime').append(row);
+                if (i >= 12)
+                    $('#btime').append("<option value='" + i + "30'>" + i + ":30 </option>");
+            }
+
+            var row0 = "<option selected disabled class='text-hide'></option>";
+            $('#etime').append(row0);
+            for (var i = bt + 1; i <= et + 1; ++i) {
+                var row = "<option value=" + i + ">" + i + "</option>";
+                $('#etime').append(row);
+                if (i >= 12)
+                    $('#etime').append("<option value='" + i + "30'>" + i + ":30 </option>");
+            }
+        }
+
+    }
+    else {
+        // 正常時間
+        vt = ['06', '21', '22'];
+        if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1 ) {
+            // 開始
+            var row0 = "<option selected disabled class='text-hide'></option>";
+            $('#btime').append(row0);
+            for (var i = bt; i <= 13; i += 5) {
+                var row = "<option value=" + i + ">" + i + "</option>";
+                $('#btime').append(row);
+            }
+
+            // 結束
+            var row0 = "<option selected disabled class='text-hide'></option>";
+            $('#etime').append(row0);
+            for (var i = 12; i <= 17; i += 5) {
+                var row = "<option value=" + i + ">" + i + "</option>";
+                $('#etime').append(row);
+            }
+        }
+        else {
+
+            var row0 = "<option selected disabled class='text-hide'></option>";
+            $('#btime').append(row0);
+            for (var i = bt; i <= et; ++i) {
+                var row = "<option value=" + i + ">" + i + "</option>";
+                $('#btime').append(row);
+            }
+
+            var row0 = "<option selected disabled class='text-hide'></option>";
+            $('#etime').append(row0);
+            for (var i = bt + 1; i <= et + 1; ++i) {
+                var row = "<option value=" + i + ">" + i + "</option>";
+                $('#etime').append(row);
+            }
+        }
+    }
+}
 
 function confirm_reset() {
     return confirm("確定重填？");

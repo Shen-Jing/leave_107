@@ -81,8 +81,21 @@
             AND    due_date >= '$vocdate'
             ORDER BY over_date";
     $tmp_data = $db -> query_array($sql);
-
     $data['qry_nouse'] = $tmp_data;
+
+    // 判斷是否為寒暑假期間
+    $sql = "SELECT count(*) count
+						FROM    t_card_time
+						WHERE   '$vocdate' BETWEEN afternoon_s AND afternoon_e";
+    $tmp_data = $db -> query_array($sql);
+    $data['qry_voc'] = $tmp_data;
+
+    // 判斷是否為特殊工作人員
+    $sql = "SELECT nvl(empl_party,'0') empl_party
+						FROM psfempl
+						WHERE empl_no='$empl_no'";
+    $tmp_data = $db -> query_array($sql);
+    $data['qry_party'] = $tmp_data;
 
     echo json_encode($data);
     exit;

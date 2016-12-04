@@ -7,21 +7,6 @@
         $empl_name = $_SESSION['empl_name'];
 				$title_id = $_SESSION['title_id'];
         $depart = $_SESSION['depart'];
-        
-        //----------------------------------------------
-        //   970813 add  判斷是否為寒暑假期間
-        //----------------------------------------------
-        // $sql = "SELECT count(*) count
-        // 						FROM    t_card_time
-        // 				    WHERE   '$vocdate' BETWEEN afternoon_s AND afternoon_e";
-        // $data = $db -> query($sql);
-        // $cn = $data['COUNT'];
-        // if ($cn > 0)
-        // 	$vocation = '1';
-        // else
-        // 	$vocation = '0';
-        //
-        // @$_POST['vocation'] = $vocation;
         ?>
             <!-- Page Content -->
             <div id="page-wrapper">
@@ -85,116 +70,38 @@
     			                                  					<tr>
     			                                  						<td class="td1">請假開始日期</td>
     			                                              <td>
-                                                          <div class='input-group date' id='leave-start'>
-                                                              <input type='text' class="form-control" />
-                                                              <span class="input-group-addon">
-                                                                  <span class="glyphicon glyphicon-calendar"></span>
-                                                              </span>
-                                                          </div>
+                                                          <div class="form-group">
+                                                            <div class='input-group date' id='leave-start'>
+                                                                <input type='text' class="form-control" />
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                          </dvi>
     			                                    					</td>
     		                                  							<td class="td1">請假開始時間</td>
     			                                  						<td>
-    			                                  							<select class="selectpicker" name="btime" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-
-                                                        <?
-                                                          /* 1021101 update */
-                                                          if (@$_POST['vtype'] == '01' or @$_POST['vtype'] == '02' or @$_POST['vtype'] == '03'){
-                                                            $bt = 8;
-                                                            $et = 23;
-                                                          }
-                                                          elseif ($vocation == '1'){
-                                                            $bt = 8;
-                                                            $et = 15;
-                                                          }
-                                                          elseif ($party=='1'){
-                                                            //特殊上班人員
-                                                            $bt = 13;
-                                                            $et = 21;
-                                                          }
-                                                          else {
-                                                            $bt= 8;
-                                                            $et = 16;
-                                                          }
-                                                          if ($vocation == '1') {
-                                                            //寒暑假
-                                                            if (@$_POST['vtype'] == '06' || @$_POST['vtype'] == '21' || @$_POST['vtype'] == '22') {
-                                                              //休假、寒暑休
-                                                              for ($i = $bt; $i <= 12; $i = $i + 4)
-                                                                echo "<option value='$i' " . ((@$_POST['btime'] == $i) ? 'selected' : '') . ">" . $i . "</option>";
-
-                                                              echo "<option value='1230'" . ((@$_POST['btime'] == '1230') ? 'selected' : '') . ">12:30</option>";//10201 add
-                                                            }
-                                                            else {
-                                                              for ($i = $bt; $i <= $et; $i++) {
-                                                                echo "<option value='$i' " . ((@$_POST['btime'] == $i) ? 'selected' : '') . ">" . $i . "</option>";
-                                                                if ($i >= 12){
-                                                                  $bi = $i . "30";
-                                                                  echo "<option value='$bi' " . ((@$_POST['btime'] == $bi) ? 'selected' : '') . ">" . $i . ":30</option>";
-                                                                }
-                                                              }// for
-                                                            }// else
-                                                          }
-                                                          else {
-                                                            if(@$_POST['vtype'] == '06' || @$_POST['vtype'] == '21' || @$_POST['vtype'] == '22')
-                                                              for ($i = $bt; $i <= 13; $i = $i + 5){
-                                                                echo "<option value='$i' " . ((@$_POST['btime'] == $i) ? 'selected' : '') . ">" . $i . "</option>";
-                                                              }
-                                                            else
-                                                              for ($i = $bt; $i <= $et; $i++){
-                                                                echo "<option value='".$i."'".(($_SESSION["btime"]==$i)?'selected':'').">" . $i . "</option>";
-                                                              }
-                                                          }
-                                                        ?>
+                                                          <span id="party" style="display: none;"></span>
+                                                          <span id="vocation" style="display: none;"></span>
+                                                          <select name="vtype" id="btime" class="form-control">
     			                                  							</select>時
     			                                  						</td>
     			                                  					</tr>
     			                                  					<tr>
     			                                  						<td class="td1">請假結束日期</h3>
                                                         <td>
-                                                          <div class='input-group date' id='leave-end'>
-                                                              <input type='text' class="form-control" />
-                                                              <span class="input-group-addon">
-                                                                  <span class="glyphicon glyphicon-calendar"></span>
-                                                              </span>
+                                                          <div class="form-group">
+                                                            <div class='input-group date' id='leave-end'>
+                                                                <input type='text' class="form-control" />
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
                                                           </div>
     			                                    					</td>
     																							      <td class="td1">請假結束時間</td>
     																								   	<td>
-    																											<select class="selectpicker" name="etime" data-width="fit" data-style="btn-default" data-live-search="true" onChange='document.holiday.submit();'>
-                                                        <?
-                                                        if ($vocation == '1') {
-                                                          //寒暑假
-                                                          if (@$_POST['vtype'] == '06' || @$_POST['vtype'] == '21' || @$_POST['vtype'] == '22') {
-                                                            //休假、寒暑休
-                                                            for ($i = 12; $i <= 16; $i = $i + 4){
-                                                              echo "<option value='$i' " . ((@$_POST['etime'] == $i) ? 'selected' : '') . ">" . $i . "</option>";
-                                                            }
-                                                            echo "<option value='1630'" . ((@$_POST['etime'] == '1230') ? 'selected' : '') . ">16:30</option>"; //10201 add
-                                                          }
-                                                          else {
-                                                            for ($i = $bt + 1; $i <= $et + 1; $i++){
-                                                              echo "<option value='$i' " . ((@$_POST['etime'] == $i) ? 'selected' : '') . ">" . $i . "</option>";
-                                                              if ($i >=12){
-                                                                $bi = $i . "30";
-                                                                echo "<option value='$i' " . ((@$_POST['etime'] == $i) ? 'selected' : '') . ">" . $i . "</option>";
-                                                              }
-                                                            }//for
-                                                          }//else
-                                                        }
-                                                        else {
-                                                          //正常時間
-                                                          if (@$_POST['vtype'] == '06' || @$_POST['vtype'] == '21' || @$_POST['vtype'] == '22') {
-                                                            for ($i=12 ; $i <= 17; $i = $i + 5){
-                                                              echo "<option value='$i' " . ((@$_POST['etime'] == $i) ? 'selected' : '') . ">" . $i . "</option>";
-                                                            }
-                                                          }
-                                                          else {
-                                                            for ($i = $bt + 1; $i <= $et + 1; $i++){
-                                                              echo "<option value='$i' " . ((@$_POST['etime'] == $i) ? 'selected' : '') . ">" . $i . "</option>";
-                                                            }//for
-                                                          }//else
-                                                        }
-                                                        ?>
+                                                          <select name="vtype" id="etime" class="form-control">
     			                                  							</select>時
     																										</td>
     			                                  					</tr>
@@ -237,8 +144,8 @@
                                                       </tr>
                                                       <tr id="nouse" style="display: none;">
                                             						<td class="td1"><span style="color: red;">可補休之加班時數</span></td>
-                                            						<td></td>
-                                                        <td colspan="2">
+                                                        <td colspan="3">
+                                                          <span id="qry_nouse"></span><br />
                                                           <span style="color: red;">
                                               						顯示資料格式：加班日期(可補休剩餘時數)。<br>
                                               						注意！人事室審核過的加班日期才會顯示，系統自動由最前面的日期扣除補休之時數。
@@ -257,7 +164,7 @@
                                               				  <td colspan="4">
                                                           <div class="alert alert-warning">
                                                             <i class="fa fa-warning" style="float:left"></i>
-                                                            以下資料將提供「<a href="http://etress.ncue.edu.tw/index2.aspx" target="_blank">教師學術歷程檔案</a>」使用
+                                                            以下資料將提供「教師學術歷程檔案」使用
                                                           </div>
                                               				  </td>
                                               				</tr>
