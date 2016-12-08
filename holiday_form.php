@@ -71,14 +71,7 @@
     			                                  					<tr>
     			                                  						<td class="td1">請假開始日期</td>
     			                                              <td>
-                                                          <div class="form-group">
-                                                            <div class='input-group date' id='leave-start'>
-                                                                <input type='text' class="form-control" />
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
-                                                          </dvi>
+                                                          <input type='text' class="form-control calendar" id='leave-start'>
     			                                    					</td>
     		                                  							<td class="td1">請假開始時間</td>
     			                                  						<td>
@@ -91,14 +84,7 @@
     			                                  					<tr>
     			                                  						<td class="td1">請假結束日期</h3>
                                                         <td>
-                                                          <div class="form-group">
-                                                            <div class='input-group date' id='leave-end'>
-                                                                <input type='text' class="form-control" />
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
-                                                          </div>
+                                                          <input type='text' class="form-control calendar"  id='leave-end'>
     			                                    					</td>
     																							      <td class="td1">請假結束時間</td>
     																								   	<td>
@@ -208,20 +194,10 @@
                                                         </td>
                                                         <td colspan="3">
                                                           <div class='col-md-6'>
-                                                            <div class='input-group date' id='bus-trip-start'>
-                                                                <input type='text' class="form-control" placeholder="出差開始時間">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
+                                                            <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start'>
                                                           </div>
                                                           <div class='col-md-6'>
-                                                            <div class='input-group date' id='bus-trip-end'>
-                                                                <input type='text' class="form-control" placeholder="出差結束時間">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
+                                                            <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end'>
                                                           </div>
     			                                    					</td>
                                                       </tr>
@@ -231,20 +207,10 @@
                                                         </td>
                                                         <td colspan="3">
                                                           <div class='col-md-6'>
-                                                            <div class='input-group date' id='depart-time'>
-                                                                <input type='text' class="form-control" placeholder="出境時間">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
+                                                            <input type='text' class="form-control" placeholder="出境時間" id='depart-time'>
                                                           </div>
                                                           <div class='col-md-6'>
-                                                            <div class='input-group date' id='immig-time'>
-                                                                <input type='text' class="form-control" placeholder="入境時間">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
+                                                            <input type='text' class="form-control" placeholder="入境時間" id='immig-time'>
                                                           </div>
                                                         </td>
                                                       </tr>
@@ -254,20 +220,10 @@
                                                         </td>
                                                         <td colspan="3">
                                                           <div class='col-md-6'>
-                                                            <div class='input-group date' id='meeting-start'>
-                                                                <input type='text' class="form-control" placeholder="出境時間">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
+                                                            <input type='text' class="form-control" placeholder="出境時間" id='meeting-start'>
                                                           </div>
                                                           <div class='col-md-6'>
-                                                            <div class='input-group date' id='meeting-end'>
-                                                                <input type='text' class="form-control" placeholder="入境時間">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
+                                                            <input type='text' class="form-control" placeholder="入境時間" id='meeting-end'>
                                                           </div>
                                                         </td>
                                                       </tr>

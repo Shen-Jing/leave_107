@@ -2,6 +2,7 @@ $( // 表示網頁完成後才會載入
     function() {
         var date = new Date();
         var year = date.getFullYear() - 1911;
+        var ad_year = date.getFullYear();
         var month = date.getMonth() + 1;
         var day = date.getDate();
         // 部門：MQ5等等的編號
@@ -125,87 +126,87 @@ $( // 表示網頁完成後才會載入
             $('#qry_extracase').append(row);
         }
 
+        var start_options = {
+            defaultDate: new Date(),
+            format: 'YYYY/MM/DD',
+            tooltips: {
+                clear: "清除所選",
+                close: "關閉日曆",
+                decrementHour: "減一小時",
+                decrementMinute: "Decrement Minute",
+                decrementSecond: "Decrement Second",
+                incrementHour: "加一小時",
+                incrementMinute: "Increment Minute",
+                incrementSecond: "Increment Second",
+                nextCentury: "下個世紀",
+                nextDecade: "後十年",
+                nextMonth: "下個月",
+                nextYear: "下一年",
+                pickHour: "Pick Hour",
+                pickMinute: "Pick Minute",
+                pickSecond: "Pick Second",
+                prevCentury: "上個世紀",
+                prevDecade: "前十年",
+                prevMonth: "上個月",
+                prevYear: "前一年",
+                selectDecade: "選擇哪十年",
+                selectMonth: "選擇月份",
+                selectTime: "選擇時間",
+                selectYear: "選擇年份",
+                today: "今日日期",
+            },
+            locale: 'zh-tw',
+        }
+        var end_options = start_options;
+        end_options.useCurrent = false;
+        // clock_options.format = 'YYYY/MM/DD HH時';
+
         // 請假開始日期、結束日期
-        $('#leave-start').datetimepicker({
-            format: 'YYYY/MM/DD',
-            collapse: false,
-        });
-        $('#leave-end').datetimepicker({
-            format: 'YYYY/MM/DD',
-            collapse: false,
-            useCurrent: false //Important! See issue #1075
-        });
-        // 開始時間的選取值為結束時間的最小值
+
+        $('#leave-start').datetimepicker(start_options);
+        $('#leave-end').datetimepicker(end_options);
         $("#leave-start").on("dp.change", function (e) {
+            // end date的最小為start date所選
             $('#leave-end').data("DateTimePicker").minDate(e.date);
-        });
-        // 結束時間的選取值為開始時間的最大值
-        $("#leave-end").on("dp.change", function (e) {
-            $('#leave-start').data("DateTimePicker").maxDate(e.date);
+            // 將end date的initial date同步為start date所選
+            $('#leave-end').data("DateTimePicker").date(e.date);
         });
 
         // 請假開始時間、結束時間
         leave_time_option();
 
-        // 起訖時間
-        $('#bus-trip-start').datetimepicker({
-            format: 'YYYY/MM/DD HH時',
-            showClose: true,
-            // sideBySide: true
-        });
-        $('#bus-trip-end').datetimepicker({
-            format: 'YYYY/MM/DD HH時',
-            showClose: true,
-            // sideBySide: true,
-            useCurrent: false  //Important! See issue #1075
-        });
-        // 開始時間的選取值為結束時間的最小值
-        $("#bus-trip-start").on("dp.change", function (e) {
-            $('#bus-trip-end').data("DateTimePicker").minDate(e.date);
-        });
-        // 結束時間的選取值為開始時間的最大值
-        $("#bus-trip-end").on("dp.change", function (e) {
-            $('#bus-trip-start').data("DateTimePicker").maxDate(e.date);
-        });
-
         // 出國出入境時間
-        $('#depart-time').datetimepicker({
-            format: 'YYYY/MM/DD',
-            collapse: false,
-        });
-        $('#immig-time').datetimepicker({
-            format: 'YYYY/MM/DD',
-            collapse: false,
-            useCurrent: false //Important! See issue #1075
-        });
-        // 開始時間的選取值為結束時間的最小值
+        $('#depart-time').datetimepicker(start_options);
+        $('#immig-time').datetimepicker(end_options);
         $("#depart-time").on("dp.change", function (e) {
             $('#immig-time').data("DateTimePicker").minDate(e.date);
-        });
-        // 結束時間的選取值為開始時間的最大值
-        $("#immig-time").on("dp.change", function (e) {
-            $('#depart-time').data("DateTimePicker").maxDate(e.date);
+            $('#immig-time').data("DateTimePicker").date(e.date);
         });
 
         // 出國會議(研究)日程
-        $('#meeting-start').datetimepicker({
-            format: 'YYYY/MM/DD'
-        });
-        $('#meeting-end').datetimepicker({
-            format: 'YYYY/MM/DD',
-            useCurrent: false //Important! See issue #1075
-        });
+        $('#meeting-start').datetimepicker(start_options);
+        $('#meeting-end').datetimepicker(end_options);
         // 開始時間的選取值為結束時間的最小值
         $("#meeting-start").on("dp.change", function (e) {
             $('#meeting-end').data("DateTimePicker").minDate(e.date);
+            $('#meeting-end').data("DateTimePicker").date(e.date);
         });
-        // 結束時間的選取值為開始時間的最大值
-        $("#meeting-end").on("dp.change", function (e) {
-            $('#meeting-start').data("DateTimePicker").maxDate(e.date);
+
+        var clock_start_options = start_options,
+        clock_end_options = end_options;
+        clock_start_options.format = clock_end_options.format = 'YYYY/MM/DD HH時';
+        clock_start_options.showClose = clock_end_options.showClose = true;
+        // 起訖時間
+        $('#bus-trip-start').datetimepicker(clock_start_options);
+        $('#bus-trip-end').datetimepicker(clock_end_options);
+        // 開始時間的選取值為結束時間的最小值
+        $("#bus-trip-start").on("dp.change", function (e) {
+            $('#bus-trip-end').data("DateTimePicker").minDate(e.date);
+            $('#bus-trip-end').data("DateTimePicker").date(e.date);
         });
+
 
         $('.bus-trip').hide();
-
 
         // 勞基特休 / 教職特休
         $("#qry_vtype").change(function(){
@@ -394,9 +395,6 @@ function formCheck(){
         url: 'ajax/holiday_form_ajax.php',
         data: {
           oper: 'submit',
-          empl_no: $('#empl_no').text(),
-          // class_depart: ,
-          empl_name: $('#empl_name').text(),
           vtype: $('#qry_vtype').val(),
           this_serialno: $('#hide-serial').val(),
           agent_depart: $('#qry_agent_depart').val(),
@@ -535,8 +533,9 @@ function leave_time_option() {
             }
         }
     }
+    $('#btime').val($('#btime > option:nth-child(2)').val());
+    $('#etime').val($('#etime > option:last').val());
 }
-
 function confirm_reset() {
     return confirm("確定重填？");
 }

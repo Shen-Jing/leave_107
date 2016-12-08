@@ -13,11 +13,11 @@
     <script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
     <!-- bootstrap datepicker -->
     <script src="bower_components/moment/min/moment.min.js"></script>
+    <script src="bower_components/moment/min/locales.min.js"></script>
     <script src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
     <!-- Custom Theme JavaScript -->
     <script src="js/sb-admin-2.js"></script>
-
-    <script type="text/javascript" src="js/school_change.js"></script>
     <script src="js/toastr.min.js"></script>
     <script src="js/bootstrap_message.js"></script>
     <script src="js/sbadmin2-sidebar-toggle.js"></script>
