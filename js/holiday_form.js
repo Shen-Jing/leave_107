@@ -395,14 +395,20 @@ function formCheck(){
         url: 'ajax/holiday_form_ajax.php',
         data: {
           oper: 'submit',
-          vtype: $('#qry_vtype').val(),
-          this_serialno: $('#hide-serial').val(),
+          this_serialno: $('#hide-serial').text(),
           agent_depart: $('#qry_agent_depart').val(),
+          agentno: $('#qry_agentno').val(),
+          check: $('#hide-check').text(),
           // 請假開始日期
-          leave_start: $('#leave-start > input').val(),
-          leave_end: $('#leave-end > input').val(),
+          leave_start: $('#leave-start').val(),
+          leave_end: $('#leave-end').val(),
           btime: $('#btime').val(),
           etime: $('#etime').val(),
+          bus_trip_start: $('#bus-trip-start').val(),
+          bus_trip_end: $('#bus-trip-end').val(),
+          depart_time: $('#depart-time').val(),
+          immig_time: $('#immig-time').val(),
+          vtype: $('#qry_vtype').val(),
           eplace: $('#qry_eplace').val(),
           extracase: $('#qry_extracase').val(),
           haveclass: $('input[name="haveclass"]:checked').val(),
@@ -415,16 +421,17 @@ function formCheck(){
           permit: $('input[name="permit"]').val(),
           on_dept: $('input[name="on_dept"]').val(),
           on_duty: $('input[name="on_duty"]').val(),
-
-
+          voc: $('#vocation').text(),
+          party: $('#party').text(),
         },
         type: 'POST',
         dataType: "text",
         success: function(JData) {
-            $('#message > div > ul').html("<li>" + JData + "</li>");
+            alert("成功");
+            // $('#message > div > ul').html("<li>" + JData + "</li>");
         },
         error: function(xhr, ajaxOptions, thrownError) {
-            // console.log(xhr.responseText);
+            console.log(xhr.responseText);
         }
     });
 }

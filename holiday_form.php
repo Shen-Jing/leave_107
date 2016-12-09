@@ -34,6 +34,7 @@
     			                                  					<tr>
                                                           <td id="hide-depart" style="display:none"><?=$depart ?></td>
                                                           <td id="hide-serial" style="display:none"></td>
+                                                          <td id="hide-check" style="display:none">fe</td>
       			                                  						<td class="td1">員工編號</td>
       			                                              <td><span id="empl_no"><?=$empl_no ?></span></td>
       			                                              <td class="td1">姓名</td>
