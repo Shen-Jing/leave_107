@@ -299,8 +299,7 @@
       $etime = substr($etime, 0, 2);
     }
 
-    // require "../calculate_time.php"; //統計此次請假總天數，提到此判斷寒暑休
-
+    require "../calculate_time.php"; //統計此次請假總天數，提到此判斷寒暑休
 
     //*************************************************************************
     //**                資料檢核
@@ -398,30 +397,179 @@
     //**********************************************************
 
     // 例假日出國(29)不檢查 -- 104/04/07 add */
-    if ($tot_day < 0 || ( ($tot_day == 0 && $tot_hour == 0) && ($vtype != '29') ) ){
-      echo "請假天數不合理，是否忘了填含例假日！";
-    	exit;
-    }
+    // if ($tot_day < 0 || ( ($tot_day == 0 && $tot_hour == 0) && ($vtype != '29') ) ){
+    //   echo "請假天數不合理，是否忘了填含例假日！";
+    // 	exit;
+    // }
 
     //事假才累計此次請假  961123
-    // if ($vtype == '04'){
-  	// 	$tot_day_04 = $tot_day;   //先暫存，免被覆蓋
-  	// 	$tot_hour_04 = $tot_hour;
-  	// 	require "calculate_tot.php";  //統計之前事假總天數 961123
-  	// 	$pohdaye = $pohdaye + $tot_day_04;		//加上此次請假日數
-  	// 	$pohoure = $pohoure + $tot_hour_04;
-  	// 		//時數超過八小時轉入天數
-  	// 	$temp_h = 0;
-  	// 	if ($pohoure > 8){
-  	// 		$temp_h = $pohoure % 8;
-  	// 		$pohdaye += floor($pohoure / 8 );
-  	// 		$pohoure = $temp_h;
-    //   }
-	  //   if ($pohdaye > 7 || ($pohdaye == 7 and $pohoure > 0)){
-    //     echo "加上本次請假，您的事假已請：" . $pohdaye . "日" . $pohoure . "時";
-    //     // echo "<script> alert('".$str."');	if (confirm('您的事假已超過７天，會扣錢的喲！要取消此次假單嗎？請按「確定鍵」'))	 top.r.location.href='sign.php';</script>";
-	  //   }
-	  // }//事假
+    if ($vtype == '04'){
+  		$tot_day_04 = $tot_day;   //先暫存，免被覆蓋
+  		$tot_hour_04 = $tot_hour;
+  		require "calculate_tot.php";  //統計之前事假總天數 961123
+  		$pohdaye = $pohdaye + $tot_day_04;		//加上此次請假日數
+  		$pohoure = $pohoure + $tot_hour_04;
+  			//時數超過八小時轉入天數
+  		$temp_h = 0;
+  		if ($pohoure > 8){
+  			$temp_h = $pohoure % 8;
+  			$pohdaye += floor($pohoure / 8 );
+  			$pohoure = $temp_h;
+      }
+	    if ($pohdaye > 7 || ($pohdaye == 7 and $pohoure > 0)){
+        echo "加上本次請假，您的事假已請：" . $pohdaye . "日" . $pohoure . "時";
+        // echo "<script> alert('".$str."');	if (confirm('您的事假已超過７天，會扣錢的喲！要取消此次假單嗎？請按「確定鍵」'))	 top.r.location.href='sign.php';</script>";
+	    }
+	  }//事假
+
+    //統計會議日程天數   980630 add
+    if ( ($vtype == '01' || $vtype == '02' || $vtype == '03') && $abroad == '1'){//出差、公假、出國
+    	$sql = "SELECT count(*) count  FROM  ps_calendar
+        			WHERE  lpad(calendar_yymm || lpad(to_char(calendar_dd), 2, '0'), 7, '0')
+        			BETWEEN '$tdate' AND '$sdate' ";
+      $data = $db -> query_array($sql);
+      $mdays = $data['COUNT'][0];
+    }
+    elseif ( ($vtype == '01' || $vtype == '02' || $vtype == '03') && $abroad == '0') {//出差、公假未出國
+    	$odate = '';
+    	$idate = '';
+    }
+    elseif ( !($vtype == '01' || $vtype == '02' || $vtype == '03') && $abroad == '1'){//非出差、公假但出國
+    	$tdate = '';
+    	$sdate = '';
+    }
+    else{//非(出差、公假、出國)
+    	$tdate = '';
+    	$sdate = '';
+    	$odate = '';
+    	$idate = '';
+    }
+
+  	//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+  	// 事假（因故無法參加學校慶典）
+  	//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+  	if ($vtype == '31'){
+  		$tot_day = 0;
+  		$tot_hour = 0;
+    }
+
+    //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+  	// 可否補休之判斷
+  	//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+  	if ($vtype=='11'){ //補休
+  		$flag_11 = 0;        //控制能否儲存
+  		$f = 0;
+      $nouse_sum = 0; //累計未使用時數
+
+  		//抓出所有可補休之加班記錄並累計可使用總時數
+  		$sql = "SELECT over_date,nouse_time
+  				  FROM   overtime
+  				  WHERE  empl_no = '$empl_no'
+  				  AND    person_check = '1'
+  				  AND    nouse_time > 0
+  				  AND    due_date >= '$bdate'
+  				  ORDER BY over_date";
+      $data = $db -> query_array($sql);
+      for ($i = 0; $i < count($data['OVER_DATE']); ++$i){
+        $over[$i]  = $data['OVER_DATE'][$i]; //加班日期
+        $nouse[$i] = $data['NOUSE_TIME'][$i];//加班時數
+        $nouse_sum = $nouse_sum + $nouse[$i];
+      }
+
+  		if ($nouse_sum < $total_over){
+  		   echo "補休時數超過可請時數，請先完成加班申請作業。";
+  		   exit;
+  		}
+  		else {
+  			$flag_11 = 1; //控制能否儲存
+  			$over_date = $over[0]; //記錄至請假檔 holidyform，後來請假用到那些加班日都記錄在 overtime_use，這個其實可以不必再使用
+  		}
+    }//補休
+
+    //*************************************************************************
+    //**                 正常請假作業審核-開始 找代理人
+    //*************************************************************************
+    //961218  更新功能:出差沒有電子簽核流程，只有紙本流程
+    //正常請假
+    if ($_POST['check'] == 'fe'){
+  	  $url = "holiday_form.php";  //liru
+  	  // 職務代理人處理
+  	  $sql = "SELECT email FROM psfempl WHERE empl_no = '$agentno'";
+      if ($data = $db -> query_array($sql))
+  		  $mail_to = $data['EMAIL'][0];    //agent mail liru
+    }
+    //*************************************************************************
+    //**                 未兼行政之教師  /教師、學術單位專案助理沒有職務代理人
+    //*************************************************************************
+    else if($_POST['check'] == 'ex'){  //教師沒有職務代理人 ,監考公假不需代理人
+  		$url = "exholiday_form.php";
+  		//---------------------------------------------
+  		//找出單位主管
+  		//---------------------------------------------
+  		$sql = "SELECT boss_no, type FROM dept_boss
+            WHERE dept_no = '$depart'
+  					AND type IN ('1', '2', '3')";
+      if ($data = $db -> query_array($sql)){
+        $bossno = $data['BOSS_NO'][0];   //此部門主管代號
+        $type = $data['TYPE'][0];     //此部門主管級別(直屬或一級)
+      }
+      $cstatus=$type;  //假單目前狀態
+
+  		//---------------------------------------------
+  		//判斷主管是否請假，有代理人   96.01.05 liru add
+  		//---------------------------------------------
+  		$flag = 0;
+  		$sql = "SELECT agentno
+              FROM HOLIDAYFORM
+              WHERE POCARD = '$bossno'
+              AND (
+              ((POVDATEB<= '$bdate' AND POVDATEE >= '$bdate'
+               AND POVTIMEB <= $btime AND POVTIMEE > $btime ) OR
+              (POVDATEB<= '$edate' AND POVDATEE >= '$edate'
+               AND POVTIMEB <= $etime AND POVTIMEE >= $etime)) OR
+              (POVDATEB<'$bdate' AND POVDATEE >'$edate')
+              )
+              AND (condition = 0 OR  condition = 1 OR condition = 2)
+              AND   povtimeb != $etime
+              AND   povtimee != $btime";
+  		//---------------------------------------------
+      //主管請假，沒有請假以原單位主管簽核
+  		//---------------------------------------------
+  		if ($db -> query_array($sql) && $ndate>= $bdate){
+  			//---------------------------------------------
+  			//判斷主管是否兼兩個單位以上   100.08.03 add
+  			//---------------------------------------------
+  			$i = 0;
+  			$sql = "SELECT count(*) count
+    						FROM   dept_boss
+    						WHERE  boss_no = '$bossno'";
+  			$data = $db -> query_array($sql);
+  			$i = $data['COUNT'][0]; //主管數
+
+  			//兼兩個單位以上
+        if ($i > 1){ //選請假者單位代理人
+          $sql = "SELECT  agent_no
+              		FROM    chief_agent
+              		WHERE   boss_no = '$bossno'
+              		AND    substr(dept_no,1,2) = '" . substr($dept_no, 0, 2) . "'
+              		AND     $bdate BETWEEN begin_date AND end_date";
+
+          if ($data = $db -> query_array($sql))
+            $bossno = $data['AGENT_NO'][0];
+          else
+            $bossno = $data['AGENTNO'][0];//之前資料未寫人  chief_agent，以後可以將此段刪除  100.08.03
+        }
+  		  else
+  			  $bossno = $data['AGENTNO'][0];//任一個單位主管之代理人
+  		  $flag = 1;
+  		}//$ndate>= $bdate  主管請假
+
+      //---------------------------------------------
+      //未兼行政教師及學術單位專案助理主管
+  		$sql = "SELECT email FROM psfempl WHERE empl_no = '$bossno'";
+  		if ($data = $db -> query_array($sql))
+  		  $mail_to = $data['EMAIL'];    //主管 mail liru
+	  } //未兼行政之教師
 
     print_r($GLOBALS);
 

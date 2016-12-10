@@ -391,10 +391,13 @@ $( // 表示網頁完成後才會載入
 );
 
 function formCheck(){
+    var date = new Date();
+    var year = date.getFullYear() - 1911;
     $.ajax({
         url: 'ajax/holiday_form_ajax.php',
         data: {
           oper: 'submit',
+          year: year,
           this_serialno: $('#hide-serial').text(),
           agent_depart: $('#qry_agent_depart').val(),
           agentno: $('#qry_agentno').val(),
