@@ -247,7 +247,7 @@
     // 差假合計日數是否含例假日
     $saturday = $_POST["saturday"];
     $sunday = '0';
-    // $this_serialno = $_POST["this_serialno"];
+    $this_serialno = $_POST["this_serialno"];
     $filestatus = "";
     $notefilename  = "";
     // 經費來源
@@ -456,7 +456,7 @@
     //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
   	// 可否補休之判斷
   	//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-  	if ($vtype=='11'){ //補休
+  	if ($vtype == '11'){ //補休
   		$flag_11 = 0;        //控制能否儲存
   		$f = 0;
       $nouse_sum = 0; //累計未使用時數
@@ -513,7 +513,7 @@
         $bossno = $data['BOSS_NO'][0];   //此部門主管代號
         $type = $data['TYPE'][0];     //此部門主管級別(直屬或一級)
       }
-      $cstatus=$type;  //假單目前狀態
+      $cstatus = $type;  //假單目前狀態
 
   		//---------------------------------------------
   		//判斷主管是否請假，有代理人   96.01.05 liru add
@@ -570,6 +570,163 @@
   		if ($data = $db -> query_array($sql))
   		  $mail_to = $data['EMAIL'];    //主管 mail liru
 	  } //未兼行政之教師
+
+    //*************************************************************************
+    //**                抓請假者email
+    //*************************************************************************
+  	$sql = "SELECT email FROM psfempl
+            WHERE empl_no='$empl_no'";
+    if ($data = $db -> query_array($sql))
+      $mail_from = $data['EMAIL'];
+
+    //設定使用者按"回覆"時要顯示的e-mail  Reply-To
+  	//$mail_headers = "From: $mail_from\r\nReply-To:lucy@cc.ncue.edu.tw\r\n";
+    $mail_headers  = "From: edoc@cc2.ncue.edu.tw\r\n";
+    $mail_headers .= "Reply-To:lucy@cc.ncue.edu.tw\r\n";
+    $mail_headers .= "X-Mailer: PHP\r\n"; // mailer
+    //設定有錯誤時自動回覆的e-mail  Return-Path :liru
+    $mail_headers .= "Return-Path: edoc@cc2.ncue.edu.tw\r\n";
+    $mail_headers .= "Content-type: text/html; charset=big5\r\n";
+  	 //$mail_headers="From: $mail_from";
+
+    //..............................................................
+    //半小時的轉成整數 資料還原 10201 add
+    // if (substr($btime_bk, 2, 2) == '30')
+    // 	$btime = $btime_bk;
+    //
+    // if (substr($etime_bk, 2, 2) == '30')
+    // 	$etime = $etime_bk;
+    //...................................................................
+    $mark = str_replace("'", "", $mark);
+    $permit = str_replace("'", "", $permit);
+    $extracase = str_replace("'", "", $extracase);
+    $eplace = str_replace("'", "", $eplace);
+    $mdays = $over_date = "";
+    if ($flag == 1){  //主管有代理人  agentchief 104/05/13 將agentchief移除($bossno)
+      if ($vtype != '11' || ($vtype == '11' && $flag_11 == '1')){ //有夠用的加班時數才能請補休
+        $sql = "INSERT INTO holidayform (pocard, povtype, povdateb, povdatee, povtimeb, povtimee, eplace,
+          povdays, povhours, class, extracase, note, agentno,
+          bossone, bosstwo, bossthree, curentstatus, condition,
+          serialno, poremark, agentsign, abroad, containsat, containsun,
+          depart, appdate, agentchief, budget, , research, permit_commt,
+          meetdateb, meetdatee, meetdays, exit_date, back_date, meettimeb,
+          meettimee, class_depart, over_date, on_dept, on_duty)";
+        $sql .= " values ('$empl_no','$vtype','$bdate','$edate','$btime','$etime','$eplace',
+        '$tot_day','$tot_hour','$haveclass','$extracase','$notefilename',
+        '$agentno','0','0','0','$cstatus','$condi','$this_serialno',
+        '$mark','$agentsign','$abroad','$saturday','$sunday','$depart',
+        '$ndate','$bossno','$budget','$agent_depart','$research',
+        '$permit','$tdate','$sdate','$mdays','$odate','$idate',
+        '$mtimeb','$mtimee','$class_depart','$over_date','$on_dept','$on_duty')";
+      }
+    }
+    else {//主管自己簽核
+      if ($vtype != '11' || ($vtype =='11' && $flag_11 == '1')){
+    	  $sql = "INSERT INTO holidayform (pocard,povtype,povdateb,povdatee,povtimeb,povtimee,eplace,
+          povdays,povhours,class,extracase,note,agentno,
+          bossone,bosstwo,bossthree,curentstatus,condition,
+          serialno,poremark,agentsign,abroad,containsat,containsun,
+          depart,appdate,budget,trip,agent_depart,research,permit_commt,
+          meetdateb,meetdatee,meetdays,exit_date,back_date,meettimeb,
+          meettimee,class_depart,over_date,on_dept,on_duty)";
+    	  $sql .= " values ('$empl_no','$vtype','$bdate','$edate','$btime','$etime','$eplace',
+        '$tot_day','$tot_hour','$haveclass','$extracase','$notefilename','$agentno',
+        '0','0','0','$cstatus','$condi','$this_serialno','$mark','$agentsign','$abroad',
+        '$saturday','$sunday','$depart','$ndate','$budget',$trip,'$agent_depart','$research',
+        '$permit','$tdate','$sdate','$mdays','$odate','$idate','$mtimeb','$mtimee',
+        '$class_depart','$over_date','$on_dept','$on_duty')";
+      }
+    }
+    echo $sql;
+    $data = $db -> query_array($sql);
+    // 若沒錯誤
+    if (empty($data['MESSAGE'])){
+      // 系統自動由最前面的日期扣除相等於補休之時數。// 請假成功後，補休才能扣除
+			//---------------------------------------------------------------
+			if ($vtype == '11'){ //補休
+			   $nouse_sum = 0;       //累計到目前的時數
+			   for ($i = 0; $i < $f; $i++) {//尋找日期那一天就夠用
+            $nouse_sum = $nouse_sum + $nouse[$i];//由第一筆開始尋找，那一天夠用扣除補休時數
+            if ($nouse_sum >= $total_over){ //A
+              $nouse_sum = $nouse_sum - $total_over; //剩餘時數=累計時數-補休時數，歸入第 i 日期
+
+              //更新資料庫，第 i　日之前，全部扣光
+              //-----------------------------------------------
+              $sql = "UPDATE overtime
+              		  SET    nouse_time = 0
+              		  WHERE  empl_no = '$empl_no'
+              		  AND    over_date < '" . $over[$i] . "'
+              		  AND    over_date >= '" . $over[0] . "'"; //--10207加此，
+              	  //over_time table有些記錄其due_date與請假起始日期比已過時了，這些記錄不能當次使用
+              	  //但這些當次不能使用的記錄其 due_date 卻 > 系統日期，表示可以供其它的加班補休使用
+              	  //這些記錄 nouse_time 不能歸零
+              //echo $sql;
+              $data = $db -> query_array($sql);
+
+              $liru_subject = $empl_no . "--" . $serialno . "--process.php 異動到的 overtime 記錄";
+              $liru_subject = "=?big5?B?" . base64_encode($liru_subject) . "?=";
+              //@mail('liru@cc.ncue.edu.tw',$liru_subject, $sql, $mail_headers);
+
+              //更新資料庫，第 i　日，將剩餘時數存回資料庫
+              //-----------------------------------------------------------
+              $sql = "UPDATE overtime
+                      SET    nouse_time = $nouse_sum
+                      WHERE  empl_no = '$empl_no'
+                      AND    over_date = '" . $over[$i] . "'";
+              //echo $sql;
+              $data = $db -> query_array($sql);
+
+              //存入資料庫overtime_use，第 i　日之前，補休時用掉那些加班日及時數
+              //------------------------------------------------------------------------------------------
+              $i_use = 0;
+              if ($i > 0){
+              	for ($p = 0; $p < $i; $p++){
+              		$i_use = $i_use + $nouse[$p];//第 i　日之前用掉多少
+              		$sql = "INSERT INTO overtime_use(EMPL_NO,OVER_DATE,SERIALNO,USE_HOUR)
+              			      VALUES('$empl_no', '" . $over[$p] . "', $serialno, " . $nouse[$p] . ")";
+              		//echo $sql."<br>";
+                  $data = $db -> query_array($sql);
+              	}
+              	$i_use = $total_over - $i_use;
+              	$sql = "INSERT INTO overtime_use(EMPL_NO,OVER_DATE,SERIALNO,USE_HOUR)
+                        VALUES('$empl_no', '" . $over[$i] . "', $serialno, $i_use)";
+              	//echo $sql;
+                $data = $db -> query_array($sql);
+              }
+              else {
+              	$sql = "INSERT INTO overtime_use(EMPL_NO,OVER_DATE,SERIALNO,USE_HOUR)
+              		  VALUES('$empl_no','".$over[$i]."',$serialno,".$total_over.")";
+              	//echo $sql;
+                $data = $db -> query_array($sql);
+              }
+              break;
+    				}	//if A
+			   }//for
+			}//補休
+      //--------------------------------------------------------------------
+  	  if(@mail($mail_to, $mail_subject, $mail_body, $mail_headers)){
+  			if ($agentsign == 0)
+  				$str = "請假成功，" . $filestatus . "並已寄發email通知職務代理人";
+  			if ($agentsign == 1)
+  				$str = "請假成功，" . $filestatus . "並已寄發email通知直屬主管";
+  	  }
+  	  else
+  			$str = "請假成功，" . $filestatus;//."，但寄發email失敗";
+      echo $str;
+      exit;
+    }
+    else{
+  	  //echo  $err['message'] . "--". $sql ;
+
+      // @mail('bob@cc.ncue.edu.tw', '請假者資料無法儲存', $SQLStr, $mail_headers);
+  	  if ($data['code'] == 1) //ORA-00001 unique...
+  		  echo "相同假單已存在，請勿重覆送出！";
+  	  else {
+  		  echo "資料儲存有問題，請洽管理者！";
+  		  mail('bob@cc.ncue.edu.tw', '請假資料寫入失敗!(/leave/process.php)', $sql . $data['message'], $mail_headers);
+  	  }
+      exit;
+    }
 
     print_r($GLOBALS);
 
