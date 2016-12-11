@@ -25,6 +25,23 @@ $sql = "select empl_no
                    exit;
 
                  }
+                 if($_POST['oper'] == "qry_class")
+                 {
+
+                   $data = array('year' => $year);
+                   echo json_encode($data);
+                   exit;
+
+                 }
+                 if($_POST['oper']==1)//修改
+                 {
+                   $SQLStr ="select * from haveclass
+                 			    	where class_serialno='$_POST[serialnoVar]'";
+                   $row = $db -> query_array($SQLStr);
+                   echo json_encode($row);
+                   exit;
+
+                 }
                  if($_POST['oper']==0)
                  {
                    $sql = "SELECT count(*) count

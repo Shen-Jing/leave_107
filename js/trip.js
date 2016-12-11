@@ -147,8 +147,8 @@ function cancelc(serialno)
           },
       type: 'POST',
       dataType: "json",
-      success:function(){alert("該國民旅遊已處理完成!!");
-      window.location.reload();},
+      success:function(){toastr["success"]("國民旅遊處理完成!!");
+      init_table();
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
   });
 }

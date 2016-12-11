@@ -30,7 +30,7 @@
                                       <div class="panel-heading">
                                           <font STYLE="font-family:微軟正黑體">差假資料查詢</font>
                                       </div>
-                                      <div class="table-responsive">
+                                      <div class="form-group">
                                         <table class="table table-striped table-bordered dt-responsive nowrap" >
 
                                         <tr style="font-weight:bold">
