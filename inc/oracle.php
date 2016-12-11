@@ -42,6 +42,67 @@ class ORACLE{
 		}
 	}
 
+	function query_trsac($Qstr){
+		if ($Qstr) {
+			$this ->str = $Qstr;
+			//change encoding before query cuz
+			$Qstr = mb_convert_encoding($Qstr, "BIG5", "UTF-8");
+			$stmt=oci_parse($this->rp, $Qstr); // parse sql to oracle statement
+
+			if (!@oci_execute($stmt,OCI_NO_AUTO_COMMIT)){ // execute and auto commit to database
+					//error occur and print error and sql
+					$oci_err=@OCIError($stmt);
+					return $oci_err; //add by boblee!
+					//echo "<p>資料處理失敗，錯誤訊息: " . $oci_err[message] . "<br>錯誤請求指令" . $this -> str ."</p><hr>";
+			}
+			else {
+				return $stmt;
+			}
+		}
+	}
+
+	function create_savepoint($SPname){
+		if ($SPname) {
+			$this ->str = 'SAVEPOINT '.$SPname;
+			//change encoding before query cuz
+			//$SPname = mb_convert_encoding($SPname, "BIG5", "UTF-8");
+			$stmt = oci_parse($this->rp, $this ->str); // parse sql to oracle statement
+
+			if (!@oci_execute($stmt,OCI_NO_AUTO_COMMIT)){ // execute and auto commit to database
+					//error occur and print error and sql
+					$oci_err=@OCIError($stmt);
+					return $oci_err; //add by boblee!
+					//echo "<p>資料處理失敗，錯誤訊息: " . $oci_err[message] . "<br>錯誤請求指令" . $this -> str ."</p><hr>";
+			}
+			else {
+				return $stmt;
+			}
+		}
+	}
+
+	function rb_to_savepoint($SPname){
+		if ($SPname){
+				$this ->str = 'ROLLBACK TO SAVEPOINT '.$SPname;
+				//change encoding before query cuz
+				//$SPname = mb_convert_encoding($SPname, "BIG5", "UTF-8");
+				$stmt = oci_parse($this->rp, $this ->str);
+				if (!@oci_execute($stmt,OCI_NO_AUTO_COMMIT)){ // execute and auto commit to database
+						//error occur and print error and sql
+						$oci_err=@OCIError($stmt);
+						return $oci_err; //add by boblee!
+						//echo "<p>資料處理失敗，錯誤訊息: " . $oci_err[message] . "<br>錯誤請求指令" . $this -> str ."</p><hr>";
+				}
+				else {
+					return $stmt;
+				}
+		}
+	}
+
+	function end_trsac(){
+		$committed=oci_commit($this ->rp);
+		return $committed;
+	}
+
 	#######################################################
 	# 2015.10.21 Rewrite and test finish by Ting-Rui Chen #
 	#######################################################

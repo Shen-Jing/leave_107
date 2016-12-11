@@ -101,7 +101,7 @@
 					<tr>
 						<td colspan="4" align="center">
 							<button class="btn btn-default" type="reset">取消</button>
-							<button role="button" class="btn btn-primary" name="check" onclick='holidaycheck();'>確定</button>
+							<button type="button" class="btn btn-primary" name="check" onclick='holidaycheck();'>確定</button>
 						</td>
 					</tr>
 					<tr>

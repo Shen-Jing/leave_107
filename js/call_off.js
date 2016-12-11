@@ -142,6 +142,8 @@ function CRUD(oper, id)
                 else if (oper == 2)
                 { //刪除
                     alert(JData);
+                    //alert(JData.SERIALNO+JData.POVTYPE);
+                    // alert(JData.OVER_DATE+JData.USE_HOUR);
                     CRUD(0); //reload
                 }
             }
