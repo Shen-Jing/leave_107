@@ -1,5 +1,5 @@
 <?php
-  include_once("../inc/check.php");
+  include_once("../inc/connect.php");
   // from p_search_overtime_idx_ajax.js
   $empl_no = $_POST['empl_no'];
   $empl_name = $_POST['empl_name'];

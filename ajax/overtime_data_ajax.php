@@ -1,5 +1,5 @@
 <?php
-  include_once("../inc/check.php");
+  include_once("../inc/connect.php");
 
   // 查詢加班記錄年份
   if ($_POST['oper'] == "qry_year") {
