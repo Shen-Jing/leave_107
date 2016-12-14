@@ -36,7 +36,7 @@ function cancelclick(serialno)
           },
       type: 'POST',
       dataType: "json",
-      success:function(){alert("該國民旅遊已取消!!");
+      success:function(){toastr["success"]("該筆資料已取消!!");
       window.location.reload();},
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
   });

@@ -187,14 +187,15 @@
 
 			$ndate = $db -> query_array($sql);
 			$nd = $ndate['NDATE'][0];
-			$SQLStr2=  "update holidayform set CONDITION='-1' ,THREESIGND='$nd' where serialno = $serialno ";
-			$stmt = OCIPARSE($conn,$SQLStr2);
-			ociexecute($stmt,OCI_DEFAULT);
-			if (OCICommit($conn)){
+			$SQLStr2 = "update holidayform set CONDITION='-1' ,THREESIGND='$nd' where serialno = $serialno ";
+
+			if ($db -> query($SQLStr2))
+			{
 			        //*************
 					//補休時數恢復
 			        //*************
-					if ($povtype =='11'){
+					if ($povtype =='11')
+					{
 						//設定使用者按"回覆"時要顯示的e-mail  Reply-To
 						$mail_headers  = "From: edoc@cc.ncue.edu.tw\r\n";
 						$mail_headers .= "Reply-To:lucy@cc.ncue.edu.tw\r\n";
@@ -209,7 +210,8 @@
 			            //echo $sql."<br>";
 						$stmt2=ociparse($conn,$sql);
 						ociexecute($stmt2,OCI_DEFAULT);
-						while (OCIFETCH($stmt2)){
+						while (OCIFETCH($stmt2))
+						{
 							$over_date = OCIRESULT($stmt2,OVER_DATE);
 						   	$use_hour = OCIRESULT($stmt2,USE_HOUR);
 
@@ -218,9 +220,7 @@
 										where  empl_no= '$userid'
 										and    over_date= '$over_date'";
 
-						   	$stmt3 = OCIPARSE($conn,$SQLStr2);
-						   	ociexecute($stmt3,OCI_DEFAULT);
-						   	OCICommit($conn);
+						   	$db -> query($SQLStr2);
 						   	$mail_subject =$userid."--".$serialno."--update補休時數恢復通知";
 						   	$mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
 			   			   	// @mail('bob@cc.ncue.edu.tw',$mail_subject, $SQLStr2, $mail_headers);
@@ -230,9 +230,7 @@
 						   	$SQLStr2="delete from  overtime_use
 						                   where  serialno= $serialno";
 			               	//echo $SQLStr2;
-						   	$stmt3 = OCIPARSE($conn,$SQLStr2); //liru update
-						   	ociexecute($stmt3,OCI_DEFAULT);
-						   	OCICommit($conn);
+						   $db -> query($SQLStr2); //liru update
 						  	/* $mail_subject =$userid."--".$serialno."--delete補休時數恢復通知";
 						   	$mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
 			   			  	@mail('bob@cc.ncue.edu.tw',$mail_subject, $SQLStr2, $mail_headers); */
@@ -240,10 +238,36 @@
 					//**********************************
 				    echo json_encode("本假單取消成功，假別為『補休』時，加班時數同步加回資料庫！！");
 					exit;
-			    }
+			}
 		}
 		else if($id == 2)
 		{
+
+			$str = "ist";
+			$sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('<script>alert(aaa)</script>','1051212','1051212','1')";
+			$ck_1 = $db -> query_trsac($sqlist);
+
+			$m = $db -> create_savepoint("ist");
+			//oci_commit($db ->rp);
+
+
+			$sqlist2=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','2')";
+			$db -> query_trsac($sqlist2);
+
+			// $sqlup=  "update holidayform set CONDITION='4' where pocard = '000000' and POVDATEB = '1051212' and CONDITION = '1'";
+			// $db -> query_trsac($sqlup);
+
+			$check = $db -> end_trsac();
+			// if(!$check)
+			// 	$db -> rb_to_savepoint("ist");
+			echo json_encode($ck_1);
+			exit;
+			echo json_encode($m);
+			exit;
+			// $SQLStr2=  "update holidayform set CONDITION='1' where serialno = 109236 ";
+			// $data_update = $db -> query($SQLStr2);
+			// echo json_encode("value");
+			// exit;
 			$sql="select lpad(to_char(sysdate,'yyyymmdd')-'19110000',7,'0') ndate
 			from dual";
 			$ndate = $db -> query_array($sql);
@@ -264,18 +288,23 @@
 			$serialno = $data["SERIALNO"][$no];
 			$povtype  = $data["POVTYPE"][$no];
 			$nd = $ndate['NDATE'][0];
-			$SQLStr2=  "update holidayform set CONDITION='3' ,THREESIGND='$nd' where serialno = $serialno ";
-			if ($db -> query($SQLStr2)){
+			echo json_encode($data);
+			exit;
+			$SQLStr2=  "update holidayform set CONDITION='3' where serialno = $serialno ";
+			$data_update = $db -> query($SQLStr2);
+			if ( empty($data_update["message"]) )
+			{
 			        //*************
 					//補休時數恢復
 			        //*************
-					if ($povtype =='11'){
-						     //設定使用者按"回覆"時要顯示的e-mail  Reply-To
-							 $mail_headers  = "From: edoc@cc.ncue.edu.tw\r\n";
-							 $mail_headers .= "Reply-To:lucy@cc.ncue.edu.tw\r\n";
-							 $mail_headers .= "X-Mailer: PHP\r\n"; // mailer
-							 $mail_headers .= "Return-Path: edoc@cc2.ncue.edu.tw\r\n";
-							 $mail_headers .= "Content-type: text/html; charset=big5\r\n";
+					if ($povtype =='11')
+					{
+						//設定使用者按"回覆"時要顯示的e-mail  Reply-To
+						$mail_headers  = "From: edoc@cc.ncue.edu.tw\r\n";
+						$mail_headers .= "Reply-To:lucy@cc.ncue.edu.tw\r\n";
+						$mail_headers .= "X-Mailer: PHP\r\n"; // mailer
+						$mail_headers .= "Return-Path: edoc@cc2.ncue.edu.tw\r\n";
+						$mail_headers .= "Content-type: text/html; charset=big5\r\n";
 
 						//抓出此取消假單補休時用到的加班日期及時數
 						$sql="select *
@@ -283,17 +312,19 @@
 						      where  serialno= $serialno";
 			            //echo $sql."<br>";
 						$data_temp = $db -> query_array($sql);
+						// echo json_encode($data_temp);
+						// exit;
 						for($i = 0 ; $i < count($data_temp) ; $i++)
 						{
-						   $over_date = OCIRESULT($stmt2,OVER_DATE);
-						   $use_hour = OCIRESULT($stmt2,USE_HOUR);
+						   $over_date = $data_temp["OVER_DATE"][$i];
+						   $use_hour = $data_temp["USE_HOUR"][$i];
 						   $SQLStr2=  " update overtime o
 										set    nouse_time= o.nouse_time + $use_hour
 										where  empl_no= '$empl_no'
 										and    over_date= '$over_date'";
 
 						   $db -> query($SQLStr2);
-						   $mail_subject =$userid."--".$serialno."--update補休時數恢復通知";
+						   $mail_subject =$empl_no."--".$serialno."--update補休時數恢復通知";
 						   $mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
 			   			    //@mail('bob@cc.ncue.edu.tw',$mail_subject, $SQLStr2, $mail_headers);
 			            }
@@ -310,7 +341,7 @@
 					//**********************************
 				    echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
 					exit;
-			    }
+			}
 
 		}
 	}

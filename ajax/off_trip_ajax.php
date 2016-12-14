@@ -43,6 +43,9 @@ $a['data']="";
 
 for($i = 0; $i < sizeof($row['EMPL_CHN_NAME']); ++$i){
   $serialno=$row['SERIALNO'][$i];
+  $agentno  = $row['AGENTNO'][$i];
+  $SQLStr2 = "SELECT EMPL_CHN_NAME FROM PSFEMPL where EMPL_NO='$agentno' ";
+  $agentname=$db -> query_array($SQLStr2);
   $a['data'][] = array(
     $row['EMPL_CHN_NAME'][$i],
     $row['CODE_CHN_ITEM'][$i],
@@ -51,7 +54,7 @@ for($i = 0; $i < sizeof($row['EMPL_CHN_NAME']); ++$i){
     $row['POVTIMEE'][$i],
     $row['POVTIMEB'][$i],
     $row['POVDAYS'][$i]."天".$row['POVHOURS'][$i]."時",
-    "",
+    $agentname['EMPL_CHN_NAME'],
     "<button type=\"button\" class=\"btn btn-default\" onclick='cancelclick($serialno);'>取消</button>");
 
 }
