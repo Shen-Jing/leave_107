@@ -101,7 +101,7 @@
     $sql = "SELECT max(serialno) serialno
             FROM holidayform";
     $tmp_data = $db -> query_array($sql);
-    $data['qry_serial'] = $tmp_data;
+    $data['qry_serial'] = $tmp_data['SERIALNO'][0] + 1;
 
     echo json_encode($data);
     exit;
@@ -591,17 +591,16 @@
 
     //..............................................................
     //半小時的轉成整數 資料還原 10201 add
-    // if (substr($btime_bk, 2, 2) == '30')
-    // 	$btime = $btime_bk;
-    //
-    // if (substr($etime_bk, 2, 2) == '30')
-    // 	$etime = $etime_bk;
+    if (@substr($btime_bk, 2, 2) == '30')
+    	$btime = $btime_bk;
+
+    if (@substr($etime_bk, 2, 2) == '30')
+    	$etime = $etime_bk;
     //...................................................................
     $mark = str_replace("'", "", $mark);
     $permit = str_replace("'", "", $permit);
     $extracase = str_replace("'", "", $extracase);
     $eplace = str_replace("'", "", $eplace);
-    $mdays = $over_date = "";
     if ($flag == 1){  //主管有代理人  agentchief 104/05/13 將agentchief移除($bossno)
       if ($vtype != '11' || ($vtype == '11' && $flag_11 == '1')){ //有夠用的加班時數才能請補休
         $sql = "INSERT INTO holidayform (pocard, povtype, povdateb, povdatee, povtimeb, povtimee, eplace,
@@ -704,13 +703,13 @@
 			   }//for
 			}//補休
       //--------------------------------------------------------------------
-  	  if(@mail($mail_to, $mail_subject, $mail_body, $mail_headers)){
-  			if ($agentsign == 0)
-  				$str = "請假成功，" . $filestatus . "並已寄發email通知職務代理人";
-  			if ($agentsign == 1)
-  				$str = "請假成功，" . $filestatus . "並已寄發email通知直屬主管";
-  	  }
-  	  else
+  	  // if(@mail($mail_to, $mail_subject, $mail_body, $mail_headers)){
+  		// 	if ($agentsign == 0)
+  		// 		$str = "請假成功，" . $filestatus . "並已寄發email通知職務代理人";
+  		// 	if ($agentsign == 1)
+  		// 		$str = "請假成功，" . $filestatus . "並已寄發email通知直屬主管";
+  	  // }
+  	  // else
   			$str = "請假成功，" . $filestatus;//."，但寄發email失敗";
       echo $str;
       exit;
@@ -723,7 +722,7 @@
   		  echo "相同假單已存在，請勿重覆送出！";
   	  else {
   		  echo "資料儲存有問題，請洽管理者！";
-  		  mail('bob@cc.ncue.edu.tw', '請假資料寫入失敗!(/leave/process.php)', $sql . $data['message'], $mail_headers);
+  		  // mail('bob@cc.ncue.edu.tw', '請假資料寫入失敗!(/leave/process.php)', $sql . $data['message'], $mail_headers);
   	  }
       exit;
     }

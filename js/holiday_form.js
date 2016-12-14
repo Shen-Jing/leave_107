@@ -89,10 +89,8 @@ $( // 表示網頁完成後才會載入
                     $('#vocation').append('0');
 
                 // serialno
-                if (JData.qry_serial.SERIALNO[0])
-                    $('#hide-serial').append(JData.qry_serial.SERIALNO[0]);
-                else
-                    $('#hide-serial').append(1);
+                $('#hide-serial').append(JData.qry_serial);
+
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 // console.log(xhr.responseText);
