@@ -1,5 +1,5 @@
 <?php
-  include '../inc/check.php';
+  include '../inc/connect.php';
 
   // 查詢年份與系所
   if ($_POST['oper'] == "qry_year_and_dept"){
