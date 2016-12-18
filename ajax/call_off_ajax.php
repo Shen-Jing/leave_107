@@ -89,8 +89,8 @@
 			        $data[0][3][$i] = $data_unsigned['POVDATEE'][$i];
 			        $data[0][4][$i] = $data_unsigned['POVTIMEB'][$i];
 			        $data[0][5][$i] = $data_unsigned['POVTIMEE'][$i];
-			        $data[0][6][$i] = $data_unsigned['POVHOURS'][$i];
-			        $data[0][7][$i] = $data_unsigned['POVDAYS'][$i];
+			        $data[0][6][$i] = $data_unsigned['POVDAYS'][$i];
+			        $data[0][7][$i] = $data_unsigned['POVHOURS'][$i];
 			        $data[0][8][$i] = $data_unsigned2['EMPL_CHN_NAME'][0];
 				}
 			}
@@ -141,8 +141,8 @@
 			        $data[1][3][$i] = $data_signed['POVDATEE'][$i];
 			        $data[1][4][$i] = $data_signed['POVTIMEB'][$i];
 			        $data[1][5][$i] = $data_signed['POVTIMEE'][$i];
-			        $data[1][6][$i] = $data_signed['POVHOURS'][$i];
-			        $data[1][7][$i] = $data_signed['POVDAYS'][$i];
+			        $data[1][6][$i] = $data_signed['POVDAYS'][$i];
+			        $data[1][7][$i] = $data_signed['POVHOURS'][$i];
 			        $data[1][8][$i] = $data_signed2['EMPL_CHN_NAME'][0];
 				}
 			}
@@ -242,27 +242,44 @@
 		}
 		else if($id == 2)
 		{
-
+			//錯誤
 			$str = "ist";
-			$sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('<script>alert(aaa)</script>','1051212','1051212','1')";
+			$sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('111111111111111111111111111111','1051212','1051212','1')";
+			//<script>alert(aaa)</script>
+			// $sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','1')";
 			$ck_1 = $db -> query_trsac($sqlist);
 
 			$m = $db -> create_savepoint("ist");
 			//oci_commit($db ->rp);
 
-
 			$sqlist2=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','2')";
 			$db -> query_trsac($sqlist2);
-
-			// $sqlup=  "update holidayform set CONDITION='4' where pocard = '000000' and POVDATEB = '1051212' and CONDITION = '1'";
-			// $db -> query_trsac($sqlup);
-
+			$db -> create_savepoint("ist2");
 			$check = $db -> end_trsac();
+			//oci_commit($db ->rp);
+			$sqlup=  "update holidayform set CONDITION='4' where pocard = '000000' and POVDATEB = '1051212' and CONDITION = '2'";
+			$ck_2 = $db -> query_trsac($sqlup);
+			//$db -> rb_to_savepoint("ist");
+
 			// if(!$check)
 			// 	$db -> rb_to_savepoint("ist");
-			echo json_encode($ck_1);
-			exit;
-			echo json_encode($m);
+			// echo json_encode($ck_1);
+			// exit;
+			if(!empty($ck_2['message']))
+				echo json_encode($ck_2['message']);
+			else{
+					$check = $db -> end_trsac();
+					echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
+					exit;
+			}
+
+			if(!empty($ck_1['message']))
+				echo json_encode($ck_1['message']);
+			else{
+					$check = $db -> end_trsac();
+					echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
+					exit;
+			}
 			exit;
 			// $SQLStr2=  "update holidayform set CONDITION='1' where serialno = 109236 ";
 			// $data_update = $db -> query($SQLStr2);
