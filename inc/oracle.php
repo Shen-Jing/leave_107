@@ -33,6 +33,10 @@ class ORACLE{
 			if (!@oci_execute($stmt,OCI_COMMIT_ON_SUCCESS)){ // execute and auto commit to database
 					//error occur and print error and sql
 					$oci_err=@OCIError($stmt);
+					foreach ($oci_err as $key => $value) {
+						mb_convert_encoding($oci_err, "BIG5", "UTF-8");
+					}
+					//$oci_err = mb_convert_encoding($oci_err, "BIG5", "UTF-8");
 					return $oci_err; //add by boblee!
 					//echo "<p>資料處理失敗，錯誤訊息: " . $oci_err[message] . "<br>錯誤請求指令" . $this -> str ."</p><hr>";
 			}
@@ -50,8 +54,22 @@ class ORACLE{
 			$stmt=oci_parse($this->rp, $Qstr); // parse sql to oracle statement
 
 			if (!@oci_execute($stmt,OCI_NO_AUTO_COMMIT)){ // execute and auto commit to database
+					oci_rollback($this ->rp);
 					//error occur and print error and sql
-					$oci_err=@OCIError($stmt);
+					$oci_err=@oci_error($stmt);
+					foreach ($oci_err as $key => $value) {
+						$oci_err[$key] = iconv(mb_detect_encoding($oci_err['message']), "UTF-8",$value);
+					}
+
+					// foreach ($oci_err as $key => $value) {
+					// 	$oci_err[$key] = mb_convert_encoding($value, "UTF-8",mb_detect_encoding($oci_err['message']));
+					// }
+
+					//iconv("UTF-8","BIG5",$oci_err['message']);
+					//mb_convert_encoding($oci_err['message'],"BIG5", "UTF-8");
+					//$oci_err['message'] = iconv(mb_detect_encoding($oci_err['message']),"UTF-8",$oci_err['message']);
+					//return mb_detect_encoding($oci_err['message']);
+					//$oci_err['message'] = mb_convert_encoding($oci_err['message'],"UTF-8", mb_detect_encoding($oci_err['message']));
 					return $oci_err; //add by boblee!
 					//echo "<p>資料處理失敗，錯誤訊息: " . $oci_err[message] . "<br>錯誤請求指令" . $this -> str ."</p><hr>";
 			}
@@ -99,7 +117,7 @@ class ORACLE{
 	}
 
 	function end_trsac(){
-		$committed=oci_commit($this ->rp);
+		$committed=oci_commit($this->rp);
 		return $committed;
 	}
 

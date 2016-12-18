@@ -18,9 +18,7 @@
 	<div class="container-fluid" >
 		<? include ("inc/page-header.php"); ?>
 		<form class="form-horizontal" role="form" name="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" method="post"   ENCTYPE="multipart/form-data">
-		<center>
 
-		<center>
 		<div class="panel panel-primary">
 			<div class="panel-heading" style="text-align:left">
 			    加班申請作業
@@ -150,7 +148,6 @@
 				</table>
 			</div>
 		</form>
-		</center>
 		</div>
 
 	</div>

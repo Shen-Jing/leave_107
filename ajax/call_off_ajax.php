@@ -255,18 +255,23 @@
 			$sqlist2=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','2')";
 			$db -> query_trsac($sqlist2);
 			$db -> create_savepoint("ist2");
-			$check = $db -> end_trsac();
+			//$check = $db -> end_trsac();
 			//oci_commit($db ->rp);
 			$sqlup=  "update holidayform set CONDITION='4' where pocard = '000000' and POVDATEB = '1051212' and CONDITION = '2'";
 			$ck_2 = $db -> query_trsac($sqlup);
+			//$check = $db -> end_trsac();
+			// echo"OK";
+			// exit;
 			//$db -> rb_to_savepoint("ist");
 
 			// if(!$check)
 			// 	$db -> rb_to_savepoint("ist");
 			// echo json_encode($ck_1);
 			// exit;
-			if(!empty($ck_2['message']))
+			if(!empty($ck_2['message'])){
 				echo json_encode($ck_2['message']);
+				exit;
+			}
 			else{
 					$check = $db -> end_trsac();
 					echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");

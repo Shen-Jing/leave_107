@@ -18,9 +18,7 @@
 	<div class="container-fluid" >
 		<? include ("inc/page-header.php"); ?>
 		<form class="form-inline" role="form" name="holiday" method="post"  ENCTYPE="multipart/form-data">
-		<center>
 
-		<center>
 		<div class="panel panel-primary">
 			<div class="panel-heading" style="text-align:left">
 			    人事室<font color="#f93e61">差假補登作業</font>
@@ -46,7 +44,8 @@
 								</div>
 							</td>
 						</tr>
-
+					</thead>
+					<thead>
 						<tr>
 							<td class="col-md-2 td1" align="center"> 員工編號</td>
 							<td class="col-md-4" align="center" id="empl_no"></td>
@@ -125,7 +124,6 @@
 				</table>
 			</div>
 		</form>
-		</center>
 		</div>
 
 	</div>
