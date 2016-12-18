@@ -37,7 +37,7 @@ function cancelclick(serialno)
       type: 'POST',
       dataType: "json",
       success:function(){toastr["success"]("該筆資料已取消!!");
-      window.location.reload();},
+      $('#Btable').DataTable().ajax.reload();},
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
   });
 }

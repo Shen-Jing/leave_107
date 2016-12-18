@@ -98,7 +98,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         學期:
-                                                        <select class="form-control" name="qry_sum" id="qry_sum" style='display: inline-block; width: auto;'></select>
+                                                        <select class="form-control" name="qry_acadm" id="qry_acadm" style='display: inline-block; width: auto;'></select>
                                                     </div>
                                                 </div>
                                                 <div  id="class-modal">
@@ -157,17 +157,17 @@
                                               </div>
 
 
-                                              <div class="panel-body">
+                                              <div class="panel-body" id="data_modify">
                                                 <div class="panel panel-primary">
                                                   <div class="panel-heading" style="text-align:left">
                                             			    加班申請作業
                                             			</div>
                                             			<div class="panel-body panel-height">
-                                            				<table class="table table-bordered" id="">
+                                            				<table class="table table-bordered" >
                                                       <thead>
                                             					<tr>
                                             						<td class="td1" align="center">請假期間</td>
-                                            						<td colspan="3"><font size="4">
+                                            						<td colspan="3" id="holiday_time"><font size="4">
 
                                             						</td>
                                             					</tr>
@@ -176,7 +176,7 @@
                                                       <thead>
                                             					<tr>
                                             						<td class="td1" align="center">請假事由</td>
-                                            						<td colspan="3"><font size="4">
+                                            						<td colspan="3" id="holidy_mark"><font size="4">
 
                                             						</td>
                                             					</tr>
@@ -188,7 +188,7 @@
                                             						<td class="col-md-4">
 
 
-                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='class-name' name='class-name' onChange=''></select>
+                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='subject-name' name='subject-name' onChange=''></select>
 
                                             									<font size='2' color='darkred'>(如果沒有選項，表示您學年與學期選錯了，請返回上一步) </font>
 
@@ -257,7 +257,7 @@
                                             							<button class="btn btn-primary" name="check" onclick=''>離開或被退重送</button>
                                                           <button class="btn btn-primary" name="check" onclick=''>本班資料儲存</button>
                                             						</td>
-                                            					</tr
+                                            					</tr>
                                             					</thead>
 
 
