@@ -97,6 +97,8 @@ $( // 表示網頁完成後才會載入
             }
         });
 
+
+
         // 若出差地點的option
         var place = ['基隆市', '台北市', '新北市',
         '桃園市', '新竹縣', '新竹市',
@@ -321,6 +323,33 @@ $( // 表示網頁完成後才會載入
             }
         });
 
+        $("#qry_agent_depart").change(function(){
+            if ($('#qry_agent_depart').val() != "") {
+                $('#qry_agentno').empty();
+                $.ajax({
+                    url: 'ajax/holiday_form_ajax.php',
+                    data: {
+                      oper: 'qry_agent',
+                      depart: $('#qry_agent_depart').val(),
+                    },
+                    type: 'POST',
+                    dataType: "json",
+                    success: function(JData) {
+                        var row0 = "<option selected disabled class='text-hide'>請選擇職務代理人</option>";
+                        $('#qry_agentno').append(row0);
+                        for (var i = 0; i < JData.EMPL_NO.length; i++) {
+                            var row = "<option value=" + JData.EMPL_NO[i] + ">" + JData.EMPL_CHN_NAME[i] + "</option>";
+                            $('#qry_agentno').append(row);
+                        }
+                        $('#qry_agentno').append("<option value='0000000'>其它單位</option>");
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        // console.log(xhr.responseText);
+                    }
+                });
+            }
+        });
+
         // 若出差地點選擇自行輸入，則須show input text
         // 若「出差地點」的選擇改變
         $("#qry_eplace").change(function(){
@@ -393,38 +422,10 @@ function formCheck(){
     var year = date.getFullYear() - 1911;
     $.ajax({
         url: 'ajax/holiday_form_ajax.php',
-        data: {
-          oper: 'submit',
-          year: year,
-          this_serialno: $('#hide-serial').text(),
-          agent_depart: $('#qry_agent_depart').val(),
-          agentno: $('#qry_agentno').val(),
-          check: $('#hide-check').text(),
-          // 請假開始日期
-          leave_start: $('#leave-start').val(),
-          leave_end: $('#leave-end').val(),
-          btime: $('#btime').val(),
-          etime: $('#etime').val(),
-          bus_trip_start: $('#bus-trip-start').val(),
-          bus_trip_end: $('#bus-trip-end').val(),
-          depart_time: $('#depart-time').val(),
-          immig_time: $('#immig-time').val(),
-          vtype: $('#qry_vtype').val(),
-          eplace: $('#qry_eplace').val(),
-          extracase: $('#qry_extracase').val(),
-          haveclass: $('input[name="haveclass"]:checked').val(),
-          mark: $('input[name="mark"]').val(),
-          abroad: $('input[name="abroad"]:checked').val(),
-          saturday: $('input[name="saturday"]:checked').val(),
-          sunday: '0',
-          budget: $('input[name="budget"]').val(),
-          trip: $('input[name="trip"]:checked').val(),
-          permit: $('input[name="permit"]').val(),
-          on_dept: $('input[name="on_dept"]').val(),
-          on_duty: $('input[name="on_duty"]').val(),
-          voc: $('#vocation').text(),
-          party: $('#party').text(),
-        },
+        data: $('form[name="holiday"]').serialize()
+        + "&oper=submit" + "&this_serialno=" + $('#hide-serial').text()
+        + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
+        + "&party=" + $('#party').text() + "&year=" + year,
         type: 'POST',
         dataType: "text",
         success: function(JData) {

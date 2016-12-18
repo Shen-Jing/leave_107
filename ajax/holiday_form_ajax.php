@@ -107,6 +107,23 @@
     exit;
   }
 
+  // 若有指定職務代理人單位，叫出該單位所有職務代理人
+  if ($_POST['oper'] == "qry_agent") {
+    $empl_no = $_SESSION['empl_no'];
+    $depart = $_POST['depart'];
+    $sql = "SELECT  empl_no, empl_chn_name
+						FROM   psfempl, psfcrjb
+						WHERE empl_no = crjb_empl_no
+						AND   crjb_quit_date IS NULL
+						AND   crjb_depart = '$depart'
+						AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
+						AND   empl_no != '$empl_no'
+						ORDER BY crjb_depart, crjb_title, crjb_empl_no";
+    $data = $db -> query_array($sql);
+    echo json_encode($data);
+    exit;
+  }
+
   if ($_POST['oper'] == "qry_apps") {
     $empl_no = $_POST['empl_no'];
     $vtype = $_POST['vtype'];
@@ -117,8 +134,8 @@
     $sql = "SELECT trunc(sum(nvl(POVDAYS,0)) + sum(nvl(POVHOURS,0))/8)   days , mod(sum(nvl(POVHOURS,0)),8) hours
            FROM holidayform
            WHERE povtype = '$vtype'
-           AND substr(POVDATEB,1,3) = '$year'
-           AND condition IN ('0','1')
+           AND substr(POVDATEB, 1, 3) = '$year'
+           AND condition IN ('0', '1')
            AND pocard IN ('$empl_no', '$empl_no')";
     $tmp_data = $db -> query_array($sql);
     // 目前已休天
@@ -200,19 +217,19 @@
     $ndate = $data['NDATE'][0];
 
     // 正常請假
-    if($_POST['check'] == 'fe'){
-      $agentno = $_POST['agentno'];
+    if ($_POST['check'] == 'fe'){
+      $agentno = @$_POST['agentno'];
       $agentsign = 0;
       $cstatus = 0;   //假單目前狀態
     }
-    else if($_POST['check'] == 'ex'){ //未兼行政老師及學術單位專案助理
+    else if ($_POST['check'] == 'ex'){ //未兼行政老師及學術單位專案助理
       $agentno = 'none';
       $agentsign = 1;
     }
 
     /* 表單資料 */
     $serialno = $_POST["this_serialno"];  //961109 add
-    $agent_depart = $_POST['agent_depart'];
+    $agent_depart = @$_POST['agent_depart'];
     if ($agent_depart == '')
       $agent_depart = $depart;
     // 請假開始、結束日期 ex: 2016/12/08
@@ -234,8 +251,9 @@
     list($oyear, $omonth, $oday) = explode("/", $_POST['depart_time']);
     list($iyear, $imonth, $iday) = explode("/", $_POST['immig_time']);
     $vtype = $_POST['vtype'];
-    $eplace = $_POST['eplace'];
-    $extracase = $_POST['extracase'];
+    $eplace = @$_POST['eplace'];
+    $eplace_text = @$_POST['eplace_text'];
+    $extracase = @$_POST['extracase'];
     // 研發經費
     $research = '0';
     // 差假期間是否有課
@@ -298,9 +316,7 @@
       $etime_bk = $etime;
       $etime = substr($etime, 0, 2);
     }
-
     require "../calculate_time.php"; //統計此次請假總天數，提到此判斷寒暑休
-
     //*************************************************************************
     //**                資料檢核
     //*************************************************************************
@@ -322,7 +338,7 @@
             AND   povtimee != $btime";
     $data = $db -> query_array($sql);
     $count['empl_no'] = $data['COUNT'][0];
-
+    // echo $sql;
     //---------------------------------------
     // 代理人是否請假   96.01.02 liru add
     //---------------------------------------
@@ -358,15 +374,14 @@
 
     //-----------------------------------
     //判斷出差是否使用研發處經費，需經系辦助理註記才可請出差   97.12.12 liru add
-    // $sql = "SELECT COUNT(*) count
-    //         FROM TEACHER
-    //         WHERE TEACHER_NO = '$empl_no'
-    //         AND   BEGIN_DATE = '$bdate'
-    //         AND   END_DATE   = '$edate'
-    //         AND   SIGN = '1'";
-    // $data = $db -> query_array($sql);
-    // $count['teacher'] = $data['COUNT'][0];
-    // echo $sql;
+    $sql = "SELECT COUNT(*) count
+            FROM TEACHER
+            WHERE TEACHER_NO = '$empl_no'
+            AND   BEGIN_DATE = '$bdate'
+            AND   END_DATE   = '$edate'
+            AND   SIGN = '1'";
+    $data = $db -> query_array($sql);
+    $count['teacher'] = $data['COUNT'][0];
 
     // 請假狀況驗證
     if ($count['empl_no'] > 0) {
@@ -382,10 +397,10 @@
       echo "您是一級主管，系統將轉至一級主管請假作業！";
       exit;
     }
-    // elseif ( ($vtype == '01' || $vtype == '02') && $research == '1' && $count['teacher'] > 0) {
-    //   echo "請假未成功，請先知會系辦助理，註記您要使用研發處經費！";
-    //   exit;
-    // }
+    elseif ( ($vtype == '01' || $vtype == '02') && $research == '1' && $count['teacher'] > 0) {
+      echo "請假未成功，請先知會系辦助理，註記您要使用研發處經費！";
+      exit;
+    }
     elseif ( ($vtype == '06' || $vtype == '21' || $vtype == '22' || $vtype == '23') && $tot_day == 0 && $tot_hour < 4) {
       echo "寒休、暑休、休假至少要請半天！";
       exit;
@@ -397,16 +412,17 @@
     //**********************************************************
 
     // 例假日出國(29)不檢查 -- 104/04/07 add */
-    // if ($tot_day < 0 || ( ($tot_day == 0 && $tot_hour == 0) && ($vtype != '29') ) ){
-    //   echo "請假天數不合理，是否忘了填含例假日！";
-    // 	exit;
-    // }
+    if ($tot_day < 0 || ( ($tot_day == 0 && $tot_hour == 0) && ($vtype != '29') ) ){
+      echo "請假天數不合理，是否忘了填含例假日！";
+    	exit;
+    }
 
     //事假才累計此次請假  961123
     if ($vtype == '04'){
   		$tot_day_04 = $tot_day;   //先暫存，免被覆蓋
   		$tot_hour_04 = $tot_hour;
-  		require "calculate_tot.php";  //統計之前事假總天數 961123
+      // echo $edate;
+  		require "../calculate_tot.php";  //統計之前事假總天數 961123
   		$pohdaye = $pohdaye + $tot_day_04;		//加上此次請假日數
   		$pohoure = $pohoure + $tot_hour_04;
   			//時數超過八小時轉入天數
@@ -601,6 +617,11 @@
     $permit = str_replace("'", "", $permit);
     $extracase = str_replace("'", "", $extracase);
     $eplace = str_replace("'", "", $eplace);
+    if (!isset($mdays))
+      $mdays = "";
+    if (!isset($over_date))
+      $over_date = "";
+
     if ($flag == 1){  //主管有代理人  agentchief 104/05/13 將agentchief移除($bossno)
       if ($vtype != '11' || ($vtype == '11' && $flag_11 == '1')){ //有夠用的加班時數才能請補休
         $sql = "INSERT INTO holidayform (pocard, povtype, povdateb, povdatee, povtimeb, povtimee, eplace,
@@ -621,13 +642,13 @@
     }
     else {//主管自己簽核
       if ($vtype != '11' || ($vtype =='11' && $flag_11 == '1')){
-    	  $sql = "INSERT INTO holidayform (pocard,povtype,povdateb,povdatee,povtimeb,povtimee,eplace,
-          povdays,povhours,class,extracase,note,agentno,
-          bossone,bosstwo,bossthree,curentstatus,condition,
-          serialno,poremark,agentsign,abroad,containsat,containsun,
-          depart,appdate,budget,trip,agent_depart,research,permit_commt,
-          meetdateb,meetdatee,meetdays,exit_date,back_date,meettimeb,
-          meettimee,class_depart,over_date,on_dept,on_duty)";
+    	  $sql = "INSERT INTO holidayform (pocard, povtype, povdateb, povdatee, povtimeb, povtimee, eplace,
+          povdays, povhours, class, extracase, note, agentno,
+          bossone, bosstwo, bossthree, curentstatus, condition,
+          serialno, poremark, agentsign, abroad, containsat, containsun,
+          depart, appdate, budget, trip, agent_depart, research, permit_commt,
+          meetdateb, meetdatee, meetdays, exit_date, back_date, meettimeb,
+          meettimee, class_depart, over_date ,on_dept, on_duty)";
     	  $sql .= " values ('$empl_no','$vtype','$bdate','$edate','$btime','$etime','$eplace',
         '$tot_day','$tot_hour','$haveclass','$extracase','$notefilename','$agentno',
         '0','0','0','$cstatus','$condi','$this_serialno','$mark','$agentsign','$abroad',
@@ -638,6 +659,9 @@
     }
     echo $sql;
     $data = $db -> query_array($sql);
+    exit;
+    print_r($GLOBALS);
+    // exit;
     // 若沒錯誤
     if (empty($data['MESSAGE'])){
       // 系統自動由最前面的日期扣除相等於補休之時數。// 請假成功後，補休才能扣除
@@ -680,7 +704,7 @@
               $i_use = 0;
               if ($i > 0){
               	for ($p = 0; $p < $i; $p++){
-              		$i_use = $i_use + $nouse[$p];//第 i　日之前用掉多少
+              		$i_use = $i_use + $nouse[$p];//第 i日之前用掉多少
               		$sql = "INSERT INTO overtime_use(EMPL_NO,OVER_DATE,SERIALNO,USE_HOUR)
               			      VALUES('$empl_no', '" . $over[$p] . "', $serialno, " . $nouse[$p] . ")";
               		//echo $sql."<br>";
@@ -710,7 +734,7 @@
   		// 		$str = "請假成功，" . $filestatus . "並已寄發email通知直屬主管";
   	  // }
   	  // else
-  			$str = "請假成功，" . $filestatus;//."，但寄發email失敗";
+  			$str = "請假成功！" . $filestatus;//."，但寄發email失敗";
       echo $str;
       exit;
     }
@@ -719,7 +743,7 @@
 
       // @mail('bob@cc.ncue.edu.tw', '請假者資料無法儲存', $SQLStr, $mail_headers);
   	  if ($data['code'] == 1) //ORA-00001 unique...
-  		  echo "相同假單已存在，請勿重覆送出！";
+  		  echo "相同假單已存在，請勿重複送出！";
   	  else {
   		  echo "資料儲存有問題，請洽管理者！";
   		  // mail('bob@cc.ncue.edu.tw', '請假資料寫入失敗!(/leave/process.php)', $sql . $data['message'], $mail_headers);

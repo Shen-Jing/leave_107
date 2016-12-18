@@ -61,31 +61,31 @@
                             					<tr id="agent_depart">
                       						      <td class="td1"><span style="color: red;">請選職務代理人單位</span></td>
                             						<td colspan="3">
-                                            <select name="depart" id="qry_agent_depart" class="form-control">
+                                            <select name="agent_depart" id="qry_agent_depart" class="form-control">
                               						  </select>
                                         </td>
                                       </tr>
                             					<tr>
                             						<td class="td1">請假開始日期</td>
                                         <td>
-                                          <input type='text' class="form-control calendar" id='leave-start'>
+                                          <input type='text' class="form-control" id='leave-start' name="leave_start">
                               					</td>
                           							<td class="td1">請假開始時間</td>
                             						<td>
                                           <span id="party" style="display: none;"></span>
                                           <span id="vocation" style="display: none;"></span>
-                                          <select name="vtype" id="btime" class="form-control">
+                                          <select name="btime" id="btime" class="form-control">
                             							</select>時
                             						</td>
                             					</tr>
                             					<tr>
                             						<td class="td1">請假結束日期</h3>
                                         <td>
-                                          <input type='text' class="form-control calendar"  id='leave-end'>
+                                          <input type='text' class="form-control" id='leave-end' name="leave_end">
                               					</td>
 																	      <td class="td1">請假結束時間</td>
 																		   	<td>
-                                          <select name="vtype" id="etime" class="form-control">
+                                          <select name="etime" id="etime" class="form-control">
                             							</select>時
 																				</td>
                             					</tr>
@@ -123,7 +123,7 @@
                                           <select name="eplace" id="qry_eplace" class="form-control">
                                           </select>
 																			  <td colspan="2">
-																					<input type="text" class="form-control" size="50" name="eplace" value="" maxlength="50" placeholder="請自行輸入地點" disabled="true">
+																					<input type="text" class="form-control" size="50" name="eplace_text" value="" maxlength="50" placeholder="請自行輸入地點" disabled="true">
 																				</td>
                                       </tr>
                                       <tr id="nouse" style="display: none;">
@@ -191,10 +191,10 @@
                                         </td>
                                         <td colspan="3">
                                           <div class='col-md-6'>
-                                            <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start'>
+                                            <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start">
                                           </div>
                                           <div class='col-md-6'>
-                                            <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end'>
+                                            <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end' name="bus_trip_end">
                                           </div>
                               					</td>
                                       </tr>
@@ -204,10 +204,10 @@
                                         </td>
                                         <td colspan="3">
                                           <div class='col-md-6'>
-                                            <input type='text' class="form-control" placeholder="出境時間" id='depart-time'>
+                                            <input type='text' class="form-control" placeholder="出境時間" id='depart-time' name="depart_time">
                                           </div>
                                           <div class='col-md-6'>
-                                            <input type='text' class="form-control" placeholder="入境時間" id='immig-time'>
+                                            <input type='text' class="form-control" placeholder="入境時間" id='immig-time' name="immig_time">
                                           </div>
                                         </td>
                                       </tr>
@@ -217,10 +217,10 @@
                                         </td>
                                         <td colspan="3">
                                           <div class='col-md-6'>
-                                            <input type='text' class="form-control" placeholder="出境時間" id='meeting-start'>
+                                            <input type='text' class="form-control" placeholder="出境時間" id='meeting-start' name="meeting_start">
                                           </div>
                                           <div class='col-md-6'>
-                                            <input type='text' class="form-control" placeholder="入境時間" id='meeting-end'>
+                                            <input type='text' class="form-control" placeholder="入境時間" id='meeting-end' name="meeting_end">
                                           </div>
                                         </td>
                                       </tr>

@@ -26,12 +26,11 @@
 				 AND pocard = '$empl_no'
 				 AND condition = '1'";
   $data = $db -> query_array($sql);
-  $edate = $data['POVDATEE'][0]; //起始日期
-  $etime = $data['POVTIMEE'][0]; //起始時間
-  $saturday = $data['CONTAINSAT'][0];
-  $sunday = $data['CONTAINSUN'][0];
+  $edate = @$data['POVDATEE'][0]; //起始日期
+  $etime = @$data['POVTIMEE'][0]; //起始時間
+  $saturday = @$data['CONTAINSAT'][0];
+  $sunday = @$data['CONTAINSUN'][0];
   $bdate = $year . "0101";
-
 	if ($party == '1')  //特殊上班人員
     $btime = '13';
   else
@@ -58,6 +57,7 @@
     $etime = '22';
   else
     $etime = '17';
+	// echo $edate;
   require "calculate_time.php";
 	$pohdaye += $tot_day;
 	$pohoure += $tot_hour;

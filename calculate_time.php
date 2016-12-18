@@ -33,6 +33,8 @@
           AND   calendar_status = '*'";
   $data = $db -> query_array($sql);
 	$ln_day2 = $data['COUNT'][0];
+	// print_r($GLOBALS);
+
 
   if ( $btime == $bt && $etime == $et){ // 請一整天
     $tot_hour = 0;
@@ -69,7 +71,7 @@
   		if ($etime - $btime > 0)
   			$tot_hour = $etime - $btime ;
   		else {
-  			$ln_day1 = $ln_day1-1;  //再有一天不滿8小時
+  			$ln_day1 = $ln_day1 - 1;  //再有一天不滿8小時
   			$tot_hour = ($et - $btime) + ($etime - $bt);
       }
   		$tot_day = $ln_day1 - $ln_day2;
