@@ -37,6 +37,12 @@
                 <ul class="dropdown-menu">
                     <li><a href="pgm_node.php"><i class="fa fa-plus-square fa-fw"></i> 選單編輯介面</a>
                     </li>
+                    <li><a href="grp_node.php"><i class="fa fa-plus-square fa-fw"></i> 群組編輯介面</a>
+                    </li>
+                    <li><a href="grp_pgm.php"><i class="fa fa-plus-square fa-fw"></i> 程式群組編輯介面</a>
+                    </li>
+                    <li><a href="grp_user.php"><i class="fa fa-plus-square fa-fw"></i> 用戶群組編輯介面</a>
+                    </li>
                 </ul>
             </li>
             <!-- /.dropdown -->

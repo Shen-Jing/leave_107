@@ -1,6 +1,5 @@
 $(function(){
   var group = $(".root").sortable({
-    group: 'nested',
     onMousedown: function(cEl, _super, e){
       if (cEl.children('ol').children('li').length)
       {
@@ -9,10 +8,6 @@ $(function(){
       }
       else
         return true;
-    },
-    onCancel: function (cEl, container, _super)
-    {
-      return confirm("此動作可能無法復原，你確定要拖曳嗎？");
     },
     onDrop: function (cEl, container, _super) {
       var o_id = cEl.attr('id');

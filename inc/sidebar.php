@@ -1,8 +1,8 @@
 <?
-$sql ="select distinct pgmid,pgmname,pgmlevel,pgmsort,pgmurl,pgmtype ,parent_folder,folder_img
-    from syspgm
-    where sysid='LEAVE'
-    order by pgmid,pgmsort";
+$id = $_SESSION['_ID'];
+$sql ="select distinct p.pgmid,pgmname,pgmlevel,pgmsort,pgmurl,pgmtype ,parent_folder,folder_img
+    from syspgm p, sysgrppgm gp, sysgrpuser gu
+    where p.sysid='LEAVE' and gp.sysid='LEAVE' and gu.sysid='LEAVE' and userid='$id' and gu.grpid=gp.grpid and gp.pgmid=p.pgmid order by p.pgmid,pgmsort";
 $d = $db -> query_array($sql);
 ?>
 ﻿        <!-- Sidebar wrapper over SB Admin 2 sidebar -->
