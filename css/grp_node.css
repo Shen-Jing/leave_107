@@ -1,0 +1,60 @@
+li {
+  list-style-type: none;
+}
+/* 35 */
+.root {
+  position: relative;
+  height: auto;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  padding: 18px;
+  border: 1px solid #DDDDDD;
+  background-color: #fff;
+}
+/* 49 */
+.root li {
+  margin: 7px 0px 0px 0px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  transition: box-shadow 0.2s;
+}
+/* 63 */
+.root li:hover {
+  border: 1px solid #92cd3a;
+  box-shadow: 0 0 2px 0 #ccc;
+}
+/* 68 */
+.root .placeholder {
+  height: 40px;
+  margin: 7px 0px 0px 0px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #FAFAFA;
+  box-shadow:inset 2px 2px 4px 1px rgba(20%,20%,40%,0.35);
+}
+.root .right {
+  float:right;
+  z-index: 9999;
+}
+
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+ol.root li.placeholder {
+  position: relative;
+  /** More li styles **/
+}
+ol.root li.placeholder:before {
+  position: absolute;
+  /** Define arrowhead **/
+}
