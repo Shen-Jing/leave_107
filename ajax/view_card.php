@@ -1,5 +1,5 @@
  <?php
-  include_once("../inc/check.php");
+  include_once("../inc/connect.php");
    // from over_time.js
   $empl_no = @$_POST['empl_no'];
   $over_date = @$_POST['over_date'];

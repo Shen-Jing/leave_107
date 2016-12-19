@@ -58,7 +58,6 @@ $( // 表示網頁完成後才會載入
     });
 
 function view_card(empl_no, over_date) {
-  alert(empl_no);
     // 取得詳細刷卡記錄
     $.ajax({
         url: 'ajax/view_card.php',

@@ -1,4 +1,5 @@
 <?php
+  session_start();
   include '../inc/connect.php';
 
   // 查詢年份與系所
@@ -97,8 +98,8 @@
 						WHERE empl_no = '$empl_no'
 						AND   over_date = '$over_date'";
 		$data = $db -> query($sql);
-		// $message = array("error_code" => $data['code'], "error_message" => $data['message'], "sql" => $sql);
-    echo json_encode($data);
+		$message = array("error_code" => $data['code'], "error_message" => $data['message'], "sql" => $sql);
+    echo json_encode($message);
     exit;
 	}
 
