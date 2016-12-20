@@ -37,7 +37,7 @@
     <script src="js/jquery.jqGrid.min.js" type="text/ecmascript"></script>
     <script src="js/bootbox.min.js"></script>
     <script src="js/jquery-sortable-min.js"></script>
-	<? include_once( (dirname(__DIR__)) . "/page_editor/components/new_thread_js.php" ); ?>
+	<? @include_once( (dirname(__DIR__)) . "/page_editor/components/new_thread_js.php" ); ?>
     <script src="js/<?=basename($_SERVER['PHP_SELF'], ".php")?>.js<?='?'.time()?>"></script> <!-- Ensure reloading the newest javascript every time -->
 
 </body>
