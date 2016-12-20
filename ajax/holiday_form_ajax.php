@@ -49,7 +49,6 @@
           AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
           AND   empl_no != '$empl_no'
           ORDER BY crjb_depart, crjb_title, crjb_empl_no";
-          // echo $sql . '\n';
     $tmp_data = $db -> query_array($sql);
     $data['qry_agentno'] = $tmp_data;
 
@@ -316,7 +315,7 @@
       $etime_bk = $etime;
       $etime = substr($etime, 0, 2);
     }
-    require "../calculate_time.php"; //統計此次請假總天數，提到此判斷寒暑休
+    require "../calculate_time.php"; // 統計此次請假總天數，提到此判斷寒暑休
     //*************************************************************************
     //**                資料檢核
     //*************************************************************************
@@ -338,7 +337,6 @@
             AND   povtimee != $btime";
     $data = $db -> query_array($sql);
     $count['empl_no'] = $data['COUNT'][0];
-    // echo $sql;
     //---------------------------------------
     // 代理人是否請假   96.01.02 liru add
     //---------------------------------------
@@ -385,24 +383,38 @@
 
     // 請假狀況驗證
     if ($count['empl_no'] > 0) {
-      echo "注意！您重複請假了！";
       $_POST['notefilename'] = "no file";
+      $message = array("error_code" => $count['empl_no'],
+      "error_message" => "注意！您重複請假了！",
+      "sql" => $sql);
+      echo json_encode($message);
       exit;
     }
     elseif ($count['agentno'] > 0) {
-      echo "注意！代理人請假中！";
+      $message = array("error_code" => $count['agentno'],
+      "error_message" => "注意！代理人請假中！",
+      "sql" => $sql);
+      echo json_encode($message);
       exit;
     }
     elseif ($count['dept_boss'] > 0) {
-      echo "您是一級主管，系統將轉至一級主管請假作業！";
+      $message = array("error_code" => $count['dept_boss'],
+      "error_message" => "您是一級主管，系統將轉至一級主管請假作業！",
+      "sql" => $sql);
       exit;
     }
     elseif ( ($vtype == '01' || $vtype == '02') && $research == '1' && $count['teacher'] > 0) {
-      echo "請假未成功，請先知會系辦助理，註記您要使用研發處經費！";
+      $message = array("error_code" => $count['teacher'],
+      "error_message" => "請假未成功，請先知會系辦助理，註記您要使用研發處經費！",
+      "sql" => $sql);
+      echo json_encode($message);
       exit;
     }
     elseif ( ($vtype == '06' || $vtype == '21' || $vtype == '22' || $vtype == '23') && $tot_day == 0 && $tot_hour < 4) {
-      echo "寒休、暑休、休假至少要請半天！";
+      $message = array("error_code" => 1,
+      "error_message" => "寒休、暑休、休假至少要請半天！",
+      "sql" => $sql);
+      echo json_encode($message);
       exit;
     }
 
@@ -413,7 +425,10 @@
 
     // 例假日出國(29)不檢查 -- 104/04/07 add */
     if ($tot_day < 0 || ( ($tot_day == 0 && $tot_hour == 0) && ($vtype != '29') ) ){
-      echo "請假天數不合理，是否忘了填含例假日！";
+      $message = array("error_code" => 1,
+      "error_message" => "請假天數不合理，是否忘了填含例假日！",
+      "sql" => $sql);
+      echo json_encode($message);
     	exit;
     }
 
@@ -422,7 +437,7 @@
   		$tot_day_04 = $tot_day;   //先暫存，免被覆蓋
   		$tot_hour_04 = $tot_hour;
       // echo $edate;
-  		require "../calculate_tot.php";  //統計之前事假總天數 961123
+  		require "../calculate_tot.php";  // 統計之前事假總天數 961123
   		$pohdaye = $pohdaye + $tot_day_04;		//加上此次請假日數
   		$pohoure = $pohoure + $tot_hour_04;
   			//時數超過八小時轉入天數
@@ -433,7 +448,11 @@
   			$pohoure = $temp_h;
       }
 	    if ($pohdaye > 7 || ($pohdaye == 7 and $pohoure > 0)){
-        echo "加上本次請假，您的事假已請：" . $pohdaye . "日" . $pohoure . "時";
+        $message = array("error_code" => 1,
+        "error_message" => "加上本次請假，您的事假已請：" . $pohdaye . "日" . $pohoure . "時",
+        "sql" => $sql);
+        echo json_encode($message);
+        exit;
         // echo "<script> alert('".$str."');	if (confirm('您的事假已超過７天，會扣錢的喲！要取消此次假單嗎？請按「確定鍵」'))	 top.r.location.href='sign.php';</script>";
 	    }
 	  }//事假
@@ -474,11 +493,11 @@
   	//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
   	if ($vtype == '11'){ //補休
   		$flag_11 = 0;        //控制能否儲存
-  		$f = 0;
+  		$cnt_nouse = 0; // 有多少個加班日期
       $nouse_sum = 0; //累計未使用時數
 
   		//抓出所有可補休之加班記錄並累計可使用總時數
-  		$sql = "SELECT over_date,nouse_time
+  		$sql = "SELECT over_date, nouse_time
   				  FROM   overtime
   				  WHERE  empl_no = '$empl_no'
   				  AND    person_check = '1'
@@ -489,12 +508,16 @@
       for ($i = 0; $i < count($data['OVER_DATE']); ++$i){
         $over[$i]  = $data['OVER_DATE'][$i]; //加班日期
         $nouse[$i] = $data['NOUSE_TIME'][$i];//加班時數
-        $nouse_sum = $nouse_sum + $nouse[$i];
+        $nouse_sum += $nouse[$i];
       }
+      $cnt_nouse = $i;
 
   		if ($nouse_sum < $total_over){
-  		   echo "補休時數超過可請時數，請先完成加班申請作業。";
-  		   exit;
+         $message = array("error_code" => 1,
+         "error_message" => "補休時數超過可請時數，請先完成加班申請作業。",
+         "sql" => $sql);
+         echo json_encode($message);
+         exit;
   		}
   		else {
   			$flag_11 = 1; //控制能否儲存
@@ -657,23 +680,20 @@
         '$class_depart','$over_date','$on_dept','$on_duty')";
       }
     }
-    echo $sql;
-    $data = $db -> query_array($sql);
-    exit;
-    print_r($GLOBALS);
-    // exit;
+    $data = $db -> query($sql);
     // 若沒錯誤
-    if (empty($data['MESSAGE'])){
-      // 系統自動由最前面的日期扣除相等於補休之時數。// 請假成功後，補休才能扣除
+    // 請假成功後，補休才能扣除
+    if (empty($data['message'])){
+      // 系統自動由最前面的日期扣除相等於補休之時數
 			//---------------------------------------------------------------
 			if ($vtype == '11'){ //補休
 			   $nouse_sum = 0;       //累計到目前的時數
-			   for ($i = 0; $i < $f; $i++) {//尋找日期那一天就夠用
-            $nouse_sum = $nouse_sum + $nouse[$i];//由第一筆開始尋找，那一天夠用扣除補休時數
+			   for ($i = 0; $i < $cnt_nouse; $i++) {// 尋找日期那一天就夠用
+            $nouse_sum = $nouse_sum + $nouse[$i]; // 由第一筆開始尋找，該天夠用就扣除補休時數
             if ($nouse_sum >= $total_over){ //A
-              $nouse_sum = $nouse_sum - $total_over; //剩餘時數=累計時數-補休時數，歸入第 i 日期
+              $nouse_sum = $nouse_sum - $total_over; // 剩餘時數 = 累計時數 - 補休時數，歸入第 i 日期
 
-              //更新資料庫，第 i　日之前，全部扣光
+              //更新資料庫，第 i 日之前，全部扣光
               //-----------------------------------------------
               $sql = "UPDATE overtime
               		  SET    nouse_time = 0
@@ -683,44 +703,39 @@
               	  //over_time table有些記錄其due_date與請假起始日期比已過時了，這些記錄不能當次使用
               	  //但這些當次不能使用的記錄其 due_date 卻 > 系統日期，表示可以供其它的加班補休使用
               	  //這些記錄 nouse_time 不能歸零
-              //echo $sql;
-              $data = $db -> query_array($sql);
+              $data = $db -> query($sql);
 
               $liru_subject = $empl_no . "--" . $serialno . "--process.php 異動到的 overtime 記錄";
               $liru_subject = "=?big5?B?" . base64_encode($liru_subject) . "?=";
               //@mail('liru@cc.ncue.edu.tw',$liru_subject, $sql, $mail_headers);
 
-              //更新資料庫，第 i　日，將剩餘時數存回資料庫
+              //更新資料庫，第 i 日，將剩餘時數存回資料庫
               //-----------------------------------------------------------
               $sql = "UPDATE overtime
                       SET    nouse_time = $nouse_sum
                       WHERE  empl_no = '$empl_no'
                       AND    over_date = '" . $over[$i] . "'";
-              //echo $sql;
-              $data = $db -> query_array($sql);
+              $data = $db -> query($sql);
 
-              //存入資料庫overtime_use，第 i　日之前，補休時用掉那些加班日及時數
+              //存入資料庫overtime_use，第 i 日之前，補休時用掉那些加班日及時數
               //------------------------------------------------------------------------------------------
               $i_use = 0;
               if ($i > 0){
               	for ($p = 0; $p < $i; $p++){
               		$i_use = $i_use + $nouse[$p];//第 i日之前用掉多少
-              		$sql = "INSERT INTO overtime_use(EMPL_NO,OVER_DATE,SERIALNO,USE_HOUR)
+              		$sql = "INSERT INTO overtime_use(EMPL_NO, OVER_DATE, SERIALNO, USE_HOUR)
               			      VALUES('$empl_no', '" . $over[$p] . "', $serialno, " . $nouse[$p] . ")";
-              		//echo $sql."<br>";
-                  $data = $db -> query_array($sql);
+                  $data = $db -> query($sql);
               	}
               	$i_use = $total_over - $i_use;
-              	$sql = "INSERT INTO overtime_use(EMPL_NO,OVER_DATE,SERIALNO,USE_HOUR)
+              	$sql = "INSERT INTO overtime_use(EMPL_NO, OVER_DATE, SERIALNO, USE_HOUR)
                         VALUES('$empl_no', '" . $over[$i] . "', $serialno, $i_use)";
-              	//echo $sql;
-                $data = $db -> query_array($sql);
+                $data = $db -> query($sql);
               }
               else {
               	$sql = "INSERT INTO overtime_use(EMPL_NO,OVER_DATE,SERIALNO,USE_HOUR)
               		  VALUES('$empl_no','".$over[$i]."',$serialno,".$total_over.")";
-              	//echo $sql;
-                $data = $db -> query_array($sql);
+                $data = $db -> query($sql);
               }
               break;
     				}	//if A
@@ -734,24 +749,28 @@
   		// 		$str = "請假成功，" . $filestatus . "並已寄發email通知直屬主管";
   	  // }
   	  // else
-  			$str = "請假成功！" . $filestatus;//."，但寄發email失敗";
-      echo $str;
+  		$submit_result = "請假成功！" . $filestatus;//."，但寄發email失敗";
+      $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "sql" => $sql, "submit_result" => $submit_result);
+      echo json_encode($message);
       exit;
     }
     else{
-  	  //echo  $err['message'] . "--". $sql ;
-
       // @mail('bob@cc.ncue.edu.tw', '請假者資料無法儲存', $SQLStr, $mail_headers);
   	  if ($data['code'] == 1) //ORA-00001 unique...
-  		  echo "相同假單已存在，請勿重複送出！";
+  		  $submit_result = "相同假單已存在，請勿重複送出！";
   	  else {
-  		  echo "資料儲存有問題，請洽管理者！";
+  		  $submit_result = "資料儲存有問題，請洽管理者！";
   		  // mail('bob@cc.ncue.edu.tw', '請假資料寫入失敗!(/leave/process.php)', $sql . $data['message'], $mail_headers);
   	  }
+      $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "sql" => $sql, "submit_result" => $submit_result);
+      echo json_encode($message);
       exit;
     }
-
-    print_r($GLOBALS);
+    // print_r($GLOBALS);
 
   }
 

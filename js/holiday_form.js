@@ -427,13 +427,20 @@ function formCheck(){
         + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
         + "&party=" + $('#party').text() + "&year=" + year,
         type: 'POST',
-        dataType: "text",
+        dataType: "json",
         success: function(JData) {
-            alert("成功");
-            // $('#message > div > ul').html("<li>" + JData + "</li>");
+            if (JData.error_code){
+                toastr["error"](JData.error_message);
+                message(JData.error_message, "danger", 5000);
+            }
+            else {
+                toastr["success"](JData.submit_result);
+                // reload
+            }
         },
         error: function(xhr, ajaxOptions, thrownError) {
-            console.log(xhr.responseText);
+            toastr["error"]("呈交表單出了點狀況！");
+            // console.log(xhr.responseText);
         }
     });
 }

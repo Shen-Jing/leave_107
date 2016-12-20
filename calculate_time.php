@@ -33,10 +33,8 @@
           AND   calendar_status = '*'";
   $data = $db -> query_array($sql);
 	$ln_day2 = $data['COUNT'][0];
-	// print_r($GLOBALS);
 
-
-  if ( $btime == $bt && $etime == $et){ // 請一整天
+  if ($btime == $bt && $etime == $et){ // 請一整天
     $tot_hour = 0;
   	$tot_day = $ln_day1 - $ln_day2;
   }
