@@ -62,7 +62,7 @@ for($i = 0; $i < sizeof($row['EMPL_CHN_NAME']); ++$i){
 echo json_encode($a);
 }
 
-if($_POST['oper'] == "canceled")
+if(@$_POST['oper'] == "canceled")
 {
   $serialno=$_POST['serialnoVar'];
   $SQLStr=  "update holidayform set trip=-1  where serialno = $serialno ";
