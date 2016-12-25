@@ -52,7 +52,8 @@ function year_control()
 
   }
 );
-
+var serailnoval;
+var classnoval;
 function CRUD(oper) {
 
   var yyval, mmval;
@@ -90,8 +91,9 @@ function CRUD(oper) {
           for(var i=0;i<JData.EMPL_CHN_NAME.length;i++){
             /////////////////////////////////////////
             var serialno=JData.SERIALNO[i];
+            serailnoval=serialno;
             //var serialno=74951;
-            
+
             /////////////////////////////////////////
             row0 = row0 + "<tr><td  style='text-align:center;'>" ;
             row0 = row0 + JData.EMPL_CHN_NAME[i];
@@ -205,6 +207,7 @@ function NextClick(serialno)
 
           for(var i=0;i<JData.CLASS_NAME.length;i++){
             var classno=JData.CLASS_NO[i];
+
             row0 = row0 + "<tr><td  style='text-align:center;'>" ;
             row0 = row0 + JData.CLASS_NAME[i];
             row0 = row0 + "</td><td  style='text-align:center;'>" ;
@@ -215,6 +218,7 @@ function NextClick(serialno)
             row0 = row0 + JData.CLASS_DATE2[i];
             row0 = row0 + "</td><td  style='text-align:center;'>" ;
             row0 = row0 + JData.CLASS_ROOM[i];
+
             row0 = row0 + "</td><td  style='text-align:center;'>" ;
             row0 = row0 + JData.CLASS_SECTION2[i];
             row0 = row0 + "</td><td  style='text-align:center;'>" ;
@@ -248,6 +252,13 @@ function EditDataFunc(serialno,classno)
   $('#holiday_time').empty();
   $('#holidy_mark').empty();
   $('#subject-name').empty();
+  $('#class-name').empty();
+  $('#ocyear').empty();
+  $('#ocmonth').empty();
+  $('#ocday').empty();
+  $('#ccyear').empty();
+  $('#ccmonth').empty();
+  $('#ccday').empty();
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: 'edit_class' ,serialnoVar: serialno,class_year: cy, class_acadm: ca,class_no: classno},
@@ -266,17 +277,115 @@ function EditDataFunc(serialno,classno)
           row0="";
           row0=row0+JData["holidaymark"];
           $('#holidy_mark').append(row0);
+          classnoval=JData["class_no"];
+          row0 = "<$option selected disabled class='text-hide'>選擇科目</option>";
+          row0 =row0+ "<option value=1>電子學</option>";
+          row0 =row0+ "<option value=2>線性代數</option>";
+          row0 =row0+ "<option value=3>遊戲設計</option>";
+          row0 =row0+ "<option value=4>演算法</option>";
+          row0 =row0+ "<option value=5>作業系統</option>";
+          $('#subject-name').append(row0);
+          var classname="資工三"
+          row0=classname;
+          $('#class-name').append(row0);
 
-          //row0 = "<$option selected disabled class='text-hide'>選擇科目</option>";
-          //$('#subject-name').append(row0);
-          /*for (var i = 0 ; i < JData["selcode"].length ; i++)
+
+          row0 = "<$option selected disabled class='text-hide'>請選擇年份</option>";
+          $ ('#ocyear').append(row0);
+          for (var i = JData["year"] - 1 ; i <= JData["year"]+1 ; i++)
           {
-            row0 = "<option value=" +i+ ">" + JData["selcode"][i]+JData["sub_name"][i] + " </option>";
-            $('#subject-name').append(row0);
-          }*/
+              if (i == JData["year"])
+                  row = "<option value=" +i+ " selected>" + i + "</option>";
+              else
+                  row = "<option value=" +i+ ">" + i + " </option>";
+              $ ('#ocyear').append(row);
+          }
+
+          row0 = "<$option selected disabled class='text-hide'>請選擇月份</option>";
+          $ ('#ocmonth').append(row0);
+          for (var i = 1; i <= 12 ; i++)
+          {
+                  row = "<option value=" +i+ ">" + i + " </option>";
+              $ ('#ocmonth').append(row);
+          }
+
+          row0 = "<$option selected disabled class='text-hide'>請選擇日期</option>";
+          $ ('#ocday').append(row0);
+          for (var i = 1; i <= 31 ; i++)
+          {
+                  row = "<option value=" +i+ ">" + i + " </option>";
+              $ ('#ocday').append(row);
+          }
+
+          row0 = "<$option selected disabled class='text-hide'>請選擇年份</option>";
+          $ ('#ccyear').append(row0);
+          for (var i = JData["year"] - 1 ; i <= JData["year"]+1 ; i++)
+          {
+              if (i == JData["year"])
+                  row = "<option value=" +i+ " selected>" + i + "</option>";
+              else
+                  row = "<option value=" +i+ ">" + i + " </option>";
+              $ ('#ccyear').append(row);
+          }
+
+          row0 = "<$option selected disabled class='text-hide'>請選擇月份</option>";
+          $ ('#ccmonth').append(row0);
+          for (var i = 1; i <= 12 ; i++)
+          {
+                  row = "<option value=" +i+ ">" + i + " </option>";
+              $ ('#ccmonth').append(row);
+          }
+
+          row0 = "<$option selected disabled class='text-hide'>請選擇日期</option>";
+          $ ('#ocday').append(row0);
+          for (var i = 1; i <= 31 ; i++)
+          {
+                  row = "<option value=" +i+ ">" + i + " </option>";
+              $ ('#ccday').append(row);
+          }
+
+
         }
 
       },
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
     });
+}
+
+function Send()
+{
+  var oyear=$ ('#ocyear').val();
+  var omonth=$ ('#ocmonth').val();
+  var oday=$ ('#ocday').val();
+
+  var cyear=$ ('#ccyear').val();
+  var cmonth=$ ('#ccmonth').val();
+  var cday=$ ('#ccday').val();
+
+  var class_subject=$('#subject-name').val();
+  var class_section2=$ ('#class_section2').val();
+  var class_room=$('#class_room').val();
+  var class_memo=$('#class_memo').val();
+
+  var class_name=$('#class-name').val();
+
+  var class_year=$ ('#qry_class_year').val();
+  var class_acadm=$ ('#qry_acadm').val();
+
+  $.ajax({
+      url: 'ajax/class_add_ajax.php',
+      data: { oper: 'send' ,classsubject:class_subject,byear:oyear,bmonth:omonth,bday:oday
+             ,eyear:cyear,emonth:cmonth,eday:cday,classsection2:class_section2,serialno:serailnoval,class_no:classnoval,class_room:class_room,class_memo:class_memo,class_year:class_year,class_acadm:class_acadm},
+      type: 'POST',
+      dataType: "json",
+      success: function() {
+        toastr["success"]("處理完成!!");
+        $("#ChangeModal2").modal("hide");
+      },
+      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+    });
+}
+function Send()
+{
+  $("#ChangeModal2").modal("hide");
 }
