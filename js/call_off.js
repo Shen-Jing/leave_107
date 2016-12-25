@@ -12,8 +12,8 @@ $( // 表示網頁完成後才會載入
             success: function(JData) {
                 var row0 = "<option selected disabled class='text-hide'>請選擇年份</option>";
                 $('#qry_year').append(row0);
-                for (var i = 99; i <= JData["year"] ; i++) {
-                    if (i == JData["year"])
+                for (var i = 99; i <= JData["year"] + 1 ; i++) {
+                    if (i == 101)
                         var row = "<option value=" +i+ " selected>" + i + "</option>";
                     else
                         var row = "<option value=" +i+ ">" + i + " </option>";
@@ -23,7 +23,7 @@ $( // 表示網頁完成後才會載入
                 $ ('#qry_month').append(row0);
                 for (var i = 1; i <= 12 ; i++)
                 {
-                    if (i == JData["month"] )
+                    if (i == 11 )
                         row = "<option value=" +i+ " selected>" + i + "</option>";
                     else
                         row = "<option value=" +i+ ">" + i + " </option>";

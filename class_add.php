@@ -195,7 +195,7 @@
 
                                             						</td>
                                                         <td class="col-md-2 td1" align="center">上課班別</td>
-                                            						<td class="col-md-4">
+                                            						<td class="col-md-4" id='class-name'>
 
                                             						</td>
                                             					</tr>
@@ -207,15 +207,15 @@
                                             						<td class="col-md-4">
                                             							<div class='form-group'>
                                                             <div class='col-md-12'>
-                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='cyear' name='cyear' onChange=''></select>年
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='cmonth' name='cmonth' id='cmonth' onChange=''></select>月
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='cday' name='cday' onChange=''></select>日
+                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='ocyear' name='ocyear' onChange=''></select>年
+                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ocmonth' name='ocmonth' onChange=''></select>月
+                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ocday' name='ocday' onChange=''></select>日
                                             								</div>
                                             							</div>
                                             						</td>
 
                                                         <td class="col-md-2 td1" align="center">原上課節次等</td>
-                                          							<td class="col-md-4" id=""></td>
+                                          							<td class="col-md-4" id="scr_period"></td>
                                             					</tr>
                                             					</thead>
 
@@ -225,22 +225,22 @@
                                             						<td class="col-md-4">
                                             							<div class='form-group'>
                                                             <div class='col-md-12'>
-                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='cyear' name='cyear' onChange=''></select>年
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='cmonth' name='cmonth' id='cmonth' onChange=''></select>月
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='cday' name='cday' onChange=''></select>日
+                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='ccyear' name='ccyear' onChange=''></select>年
+                                            									<select class='form-control' style='width:auto; display: inline-block;' name='ccmonth' id='ccmonth' onChange=''></select>月
+                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ccday' name='ccday' onChange=''></select>日
                                             								</div>
                                             							</div>
                                             						</td>
 
                                                         <td class="col-md-2 td1" align="center">補課節次</td>
-                                          							<td class="col-md-4" id="">第<input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" required>節</td>
+                                          							<td class="col-md-4" >第<input type="text" class="form-control" name="class_section2" id="class_section2" value="" size="25" maxlength="30" required>節</td>
                                             					</tr>
                                             					</thead>
 
                                                       <thead>
                                             					<tr>
                                             						<td class="td1" align="center">補課教室</td>
-                                            						<td colspan="3"><input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" required><font size="4">
+                                            						<td colspan="3"><input type="text" class="form-control" name="class_room" id="class_room" value="" size="25" maxlength="30" required><font size="4">
 
                                             						</td>
                                             					</tr>
@@ -248,14 +248,14 @@
                                                       <thead>
                                             					<tr>
                                             						<td class="td1" align="center">備註</td>
-                                            						<td colspan="3"><input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" required><font size="4">
+                                            						<td colspan="3"><input type="text" class="form-control" name="class_memo" id="class_memo" value="" size="25" maxlength="30" required><font size="4">
 
                                             						</td>
                                             					</tr>
                                                       <tr>
                                             						<td colspan="4" align="center">
-                                            							<button class="btn btn-primary" name="check" onclick=''>離開或被退重送</button>
-                                                          <button class="btn btn-primary" name="check" onclick=''>本班資料儲存</button>
+                                            							<button class="btn btn-primary" name="check" onclick='close()'>離開或被退重送</button>
+                                                          <button class="btn btn-primary" name="check" onclick='Send()'>本班資料儲存</button>
                                             						</td>
                                             					</tr>
                                             					</thead>

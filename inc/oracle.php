@@ -74,7 +74,7 @@ class ORACLE{
 					//echo "<p>資料處理失敗，錯誤訊息: " . $oci_err[message] . "<br>錯誤請求指令" . $this -> str ."</p><hr>";
 			}
 			else {
-				return $stmt;
+				return 1;
 			}
 		}
 	}
@@ -262,8 +262,9 @@ class ORACLE{
 	*	$val = $db -> fetch_cell($sql [,string $Field_Name]);
 	*/
 	function fetch_cell($Qstr, $colName = ""){
-		return $colName === ""  ? oci_fetch_row($this->query($Qstr))[0]
+		$ret = $colName === ""  ? oci_fetch_row($this->query($Qstr))[0]
 								: oci_fetch_assoc($this->query($Qstr))[strtoupper($colName)];
+		return iconv("BIG5", "UTF-8", $ret);
 	}
 	
 	########################################

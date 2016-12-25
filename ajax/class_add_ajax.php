@@ -58,6 +58,18 @@ $sql = "select empl_no
 	                    $emonth='0'.$emonth;
                    if(strlen($eday)<2)
 	                    $eday='0'.$eday;*/
+                      if(strlen($byear[0])<3)
+   	                    $byear[0]='0'.$byear[0];
+                      if(strlen($eyear[0])<3)
+   	                    $eyear[0]='0'.$eyear[0];
+                      if(strlen($bmonth[0])<2)
+   	                    $bmonth[0]='0'.$bmonth[0];
+                      if(strlen($bday[0])<2)
+   	                    $bday[0]='0'.$bday[0];
+                      if(strlen($emonth[0])<2)
+   	                    $emonth[0]='0'.$emonth[0];
+                      if(strlen($eday[0])<2)
+   	                    $eday[0]='0'.$eday[0];
                    $bdate = $byear.$bmonth.$bday;
                    $edate = $eyear.$emonth.$eday;
                    $class_year =$_POST[class_year];
@@ -97,11 +109,87 @@ $sql = "select empl_no
                    $selcode     = $row1['SCR_SELCODE'];
 				           $sub_name    = $row1['SUB_NAME'];*/
 
-                   $data = array('byear' => $byear,'bmonth'=>$bmonth,'bday'=>$bday,'eyear' => $eyear,'emonth'=>$emonth,'eday'=>$eday,'holidaymark'=>$holidaymark);
+                   $data = array('byear' => $byear,'bmonth'=>$bmonth,'bday'=>$bday,'eyear' => $eyear,'emonth'=>$emonth,'eday'=>$eday,'holidaymark'=>$holidaymark,'year' => $year,'class_no'=>$class_no,'class_room'=>$class_room);
                    echo json_encode($data);
 
                    exit;
 
+                 }
+                 if($_POST['oper'=="send"])
+                 {
+                   $serialno=$_POST['serailno'];
+                   $class_no=$_POST['class_no'];
+                   $sql="select crjb_depart from psfcrjb
+			                   where crjb_seq='1'
+			                   and   crjb_empl_no='$empl_no'";
+                   $depart=$db->query($sql);
+                   $class_subject=$_POST['classsubject'];
+                   $byear=$_POST['byear'];
+                   $bmonth=$_POST['bmonth'];
+                   $bday=$_POST['bday'];
+                   if ($byear<100)
+	                   $class_date='0'.$byear;
+	                 else
+	                   $class_date=$byear;
+
+	                if ($bmonth <10)
+	                   $class_date=$class_date.'0'.$bmonth;
+	                else
+	                   $class_date=$class_date.$bmonth;
+
+
+                  $class_yymm=$class_date;
+
+	                if ($bday <10)
+	                   $class_date=$class_date.'0'.$bday;
+	                else
+	                   $class_date=$class_date.$bday;
+                  $sql="select decode(calendar_week,'1','日','2','一','3','二','4','三','5','四',	'6','五','7','六','')  week
+		                   from   ps_calendar
+		                   where  calendar_yymm='$class_yymm' and   calendar_dd='$bday'";
+                   $class_week=$db->query($sql);
+
+
+
+                   $eyear=$_POST['eyear'];
+                   $emonth=$_POST['emonth'];
+                   $eday=$_POST['eday'];
+                   if ($eyear<100)
+	                  $class_date2='0'.$eyear;
+	                 else
+	                  $class_date2=$eyear;
+	                 if ($emonth <10)
+	                  $class_date2=$class_date2.'0'.$emonth;
+	                 else
+	                  $class_date2=$class_date2.$emonth;
+
+	                  $class_yymm2=$class_date2;
+
+	                 if ($eday <10)
+	                  $class_date2=$class_date2.'0'.$eday;
+	                 else
+	                  $class_date2=$class_date2.$eday;
+                  $sql="select decode(calendar_week,'1','日','2','一','3','二','4','三','5','四',	'6','五','7','六','')  week
+		                   from   ps_calendar
+		                   where  calendar_yymm='$class_yymm2' and   calendar_dd='$eday'";
+                   $class_week2=$db->query($sql);
+
+
+                   $class_section2=$_POST['classsection2'];
+                   $class_room=$_POST['class_room'];
+                   $class_memo=$_POST['class_memo'];
+                   $class_year=$_POST['class_year'];
+                   $class_acadm=$_POST['class_acadm'];
+                   $insert =
+	                     "insert into haveclass(CLASS_SERIALNO,CLASS_NO,CLASS_DEPART,CLASS_NAME, CLASS_CODE, CLASS_SUBJECT,CLASS_ID,CLASS_DATE, CLASS_WEEK , CLASS_SECTION,  CLASS_DATE2, CLASS_WEEK2 ,CLASS_SECTION2 ,CLASS_ROOM ,CLASS_MEMO, CLASS_SELCODE, CLASS_YEAR,CLASS_ACADM)
+	                     values ('$serialno',$class_no,'$depart','','','$class_subject','',
+				               '$class_date','$class_week','$class_section','$class_date2','$class_week2',  '$class_section2','$class_room','$class_memo', '','$class_year','$class_acadm')";
+                       $db->query($insert);
+                      //下面這是原本的
+                      /* $insert =
+    	                     "insert into haveclass(CLASS_SERIALNO,CLASS_NO,CLASS_DEPART,CLASS_NAME, CLASS_CODE, CLASS_SUBJECT,CLASS_ID,CLASS_DATE, CLASS_WEEK , CLASS_SECTION,  CLASS_DATE2, CLASS_WEEK2 ,CLASS_SECTION2 ,CLASS_ROOM ,CLASS_MEMO, CLASS_SELCODE, CLASS_YEAR,CLASS_ACADM)
+    	                     values ('$serialno',$class_no,'$depart','$class_name','$class_code','$class_subject','$class_id',
+    				               '$class_date','$class_week','$class_section','$class_date2','$class_week2',  '$class_section2','$class_room','$class_memo', '$selcode','$class_year','$class_acadm')";*/
                  }
                  if($_POST['oper']==1)//修改畫面
                  {

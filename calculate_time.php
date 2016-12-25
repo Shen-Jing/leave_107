@@ -1,6 +1,6 @@
 <?php
 	//--------------------961211 add  判斷是否為特殊工作人員
-	if ($party == '1'){  //特殊上班人員
+	if (@$party == '1'){  //特殊上班人員
     $bt = 13;
     $et = 22;
   }
@@ -10,7 +10,7 @@
   }
   //---------------------------------------------
 	//判斷是否為寒暑假期間
-	if ($voc == '1'){
+	if (@$voc == '1'){
     $bt = 8;
     $et = 16;
   }
@@ -19,7 +19,7 @@
   // 計算全部區間天數
   $ln_day1 = 0;
   $tot_day = 0;
-	$sql = "SELECT count(*) count FROM ps_calendar
+	@$sql = "SELECT count(*) count FROM ps_calendar
     			WHERE  lpad(calendar_yymm || lpad(to_char(calendar_dd), 2, '0'), 7, '0')
     			BETWEEN '$bdate' AND '$edate' ";
   $data = $db -> query_array($sql);
@@ -27,7 +27,7 @@
 
 	// 計算請假區間之六、日天數(正常不含星期六、日)
 	$ln_day2 = 0;
-	$sql = "SELECT count(*) count  FROM  ps_calendar
+	@$sql = "SELECT count(*) count  FROM  ps_calendar
           WHERE  lpad(calendar_yymm || lpad(to_char(calendar_dd), 2, '0'), 7, '0')
           BETWEEN '$bdate' AND '$edate'
           AND   calendar_status = '*'";
@@ -79,7 +79,7 @@
   } //1
 
   //時數超過八小時轉入天數
-  if ($voc == '1')
+  if (@$voc == '1')
     $cmh = 8;
   else
     $cmh = 9;
@@ -103,7 +103,7 @@
   $total = $tot_day . "日" . $tot_hour . "時";
 
   //補休時數  1000526 add
-  if ($voc == '1')
+  if (@$voc == '1')
   	$total_over = $tot_day * 8 + $tot_hour; //寒暑假期間
   else
   	$total_over = $tot_day * 9 + $tot_hour;

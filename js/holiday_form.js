@@ -413,11 +413,71 @@ $( // 表示網頁完成後才會載入
             }
         });
 
-
-    }
+        $('#holidayform').bootstrapValidator({
+            feedbackIcons: {
+              valid: 'fa fa-check',
+              invalid: 'fa fa-times',
+              validating: 'fa fa-refresh'
+            },
+            // submitButtons: 'button[type="button"]',
+            excluded: [':not(:visible)'],
+            fields: {
+                vtype: {
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇假別'
+                        }
+                    }
+                },
+                agentno: {
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇職務代理人'
+                        }
+                    }
+                },
+                leave_start: {
+                    validators: {
+                        notEmpty: {
+                            message: '請假日期不可空白！'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                mark: {
+                    validators: {
+                        stringLength: {
+                            max: 80,
+                            message: '備註欄長度超過上限，請簡要說明！'
+                        }
+                    }
+                },
+                budget: {
+                    validators: {
+                        notEmpty: {
+                            message: '請輸入經費來源'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '備註欄長度超過上限，請簡要說明！'
+                        }
+                    }
+                }
+            },
+            submitHandler: function(validator, form, submitButton) {
+                formSubmit();
+                // $('#helloModal')
+                //     .find('.modal-title').html('Hello ' + fullName).end()
+                //     .modal();
+            }
+        });
+    } // function
 );
 
-function formCheck(){
+function formSubmit(){
     var date = new Date();
     var year = date.getFullYear() - 1911;
     $.ajax({
@@ -427,13 +487,20 @@ function formCheck(){
         + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
         + "&party=" + $('#party').text() + "&year=" + year,
         type: 'POST',
-        dataType: "text",
+        dataType: "json",
         success: function(JData) {
-            alert("成功");
-            // $('#message > div > ul').html("<li>" + JData + "</li>");
+            if (JData.error_code){
+                toastr["error"](JData.error_message);
+                message(JData.error_message, "danger", 5000);
+            }
+            else {
+                toastr["success"](JData.submit_result);
+                // reload
+            }
         },
         error: function(xhr, ajaxOptions, thrownError) {
-            console.log(xhr.responseText);
+            toastr["error"]("呈交表單出了點狀況！");
+            // console.log(xhr.responseText);
         }
     });
 }

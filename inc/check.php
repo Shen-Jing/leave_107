@@ -18,8 +18,8 @@
           FROM syspgm
           WHERE sysid='LEAVE'
           AND syspgm.pgmurl LIKE '%$now'";
-      $d = $db -> query_array($sql);
-      $_SESSION["pgmname"] = $d['PGMNAME'][0];
+		  
+      $_SESSION["pgmname"] = $db -> fetch_cell($sql, 'PGMNAME');
 
       // $d = $db -> query_array($sql);
       // if(sizeof($d['USERID'])==0 && $now !="index.php"){

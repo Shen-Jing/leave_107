@@ -244,21 +244,35 @@
 		{
 			//錯誤
 			$str = "ist";
-			$sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('111111111111111111111111111111','1051212','1051212','1')";
-			//<script>alert(aaa)</script>
-			// $sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','1')";
-			$ck_1 = $db -> query_trsac($sqlist);
-
-			$m = $db -> create_savepoint("ist");
+			$sqlup=  "update holidayform set CONDITION='4' where pocard = '000000' and POVDATEB = '1051212' and CONDITION = '2'";
+			$ck_3 = $db -> query_trsac($sqlup);
+			if(!isset($ck_3)){
+				echo json_encode($ck_3);
+				exit;
+			}
+			//$m = $db -> create_savepoint("ist");
 			//oci_commit($db ->rp);
 
 			$sqlist2=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','2')";
-			$db -> query_trsac($sqlist2);
-			$db -> create_savepoint("ist2");
+			$ck_2 = $db -> query_trsac($sqlist2);
+			if(!empty($ck_2['message'])){
+				echo json_encode($ck_2['message']);
+				exit;
+			}
+			//$db -> create_savepoint("ist2");
 			//$check = $db -> end_trsac();
-			//oci_commit($db ->rp);
-			$sqlup=  "update holidayform set CONDITION='4' where pocard = '000000' and POVDATEB = '1051212' and CONDITION = '2'";
-			$ck_2 = $db -> query_trsac($sqlup);
+
+			$sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('111111111111111111111111111111','1051212','1051212','1')";
+			//<script>alert(aaa)</script>
+			// $sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','1')";
+			// $ck_1 = $db -> query_trsac($sqlist);
+
+			// if(!empty($ck_1['message'])){
+			// 	echo json_encode($ck_1['message']);
+			// 	exit;
+			// }
+
+			
 			//$check = $db -> end_trsac();
 			// echo"OK";
 			// exit;
@@ -268,23 +282,19 @@
 			// 	$db -> rb_to_savepoint("ist");
 			// echo json_encode($ck_1);
 			// exit;
-			if(!empty($ck_2['message'])){
-				echo json_encode($ck_2['message']);
+
+			$check = $db -> end_trsac();
+			if($check){
+				echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
 				exit;
 			}
-			else{
-					$check = $db -> end_trsac();
-					echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
-					exit;
-			}
 
-			if(!empty($ck_1['message']))
-				echo json_encode($ck_1['message']);
-			else{
-					$check = $db -> end_trsac();
-					echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
-					exit;
-			}
+
+			// else{
+			// 		$check = $db -> end_trsac();
+			// 		echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
+			// 		exit;
+			// }
 			exit;
 			// $SQLStr2=  "update holidayform set CONDITION='1' where serialno = 109236 ";
 			// $data_update = $db -> query($SQLStr2);
