@@ -60,6 +60,8 @@ $p = $db -> query_array($sql);
       </ol>
     </div>
     <div id="right">
+      篩選器： <input id="filter" class="form-control" type="text" value="">
+      <br/>
       <ol class="root pgm vertical"><!-- content -->
         <?
         $parent_previous = "";

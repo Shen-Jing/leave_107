@@ -80,4 +80,14 @@ $(function(){
       }
     }
   });
+  $('#filter').on('input', function() {
+    var input = $(this).val();
+    if (input != '')
+    {
+      $('.user li').hide();
+      $('.user li[id^=' + input + ']').show();
+    }
+    else
+      $('.user li').show();
+  });
 });

@@ -65,6 +65,8 @@ $u = $db -> query_array($sql);
       </ol>
     </div>
     <div id="right">
+      篩選器： <input id="filter" class="form-control" type="text" value="">
+      <br/>
       <ol class="root user vertical"><!-- content -->
         <?
         for ($i=0; $i < sizeof($u['EMAIL']); $i++) {

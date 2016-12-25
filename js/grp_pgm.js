@@ -87,4 +87,14 @@ $(function(){
       }
     }
   });
+  $('#filter').on('input', function() {
+    var input = $(this).val();
+    if (input != '')
+    {
+      $('.pgm li').hide();
+      $('.pgm li[id^=' + input + ']').show();
+    }
+    else
+      $('.pgm li').show();
+  });
 });
