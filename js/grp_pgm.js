@@ -21,7 +21,6 @@ $(function(){
       var grp = cEl.parent().parent().attr('id');
       for (var flag = 0; pgm.length > 0; pgm = pgm.slice(0, -2))
       {
-        toastr['warning']($('#left > .root > #admin > .grp').has('#' + pgm).length);
         if (flag == 1 && $('#left > .root > #admin > .grp').has('#' + pgm).length > 0)
           break;
         $.ajax({
