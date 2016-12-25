@@ -74,7 +74,7 @@ class ORACLE{
 					//echo "<p>資料處理失敗，錯誤訊息: " . $oci_err[message] . "<br>錯誤請求指令" . $this -> str ."</p><hr>";
 			}
 			else {
-				return $stmt;
+				return 1;
 			}
 		}
 	}
