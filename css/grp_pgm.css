@@ -71,11 +71,10 @@ ol.root li.placeholder:before {
   height: 87vh;
   overflow: auto;
 }
-.tree > li {
-  margin-left: 10%;
-}
 .disable {
   background-color: gray !important;
   color: white;
-  background-color: ;
+}
+.disable :not(.disable) {
+  color: black;
 }

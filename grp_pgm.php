@@ -75,24 +75,26 @@ $p = $db -> query_array($sql);
           {
             $len = strlen($parent_previous) - strlen($parent_folder) ;
             if ($len==5)//ex. A07 -- >"" 相差2層
-              echo "</li></span>\r\n</li></span>\r\n</li></span>";
+              echo "</ol></li>\r\n</ol></li>\r\n</li>";
             if ($len==3)//ex. A07 -- >"" 相差2層
-              echo "</li></span>\r\n</li></span>\r\n";
+              echo "</ol></li>\r\n</ol></li>\r\n";
             else //ex. A07-->A
-              echo "</li></span>\r\n";
+              echo "</ol></li>\r\n";
           }
 
-          echo "<li id='$pgmid' class='disable'>$pgmid - $pgmname</li>";
+          echo "<li id='$pgmid' class='disable'>$pgmid - $pgmname";
 
           if ($pgmurl == "")
-            echo "<span class='tree'>\r\n";
+            echo "<ol>\r\n";
+          else
+            echo "</li>\r\n";
 
           $parent_previous = $parent_folder;
           if($pgmurl == "")
-            if (strcmp($p['PARENT_FOLDER'][$i+1], $pgmid) == 0)
+            if (strcmp($d['PARENT_FOLDER'][$i+1], $pgmid) == 0)
               $parent_previous = $pgmid;
             else
-              echo "</li></span>\r\n";
+              echo "</ol></li>\r\n";
         }
         ?>
       </ol>

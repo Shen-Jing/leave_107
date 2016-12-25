@@ -97,4 +97,7 @@ $(function(){
     else
       $('.pgm li').show();
   });
+  $('li').has('ol').click(function() {
+    $(this).children('ol').slideToggle();
+  });
 });
