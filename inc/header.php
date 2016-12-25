@@ -17,16 +17,16 @@ $now = basename($_SERVER['REQUEST_URI']);
 
 
     <link href="css/core.css" rel="stylesheet">
-	
-	
-    <link href="css/vendor.css" rel="stylesheet">
 
-    
-	
+    <link href="css/vendor.css" rel="stylesheet">
+    <!-- bootstrap validator -->
+    <link href="bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css" rel="stylesheet">
+
+
 	<?php if( file_exists("css/".basename($_SERVER['PHP_SELF'], ".php").".css") ): ?>
     <link href="css/<?=basename($_SERVER['PHP_SELF'], ".php")?>.css" rel="stylesheet"/>
 	<?php endif; ?>
-	
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
