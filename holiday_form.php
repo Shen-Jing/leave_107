@@ -20,7 +20,7 @@
                               </ul>
                         </div>
                       </div>
-                      <form name="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" class="form-inline col-lg-12" method="POST">
+                      <form id="holidayform" class="form-inline col-lg-12">
                           <div class="panel panel-primary">
                               <div class="panel-heading">
                                   國立彰化師範大學 教職員請假/出差作業
@@ -48,45 +48,59 @@
                             					<tr>
                             						<td class="td1">假別</td>
                             						<td>
-																					<select name="vtype" id="qry_vtype" class="form-control">
-                            							</select>
+                                          <div class="form-group">
+                                            <select name="vtype" id="qry_vtype" class="form-control">
+                              							</select>
+                                          </div>
                             						</td>
                             						<td class="td1">職務代理人</td>
                                         <td>
-                                          <!-- 根據目前的empl_no找出所屬部門的所有代理人與其代理人號碼 -->
-                                          <select name="agentno" id="qry_agentno" class="form-control">
-                                          </select>
+                                          <div class="form-group">
+                                            <!-- 根據目前的empl_no找出所屬部門的所有代理人與其代理人號碼 -->
+                                            <select name="agentno" id="qry_agentno" class="form-control">
+                                            </select>
+                                          </div>
                                         </td>
                             					</tr>
                             					<tr id="agent_depart">
                       						      <td class="td1"><span style="color: red;">請選職務代理人單位</span></td>
                             						<td colspan="3">
+                                          <div class="form-group">
                                             <select name="agent_depart" id="qry_agent_depart" class="form-control">
                               						  </select>
+                                          </div>
                                         </td>
                                       </tr>
                             					<tr>
                             						<td class="td1">請假開始日期</td>
                                         <td>
-                                          <input type='text' class="form-control" id='leave-start' name="leave_start">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" id='leave-start' name="leave_start">
+                                          </div>
                               					</td>
                           							<td class="td1">請假開始時間</td>
                             						<td>
                                           <span id="party" style="display: none;"></span>
                                           <span id="vocation" style="display: none;"></span>
-                                          <select name="btime" id="btime" class="form-control">
-                            							</select>時
+                                          <div class="form-group">
+                                            <select name="btime" id="btime" class="form-control">
+                              							</select>時
+                                          </div>
                             						</td>
                             					</tr>
                             					<tr>
                             						<td class="td1">請假結束日期</h3>
                                         <td>
-                                          <input type='text' class="form-control" id='leave-end' name="leave_end">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" id='leave-end' name="leave_end">
+                                          </div>
                               					</td>
 																	      <td class="td1">請假結束時間</td>
 																		   	<td>
-                                          <select name="etime" id="etime" class="form-control">
-                            							</select>時
+                                          <div class="form-group">
+                                            <select name="etime" id="etime" class="form-control">
+                              							</select>時
+                                          </div>
 																				</td>
                             					</tr>
 																			<tr id="permit-row" style="display: none;">
@@ -136,12 +150,12 @@
                                           </span>
                                         </td>
                             				  </tr>
-
-
                                       <tr id="budget" style="display: none;">
                               					<td class="td1"><span style="color: red;">經費來源</td>
                               				  <td colspan="3">
-                                          <input type="text" class="form-control" size="50" name="budget" value="" maxlength="25" placeholder="限25個中文字">
+                                          <div class="form-group">
+                                            <input type="text" class="form-control" size="50" name="budget" value="" maxlength="50" placeholder="限50個中文字">
+                                          </div>
                               				  </td>
                                       </tr>
                                       <tr class="bus-trip">
@@ -232,8 +246,8 @@
                             					</tr>
                             					<tr>
                             						<td colspan="4" style="text-align: center;">
-                            							<button type="button" class="btn btn-default" onclick="return formCheck();">確 定</button>
-                            							<button type="reset" class="btn btn-default" onclick="return confirm_reset();">重 填</button>
+                            							<button type="submit" class="btn btn-primary">確 定</button>
+                            							<button type="reset" class="btn btn-warning" onclick="return confirm_reset();">重 填</button>
                             						</td>
                             					</tr>
                             					<tr>

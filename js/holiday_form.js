@@ -413,11 +413,71 @@ $( // 表示網頁完成後才會載入
             }
         });
 
-
-    }
+        $('#holidayform').bootstrapValidator({
+            feedbackIcons: {
+              valid: 'fa fa-check',
+              invalid: 'fa fa-times',
+              validating: 'fa fa-refresh'
+            },
+            // submitButtons: 'button[type="button"]',
+            excluded: [':not(:visible)'],
+            fields: {
+                vtype: {
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇假別'
+                        }
+                    }
+                },
+                agentno: {
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇職務代理人'
+                        }
+                    }
+                },
+                leave_start: {
+                    validators: {
+                        notEmpty: {
+                            message: '請假日期不可空白！'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                mark: {
+                    validators: {
+                        stringLength: {
+                            max: 80,
+                            message: '備註欄長度超過上限，請簡要說明！'
+                        }
+                    }
+                },
+                budget: {
+                    validators: {
+                        notEmpty: {
+                            message: '請輸入經費來源'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '備註欄長度超過上限，請簡要說明！'
+                        }
+                    }
+                }
+            },
+            submitHandler: function(validator, form, submitButton) {
+                formSubmit();
+                // $('#helloModal')
+                //     .find('.modal-title').html('Hello ' + fullName).end()
+                //     .modal();
+            }
+        });
+    } // function
 );
 
-function formCheck(){
+function formSubmit(){
     var date = new Date();
     var year = date.getFullYear() - 1911;
     $.ajax({
