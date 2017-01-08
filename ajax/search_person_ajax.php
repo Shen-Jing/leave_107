@@ -40,6 +40,14 @@
     else
     	$year = $today["year"] - 1911;
 
+    $next_year = $year+1;
+
+    if(strlen($next_year)<3)
+	   $next_year = "0" . $next_year;
+
+	if(strlen($year)<3)
+	   $year = "0".$year;
+
     $empl_no="";
     if (substr($userid,0,1)=='7'||substr($userid,0,1)=='5'){
     	//以身份証查詢
@@ -100,14 +108,6 @@
 
 	if($_POST["oper"] == 0 )
 	{
-	// 	if ($title=='B' or $title=='C'){
- //    		$begin_date = $_POST["year"].'0801';
- //    		$end_date = ($_POST["year"]+1).'0731';
- //    	}
- //    	else{
- //    		$begin_date = $_POST["year"].'0101';
- //    		$end_date = $_POST["year"].'1231';
- //    	}
 
     	//condition ==1 已審核
     	$col=1;
@@ -118,7 +118,7 @@
 			$pohdaye=0;
 			$pohoure=0;
 
-			$SQLStr = "SELECT substr(CODE_CHN_ITEM,1,6)  code_chn_item FROM psqcode where code_kind='0302'
+			$SQLStr = "SELECT CODE_CHN_ITEM  code_chn_item FROM psqcode where code_kind='0302'
 			           and code_field='$vtype[$i]'";  //假別名稱
 
 			$data = $db -> query_array($SQLStr);
@@ -129,7 +129,7 @@
 			//...........................................................
 			//請假總天數及總時數，正常請假
 			//...........................................................
-			//$SQLStr = "SELECT pohdaye,pohoure  FROM pap0303m	 where povtype='$vtype[$i]' and pocard='$userid' and posyear='$year'";
+
 			$SQLStr = "SELECT sum(nvl(POVDAYS,0)) POHDAYE,sum(nvl(POVHOURS,0))    POHOURE
 						FROM holidayform
 						where povtype='$vtype[$i]'
@@ -137,14 +137,16 @@
 						and POVDATEE<='$end_date'
 						and pocard in ('$userid','$empl_no')
 						and condition='1'";
-					 //echo "i=".$i."<br>".$SQLStr."<br>";
+
 			      	 $data = $db -> query_array($SQLStr);
 
 			         if (empty($data["message"])){
-			         	//if($data["POHDAYE"][0] != null)
+			         	//if(!empty($data["POHDAYE"][0]))
 							$pohdaye = $data["POHDAYE"][0];
-						//if($data["POHOURE"][0] != null)
+						//if(!empty($data["POHOURE"][0]))
 							$pohoure = $data["POHOURE"][0];
+						// echo "begin_date: ".$begin_date." end_date: ".$end_date." bdate: ".$bdate." btime: ".$btime." pohdaye: ".$pohdaye." pohoure: ".$pohoure;
+						// exit;
 			         }
 
 						//.........................................................................................
@@ -162,26 +164,30 @@
 			      	$data = $db -> query_array($SQLStr);
 
 			        if(empty($data["message"])){
+			        	if(!empty($data["POVDATEE"]) && !empty($data["POVTIMEE"]) && !empty($data["CONTAINSAT"]) && !empty($data["CONTAINSUN"]) )
+			        	{
+			        		$edate = $data["POVDATEE"][0];  //起始日期
+			        		$etime = $data["POVTIMEE"][0];  //起始時間
+			        		$saturday = $data["CONTAINSAT"][0];
+			        		$sunday = $data["CONTAINSUN"][0];
 
-						@$edate = $data["POVDATEE"];  //起始日期
-						@$etime = $data["POVTIMEE"][0];  //起始時間
-						@$saturday = $data["CONTAINSAT"];
-						@$sunday = $data["CONTAINSUN"];
+			        		if ($title=='B' or $title=='C') //教師以學年度統計971013 add
+			        			$bdate=$year.'0801';
+			        		else
+			        			$bdate=$year.'0101';
 
-					    if ($title=='B' or $title=='C') //教師以學年度統計971013 add
-							$bdate=$_POST['year'].'0801';
-						else
-							$bdate=$_POST['year'].'0101';
-
-			            $btime='8';
-						//...........................................................
-						//半小時的轉成整數  10201 add
-						if (substr($etime,2,2)=='30')
-							 $etime=substr($etime,0,2);
-						//...........................................................
-			     	    require "../calculate_time.php";
-						//$pohdaye += $tot_day;
-						//$pohoure += $tot_hour;
+			        		$btime='8';
+			        		//...........................................................
+			        		//半小時的轉成整數  10201 add
+			        		if (substr($etime,2,2)=='30')
+			        			 $etime=substr($etime,0,2);
+			        		//...........................................................
+			        		require "../calculate_time.php";
+			        		echo "begin_date: ".$begin_date." end_date: ".$end_date." bdate: ".$bdate." btime: ".$btime." saturday: ".$saturday." sunday: ".$sunday." edate: ".$edate." etime: ".$etime." tot_day: ".$tot_day." tot_hour: ".$tot_hour." pohdaye: ".$pohdaye." pohoure: ".$pohoure." bt: ".$bt." et: ".$et." v: ".$i ;
+			        		exit;
+			        		$pohdaye += $tot_day;
+			        		$pohoure += $tot_hour;
+			        	}
 			        }
 
 					//........................................................................................................
@@ -199,31 +205,33 @@
 			      	$data = $db -> query_array($SQLStr);
 
 			        if (empty($data["message"])){
-						@$bdate = $data["POVDATEB"];  //起始日期
-						@$btime = $data["POVTIMEB"][0];  //起始時間
-						@$saturday = $data["CONTAINSAT"];
-						@$sunday = $data["CONTAINSUN"];
+			        	if(!empty($data["POVDATEB"]) && !empty($data["POVTIMEB"]) && !empty($data["CONTAINSAT"]) && !empty($data["CONTAINSUN"]) )
+			        	{
+			        		$bdate = $data["POVDATEB"][0];  //起始日期
+			        		$btime = $data["POVTIMEB"][0];  //起始時間
+			        		$saturday = $data["CONTAINSAT"][0];
+			        		$sunday = $data["CONTAINSUN"][0];
 
-					    if ($title=='B' or $title=='C') //教師以學年度統計971013 add
-							$edate=$next_year.'0731';
-				        else
-							$edate=$_POST['year'].'1231';
+			        		if ($title=='B' or $title=='C') //教師以學年度統計971013 add
+			        			$edate=$next_year.'0731';
+			        		else
+			        			$edate=$year.'1231';
 
-			            $etime='17';
-						//...........................................................
-						//半小時的轉成整數  10201 add
-						if (substr($btime,2,2)=='30')
-							$btime=substr($btime,0,2);
-						//...........................................................
-			     		require "../calculate_time.php";
-						//$pohdaye += $tot_day;
-						//$pohoure += $tot_hour;
+			        		$etime='17';
+			        		//...........................................................
+			        		//半小時的轉成整數  10201 add
+			        		if (substr($btime,2,2)=='30')
+			        			$btime=substr($btime,0,2);
+			        		//...........................................................
+			        		require "../calculate_time.php";
+
+			        		$pohdaye += $tot_day;
+			        		$pohoure += $tot_hour;
+			        		// echo "begin_date: ".$begin_date." end_date: ".$end_date." bdate: ".$bdate." btime: ".$btime." saturday: ".$saturday." sunday: ".$sunday." edate: ".$edate." etime: ".$etime." tot_day: ".$tot_day." tot_hour: ".$tot_hour." pohdaye: ".$pohdaye." pohoure: ".$pohoure." bt: ".$bt." et: ".$et ;
+			        		// exit;
+			        	}
 			        }
-						//$res = db_parse($SQLStr);
-						//db_query($SQLStr,$res);
-						//$date = db_fetch_array($res);
-						//if($date[0]=='') $date[0]=0;
-						//if($date[1]=='') $date[1]=0;
+
 			        //時數超過八小時轉入天數
 			        $temp_h = 0;
 			        if ($pohoure >= 8){
@@ -231,36 +239,38 @@
 			            $pohdaye += floor($pohoure / 8 );
 			            $pohoure=$temp_h;
 			        }
-			        if ($pohdaye==null) $pohdaye=0;
-			        if ($pohoure==null) $pohoure=0;
+			        if (empty($pohdaye))
+			        	$pohdaye=0;
+			        if (empty($pohoure))
+			        	$pohoure=0;
 
 			$datalist[0]["v"][$i] = $v;
 			$datalist[0]["pohdaye"][$i] = $pohdaye;
 			$datalist[0]["pohoure"][$i] = $pohoure;
+			// echo "begin_date: ".$begin_date." end_date: ".$end_date." bdate: ".$bdate." btime: ".$btime." saturday: ".$saturday." sunday: ".$sunday." edate: ".$edate." etime: ".$etime." tot_day: ".$tot_day." tot_hour: ".$tot_hour." pohdaye: ".$pohdaye." pohoure: ".$pohoure." bt: ".$bt." et: ".$et ;
+			// exit;
 		}
 
 
-		//condition == 審核中
+		//condition == 0 審核中
 		$col=1;
 		for($i=0;$i<15;$i++)
 		{
 			$pohdaye=0;
 			$pohoure=0;
 
-			$SQLStr = "SELECT substr(CODE_CHN_ITEM,1,6)  code_chn_item FROM psqcode where code_kind='0302'
+			$SQLStr = "SELECT CODE_CHN_ITEM  code_chn_item FROM psqcode where code_kind='0302'
 		           and code_field='$vtype[$i]'";  //假別名稱
-			//echo "sql=".$SQLStr."<br>";
+
 			$data = $db -> query_array($SQLStr);
         	if (empty($data["message"]))
-				$v=$data["CODE_CHN_ITEM"];
-				//$res = db_parse($SQLStr);
-				//db_query($SQLStr,$res);
-				//$v = db_fetch_array($res);
+				$v=$data["CODE_CHN_ITEM"][0];
+
 
 			//...........................................................
 			//請假總天數及總時數，正常請假
 			//...........................................................
-			//$SQLStr = "SELECT pohdaye,pohoure  FROM pap0303m	 where povtype='$vtype[$i]' and pocard='$userid' and posyear='$year'";
+
 			$SQLStr = "SELECT sum(nvl(POVDAYS,0)) POHDAYE,sum(nvl(POVHOURS,0))    POHOURE
 							FROM holidayform
 							 where povtype='$vtype[$i]'
@@ -268,7 +278,7 @@
 							 and POVDATEE<='$end_date'
 							 and pocard in ('$userid','$empl_no')
 							 and condition='0'";
-		 	//echo "i=".$i."<br>".$SQLStr."<br>";
+
       		$data = $db -> query_array($SQLStr);
         	if (empty($data["message"])){
 				$pohdaye=$data["POHDAYE"][0];
@@ -286,28 +296,31 @@
 							 and POVDATEE>='$begin_date'
 							 and pocard in ('$userid','$empl_no')
 							 and condition='0'";
-		 	//echo $SQLStr."<br>";
+
       		$data = $db -> query_array($SQLStr);
         	if (empty($data["message"])){
-				@$edate=$data["POVDATEE"][0];  //起始日期
-				@$etime=$data["POVTIMEE"][0];  //起始時間
-				@$saturday=$data["CONTAINSAT"][0];
-				@$sunday=$data["CONTAINSUN"][0];
+        		if(!empty($data["POVDATEE"]) && !empty($data["POVTIMEE"]) && !empty($data["CONTAINSAT"]) && !empty($data["CONTAINSUN"]) )
+			    {
+					$edate=$data["POVDATEE"][0];  //起始日期
+					$etime=$data["POVTIMEE"][0];  //起始時間
+					$saturday=$data["CONTAINSAT"][0];
+					$sunday=$data["CONTAINSUN"][0];
 
-		    	if ($title=='B' or $title=='C') //教師以學年度統計971013 add
-					$bdate=$_POST['year'].'0801';
-				else
-					$bdate=$_POST['year'].'0101';
+		    		if ($title=='B' or $title=='C') //教師以學年度統計971013 add
+						$bdate=$year.'0801';
+					else
+						$bdate=$year.'0101';
 
-            	$btime='8';
-				//...........................................................
-				//半小時的轉成整數  10201 add
-				if (substr($etime,2,2)=='30')
-					 $etime=substr($etime,0,2);
-				//...........................................................
-     	    	require "../calculate_time.php";
-				//$pohdaye += $tot_day;
-				//$pohoure += $tot_hour;
+            		$btime='8';
+					//...........................................................
+					//半小時的轉成整數  10201 add
+					if (substr($etime,2,2)=='30')
+						 $etime=substr($etime,0,2);
+					//...........................................................
+     	    		require "../calculate_time.php";
+					$pohdaye += $tot_day;
+					$pohoure += $tot_hour;
+				}
         	}
 
 			//........................................................................................................
@@ -322,34 +335,32 @@
 								 and pocard in ('$userid','$empl_no')
 								 and condition='0'";
       		 $data = $db -> query_array($SQLStr);
-			 //echo $SQLStr."<br>";
 
          	if (empty($data["message"])){
-				@$bdate=$data["POVDATEB"];  //起始日期
-				@$btime=$data["POVTIMEB"][0];  //起始時間
-				@$saturday=$data["CONTAINSAT"];
-				@$sunday=$data["CONTAINSUN"];
+         		if(!empty($data["POVDATEB"]) && !empty($data["POVTIMEB"]) && !empty($data["CONTAINSAT"]) && !empty($data["CONTAINSUN"]) )
+			    {
+					$bdate=$data["POVDATEB"][0];  //起始日期
+					$btime=$data["POVTIMEB"][0];  //起始時間
+					$saturday=$data["CONTAINSAT"][0];
+					$sunday=$data["CONTAINSUN"][0];
 
-		    	if ($title=='B' or $title=='C') //教師以學年度統計971013 add
-					$edate=$next_year.'0731';
-	        	else
-	        		$edate=$_POST['year'].'1231';
+		    		if ($title=='B' or $title=='C') //教師以學年度統計971013 add
+						$edate=$next_year.'0731';
+	        		else
+	        			$edate=$year.'1231';
 
-	            $etime='17';
-				//...........................................................
-				//半小時的轉成整數  10201 add
-				if (substr($btime,2,2)=='30')
-					$btime=substr($btime,0,2);
-				//...........................................................
-     	    	require "../calculate_time.php";
-				//$pohdaye += $tot_day;
-				//$pohoure += $tot_hour;
+	            	$etime='17';
+					//...........................................................
+					//半小時的轉成整數  10201 add
+					if (substr($btime,2,2)=='30')
+						$btime=substr($btime,0,2);
+					//...........................................................
+     	    		require "../calculate_time.php";
+					$pohdaye += $tot_day;
+					$pohoure += $tot_hour;
+				}
          	}
-			//$res = db_parse($SQLStr);
-			//db_query($SQLStr,$res);
-			//$date = db_fetch_array($res);
-			//if($date[0]=='') $date[0]=0;
-			//if($date[1]=='') $date[1]=0;
+
         	//時數超過八小時轉入天數
         	$temp_h = 0;
         	if ($pohoure >= 8){
