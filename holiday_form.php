@@ -20,7 +20,7 @@
                               </ul>
                         </div>
                       </div>
-                      <form id="holidayform" class="form-inline col-lg-12">
+                      <form name="holidayform" id="holidayform" class="form-inline col-lg-12" data-bv-live="enabled" data-bv-trigger="change">
                           <div class="panel panel-primary">
                               <div class="panel-heading">
                                   國立彰化師範大學 教職員請假/出差作業
@@ -105,7 +105,10 @@
                             					</tr>
 																			<tr id="permit-row" style="display: none;">
 																				<td class='td1'><span style="color: red;">奉派文號或提簽日期或填「免」</span></td>
-																				<td><input type="text" class="form-control" size="50" name="permit" value="" maxlength="50"></td>
+																				<td>
+                                          <div class="form-group">
+                                            <input type="text" class="form-control" size="50" name="permit" value="" maxlength="50"></td>
+                                          </div>
 																		    <td class='td1'><span style="color: red;">差假合計日數是否含例假日</span></td>
 																				<td>
                                           <input type='radio' name='saturday' value='1'>是
@@ -180,15 +183,19 @@
                                           <span style="color:blue">出差服務單位</span>
                         				        </td>
                         				        <td colspan="3">
-                                          <input type="text" class="form-control" size="50" name="on_dept" value="" maxlength="25" placeholder="限25個中文字">
-                        				        </td>
+                                          <div class="form-group">
+                                            <input type="text" class="form-control" size="50" name="on_dept" value="" maxlength="25" placeholder="限25個中文字">
+                                          </div>
+                                        </td>
                             				  </tr>
                             				  <tr class="bus-trip">
                             				    <td class="td1">
                                           <span style="color:blue">出差擔任職務</span>
                             				    </td>
                             				    <td colspan="3">
-                                          <input type="text" class="form-control" size="50" name="on_duty" value="" maxlength="25" placeholder="限25個中文字">
+                                          <div class="form-group">
+                                            <input type="text" class="form-control" size="50" name="on_duty" value="" maxlength="25" placeholder="限25個中文字">
+                                          </div>
           				                      </td>
                             				  </tr>
                         				      <tr class="bus-trip">
@@ -196,7 +203,9 @@
                                           <span style="color:blue">事由或服務項目</span>
                                         </td>
                                         <td colspan="3">
-                                          <input type="text" class="form-control" size="50" name="mark" value="" maxlength="50" placeholder="限50個中文字">
+                                          <div class="form-group">
+                                            <input type="text" class="form-control" size="50" name="mark" value="" maxlength="50" placeholder="限50個中文字">
+                                          </div>
                                         </td>
                         				      </tr>
                                       <tr id="bus-trip-time" style="display: none;">
@@ -205,10 +214,14 @@
                                         </td>
                                         <td colspan="3">
                                           <div class='col-md-6'>
-                                            <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start">
+                                            <div class="form-group">
+                                              <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start">
+                                            </div>
                                           </div>
                                           <div class='col-md-6'>
-                                            <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end' name="bus_trip_end">
+                                            <div class="form-group">
+                                              <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end' name="bus_trip_end">
+                                            </div>
                                           </div>
                               					</td>
                                       </tr>
@@ -241,12 +254,14 @@
                             					<tr id="remark">
 																				<td class="td1">備註</td>
 																			  <td colspan="3">
-																					<input type="text" class="form-control" size="50" name="mark" value="" maxlength="50" placeholder="限50個中文字">
+                                          <div class="form-group">
+																					  <input type="text" class="form-control" size="50" name="remark" value="" maxlength="50" placeholder="限50個中文字">
+                                          </div>
 																				</td>
                             					</tr>
                             					<tr>
                             						<td colspan="4" style="text-align: center;">
-                            							<button type="submit" class="btn btn-primary">確 定</button>
+                            							<button type="submit" id="holiday_btn" class="btn btn-primary">確 定</button>
                             							<button type="reset" class="btn btn-warning" onclick="return confirm_reset();">重 填</button>
                             						</td>
                             					</tr>
