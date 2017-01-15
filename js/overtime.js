@@ -1,10 +1,118 @@
 $( // 表示網頁完成後才會載入
-    function date_fill()
+    function ()
     {
 
         $("body").tooltip({
             selector: "[title]"
         });
+
+        var start_options = {
+            defaultDate: new Date(),
+            format: 'YYYY/MM/DD',
+            tooltips: {
+                clear: "清除所選",
+                close: "關閉日曆",
+                decrementHour: "減一小時",
+                decrementMinute: "Decrement Minute",
+                decrementSecond: "Decrement Second",
+                incrementHour: "加一小時",
+                incrementMinute: "Increment Minute",
+                incrementSecond: "Increment Second",
+                nextCentury: "下個世紀",
+                nextDecade: "後十年",
+                nextMonth: "下個月",
+                nextYear: "下一年",
+                pickHour: "Pick Hour",
+                pickMinute: "Pick Minute",
+                pickSecond: "Pick Second",
+                prevCentury: "上個世紀",
+                prevDecade: "前十年",
+                prevMonth: "上個月",
+                prevYear: "前一年",
+                selectDecade: "選擇哪十年",
+                selectMonth: "選擇月份",
+                selectTime: "選擇時間",
+                selectYear: "選擇年份",
+                today: "今日日期",
+            },
+            locale: 'zh-tw',
+        }
+        var end_options = start_options;
+        end_options.useCurrent = false;
+        // clock_options.format = 'YYYY/MM/DD HH時';
+
+        // 請假開始日期、結束日期
+
+        $('#begin_time').datetimepicker(start_options);
+        $('#signed_date').datetimepicker(start_options);
+        $('#end_time').datetimepicker(end_options);
+        $("#begin_time").on("dp.change", function (e) {
+            // end date的最小為start date所選
+            $('#end_time').data("DateTimePicker").minDate(e.date);
+            // 將end date的initial date同步為start date所選
+            $('#end_time').data("DateTimePicker").date(e.date);
+        });
+
+        // $("holiday").bootstrapValidator({
+        //     feedbackIcons: {
+        //         valid: 'fa fa-check',
+        //         invalid: 'fa fa-times',
+        //         validating: 'fa fa-refresh'
+        //     },
+        //     // submitButtons: 'button[type="button"]',
+        //     // excluded: [':not(:visible)'],
+        //     fields: {
+        //         btime: {
+        //             trigger: "change",
+        //             validators: {
+        //                 notEmpty: {
+        //                     message: '請選擇開始加班刷卡時間'
+        //                 }
+        //             }
+        //         },
+        //         etime: {
+        //             trigger: "change",
+        //             validators: {
+        //                 notEmpty: {
+        //                     message: '請選擇結束加班刷卡時間'
+        //                 }
+        //             }
+        //         },
+        //         begin_time: {
+        //             trigger: "change",
+        //             validators: {
+        //                 notEmpty: {
+        //                     message: '請假日期不可空白'
+        //                 },
+        //                 date: {
+        //                     format: 'YYYY/MM/DD',
+        //                     message: '不正確的日期格式！'
+        //                 }
+        //             }
+        //         },
+        //         end_time: {
+        //             trigger: "change",
+        //             validators: {
+        //                 notEmpty: {
+        //                     message: '請假日期不可空白'
+        //                 },
+        //                 date: {
+        //                     format: 'YYYY/MM/DD',
+        //                     message: '不正確的日期格式！'
+        //                 }
+        //             }
+        //         },
+        //         reason: {
+        //             trigger: "blur",
+        //             validators: {
+        //                 notEmpty: {
+        //                     message: '請輸入加班簽呈文號或加班原因'
+        //                 },
+        //             }
+        //         },
+        //     }
+        // });
+
         $.ajax({
             url: 'ajax/overtime_ajax.php',
             data: { oper: 'qry_first' },
@@ -16,47 +124,6 @@ $( // 表示網頁完成後才會載入
                 $('#empl_name').append(JData["empl_name"]);
                 $('#dname').append(JData["dname"]);
                 $('#tname').append(JData["tname"]);
-
-                //年份
-                var row0 = "<option selected disabled class='text-hide'>請選擇年份</option>";
-                $('#uyear,#byear,#eyear').append(row0);
-
-                for (var i = parseInt( JData["year"] ) -1 ; i <= parseInt( JData["year"] ) + 1 ; i++) {
-                    if (i == parseInt( JData["year"] ))
-                        var row = "<option value=" + i + " selected>" + i + "</option>";
-                    else
-                        var row = "<option value=" + i + ">" + i + " </option>";
-                    $('#uyear,#byear,#eyear').append(row);
-                }
-
-                //月份
-                var row0 = "<option selected disabled class='text-hide'>請選擇月份</option>";
-                $('#umonth,#bmonth,#emonth').append(row0);
-
-                for (var i = 1 ; i <= 12 ; i++) {
-                    if (i == parseInt( JData["month"] ))
-                        var row = "<option value=" + i + " selected>" + i + "</option>";
-                    else
-                        var row = "<option value=" + i + ">" + i + " </option>";
-                    $('#umonth,#bmonth,#emonth').append(row);
-                }
-
-                //日
-                var row0 = "<option selected disabled class='text-hide'>請選擇日期</option>";
-                $('#uday,#bday,#eday').append(row0);
-
-                var monthday = ["31","28","31","30","31","30","31","31","30","31","30","31"];
-                var bmd = monthday[ JData["month"] - 1 ];    //開始那個月的日數
-                            if( JData["month"] == 2 && ( ( ( JData["month"] + 1911 ) %4 == 0  && ( JData["year"] + 1911 ) % 100 != 0 ) ) || ( JData["year"] + 1911 ) % 400 == 0 )//閏年且為二月
-                                bmd = bmd + 1;
-
-                for (var i = 0 ; i <= bmd ; i++) {
-                    if (i == parseInt( JData["date"] ))
-                        var row = "<option value=" + i + " selected>" + i + "</option>";
-                    else
-                        var row = "<option value=" + i + ">" + i + " </option>";
-                    $('#uday,#bday,#eday').append(row);
-                }
 
             },
             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
@@ -145,51 +212,23 @@ $( // 表示網頁完成後才會載入
 
 function timesum()
 {
-    var uyval, umval, udval;
-    var byval, bmval, bdval;
-    var eyval, emval, edval;
+    var signed_date, begin_time, end_time;
     var btval, etval, reval;
 
-    uyval = $('#uyear').val();
-
-    umval = $('#umonth').val();
-
-    udval = $('#uday').val();
-
-    byval = $('#byear').val();
-
-    bmval = $('#bmonth').val();
-
-    bdval = $('#bday').val();
-
-    eyval = $('#eyear').val();
-
-    emval = $('#emonth').val();
-
-    edval = $('#eday').val();
+    signed_date = $('#signed_date').val();
+    begin_time = $('#begin_time').val();
+    end_time = $('#end_time').val();
 
     btval = $('#btime').val();
 
     etval = $('#etime').val();
 
-    //var row0="<option value=' " + reasonstr + "'>" + reasonstr + "</option>"
-    //$('#reason_sub').append(row0);
-
-    //recho = document.holiday.etime.selectedIndex;
-    //reval = document.holiday.etime.options[recho].value;
-
-    //var reasonstr = document.holiday.reason.value;
     var reason = $('#reason').val();
-    /*for(var i = 0 ; i<=reasonstr.length ;i++)
-        reason[i] = parseInt( reasonstr.charCodeAt(i) );*/
-    //alert(reason);
 
     $.ajax({
         url: 'ajax/overtime_ajax.php',
-        data:{  oper: 'timesum' ,
-                uyear: uyval, umonth: umval, uday: udval,
-                byear: byval, bmonth: bmval, bday: bdval,
-                eyear: eyval, emonth: emval, eday: edval,
+        data:{  oper: 'timesum' , signed_date: signed_date, begin_time: begin_time,
+                end_time: end_time,
                 btime: btval, etime: etval, reason: reason
             },
         type: 'POST',

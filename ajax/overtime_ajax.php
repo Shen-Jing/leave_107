@@ -40,47 +40,39 @@
 	$month = $today["mon"];
 	$day   = $today["mday"];
 
-	//------------------------------------------------------------
-    // session 設定
-	//------------------------------------------------------------
-	/**session_register('byear');	session_register('bmonth');  session_register('bday');
-	session_register('eyear');	session_register('emonth');  session_register('eday');
-	session_register('uyear');	session_register('umonth');  session_register('uday');//提簽日期
-	session_register('btime'); 	session_register('etime'); //下班刷卡時間分及時
-	session_register('tot');**/
-
 	$_SESSION["tot"] = 0;
 
 	//------------------------------------------------------------
 	// 設定初值或給值
 	//------------------------------------------------------------
+	@$signed_date = $_POST["signed_date"];
+	@$begin_time = $_POST["signed_date"];
+	@$end_time = $_POST["signed_date"];
 
-	//------------------------------------------------------------
-	// 選擇的日期
-	//------------------------------------------------------------
-	if(strlen(@$_POST["bmonth"])<2)
-		@$_POST["bmonth"]='0'.@$_POST["bmonth"];
-	if(strlen(@$_POST["bday"])<2)
-		@$_POST["bday"]='0'.@$_POST["bday"];
+	@$signed_date_sec = explode("/",$signed_date);
+	@$begin_time_sec = explode("/",$begin_time);
+	@$end_time_sec = explode("/",$end_time);
 
-	if(strlen(@$_POST["emonth"])<2)
-		@$_POST["emonth"]='0'.@$_POST["emonth"];
-	if(strlen(@$_POST["eday"])<2)
-		@$_POST["eday"]='0'.@$_POST["eday"];
+	@$byear = (int)($begin_time_sec[0])-1911;
+	@$bmonth = (int)($begin_time_sec[1]);
+	@$bday = (int)($begin_time_sec[2]);
 
-	if(strlen(@$_POST["umonth"])<2)
-		@$_POST["umonth"]='0'.@$_POST["umonth"];
-	if(strlen(@$_POST["uday"])<2)
-		@$_POST["uday"]='0'.@$_POST["uday"];
+	@$eyear = (int)($end_time_sec[0])-1911;
+	@$emonth = (int)($end_time_sec[1]);
+	@$eday = (int)($end_time_sec[2]);
 
-	 $over_date =@$_POST["byear"].@$_POST["bmonth"].@$_POST["bday"];
-	 $over_date2=@$_POST["eyear"].@$_POST["emonth"].@$_POST["eday"];//加班跨隔日
-	 $draw_date =@$_POST["uyear"].@$_POST["umonth"].@$_POST["uday"];//提簽日期
+	@$uyear = (int)($signed_date_sec[0])-1911;
+	@$umonth = (int)($signed_date_sec[1]);
+	@$uday = (int)($signed_date_sec[2]);
+
+	$over_date =@$byear.@$bmonth.@$bday;
+	$over_date2=@$eyear.@$emonth.@$eday;//加班跨隔日
+	$draw_date =@$uyear.@$umonth.@$uday;//提簽日期
 
 if($_POST['oper'] == "qry_first")
 {
 
-    $data = array("year" => $year,"month" => $month,"date" => $day,"empl_no" => $empl_no,"empl_name" => $empl_name,"dname" => $dname,"tname" => $tname );
+    $data = array("empl_no" => $empl_no,"empl_name" => $empl_name,"dname" => $dname,"tname" => $tname );
 
 	echo json_encode($data);
     exit;
@@ -136,21 +128,7 @@ if( $_POST['oper'] == "timesum" )
 
 	$btime = $_POST["btime"];
 	$etime = $_POST["etime"];
-	$bmonth = $_POST["bmonth"];
-	$bday = $_POST["bday"];
-	$emonth = $_POST["emonth"];
-	$eday = $_POST["eday"];
-	$umonth = $_POST["umonth"];
-	$uday = $_POST["uday"];
-	$byear = $_POST["byear"];
-	$eyear = $_POST["eyear"];
-	$uyear = $_POST["uyear"];
 	$reason = $_POST["reason"];
-	//$reason = "";
-	//$reason='echo"<script>document.holiday.reason.value;</script>"';
-
-	//for($i = 0 ; $i < count($reasonstr) ; $i++)
-	//	$reason .= chr( $reasonstr[$i] );
 
 	//------------------------------------------------------------
     //確定送出處理求加班時數
@@ -179,11 +157,6 @@ if( $_POST['oper'] == "timesum" )
 	 $over_date2=$eyear.$emonth.$eday;//加班跨隔日
 	 $draw_date =$uyear.$umonth.$uday;//提簽日期
 
-	/* $time_1=$btime;
-		$time_2=$etime;
-
-	echo json_encode($reason);
-    exit;*/
    	if( !( empty($btime) ) && !( empty($etime) ) && ! ( empty( $reason ) ) )
 	{
 
@@ -196,6 +169,12 @@ if( $_POST['oper'] == "timesum" )
 				$tot= substr($etime,0,2) - substr($btime,0,2) ;
 			else
 				$tot= substr($etime,0,2) - substr($btime,0,2) - 1;  //借時
+			if($tot <= 0)
+			{
+				$data = "刷卡時間有誤!";
+				echo json_encode($data);
+    			exit;
+			}
 		}
 		else
 		{   //加班過淩晨，不同天
@@ -219,11 +198,6 @@ if( $_POST['oper'] == "timesum" )
 
       	$value = $db -> query($SQLStr);
 
-/*echo json_encode("$SQLStr");
-    exit;*/
-      	//$s=print_r($value);
-
-      	//echo"<script>console.log($s); </script>";
 
       	if ( !empty($value["message"])  )
 		 	$data = array("資料重複申請或儲存有問題，請洽管理者。");

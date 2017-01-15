@@ -17,7 +17,7 @@
 <div id="page-wrapper">
 	<div class="container-fluid" >
 		<? include ("inc/page-header.php"); ?>
-		<form class="form-horizontal" role="form" name="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" method="post"   ENCTYPE="multipart/form-data">
+		<form class="form-horizontal" role="form" name="holiday" id="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" method="post"   ENCTYPE="multipart/form-data">
 
 		<div class="panel panel-primary">
 			<div class="panel-heading" style="text-align:left">
@@ -47,9 +47,7 @@
 						<td class="col-md-4" colspan=3>
 							<div class='form-group'>
 								<div class='col-md-12'>
-									加班簽呈日期：<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='uyear' name='uyear' onChange=''></select>年
-									<select class='form-control' style='width:auto; display: inline-block;' id='umonth' name='umonth' id='qry_month' onChange=''></select>月
-									<select class='form-control' style='width:auto; display: inline-block;' id='uday' name='uday' onChange=''></select>日
+									加班簽呈日期：<input type='text' class="form-control" id='signed_date' name="signed_date">
 									<font size='2' color='darkred'>(學校統一加班無提簽日期者，請以加班日期代替) </font>
 								</div>
 							</div>
@@ -71,13 +69,9 @@
 					<thead>
 					<tr>
 						<td class="td1" align="center">加班日期</td>
-						<td colspan="3"><font size="4">
-							<select class='form-control' style='width:auto; display: inline-block;' id='byear' name='byear' onChange=''></select>年
-							<select class='form-control' style='width:auto; display: inline-block;' id='bmonth' name='bmonth' onChange=''></select>月
-							<select class='form-control' style='width:auto; display: inline-block;' id='bday' name='bday' onChange=''></select>日~
-							<select class='form-control' style='width:auto; display: inline-block;' id='eyear'  name='eyear' onChange=''></select>年
-							<select class='form-control' style='width:auto; display: inline-block;' id='emonth' name='emonth' onChange=''></select>月
-							<select class='form-control' style='width:auto; display: inline-block;' id='eday' name='eday' onChange=''></select>日
+						<td colspan="3" style="position: relative">
+							<input type='text' class="form-control" id='begin_time' name="begin_time">
+							~<input type='text' class="form-control" id='end_time' name="end_time">
 						</td>
 					</tr>
 					</thead>
