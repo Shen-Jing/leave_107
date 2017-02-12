@@ -41,7 +41,7 @@
         exit;
     }
 
-    if($_POST['oper'] == 0)
+    else if($_POST['oper'] == 0)
     {
         if ( $_POST['dpt'] == 'null' || $_POST['dpt'] == "請選擇單位" )
             if ( $_POST['type'] == 'null' || $_POST['type'] == "請選擇假別" )
