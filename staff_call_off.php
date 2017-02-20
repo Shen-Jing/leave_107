@@ -47,7 +47,7 @@
                                                     <th>終止時</th>
                                                     <th>天數</th>
                                                     <th>職務代理人</th>
-                                                    <th style="color: red">取消</th>
+                                                    <th style="color: red" colspan="2">功能區</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="_content">

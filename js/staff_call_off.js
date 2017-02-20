@@ -63,19 +63,15 @@ function view_call_off(serialno) {
     });
 }
 
-function CRUD(oper, empl_no, over_date) {
-    if (oper == 3)
-        if (!confirm("是否確定要刪除?")) return false;
+function CRUD(oper, serialno) {
     if (oper == 4)
-        if (!confirm("要通過審核嗎?")) return false;
+        if (!confirm("確定要取消嗎?")) return false;
     $.ajax({
         url: 'ajax/staff_call_off_ajax.php',
         data: {
             oper: oper,
-            empl_no: empl_no,
-            over_date: over_date,
-            nouse_time: $('#nouse_time' + over_date).val(),
             year: $('#qry_year').val(),
+            serialno: serialno
         },
         type: 'POST',
         dataType: "json",
@@ -87,7 +83,7 @@ function CRUD(oper, empl_no, over_date) {
                     $('#_content').empty();
                     data_length = JData.call_off.EMPL_CHN_NAME.length;
                     if (data_length == 0) {
-                        $('#_content').append("<tr><td colspan='11'>目前尚無資料</td></tr>");
+                        $('#_content').append("<tr><td colspan='12'>目前尚無資料</td></tr>");
                     }
                     else {
                         for (var i = 0; i < data_length; i++) {
@@ -99,9 +95,9 @@ function CRUD(oper, empl_no, over_date) {
                             // 假別（加班)
                             row = row + "<td>" + JData.call_off.CODE_CHN_ITEM[i] + "</td>";
                             if (JData.call_off.ABROAD[i] == '0')
-                              JData.call_off.ABROAD[i] = '未出國';
+                                JData.call_off.ABROAD[i] = '未出國';
                             else
-                              JData.call_off.ABROAD[i] = '出國';
+                                JData.call_off.ABROAD[i] = '出國';
                             // 出國否（未出國）
                             row = row + "<td>" + JData.call_off.ABROAD[i] + "</td>";
                             // 起始日（1050302）
@@ -119,22 +115,14 @@ function CRUD(oper, empl_no, over_date) {
                             // 功能區
                             // 查看詳細差假記錄（info button）
                             row = row + "<td><button type='button' class='btn-info' name='card' title='詳細記錄' onclick='view_call_off(\"" + JData.call_off.SERIALNO[i] + "\")'><i class='fa fa-info'></i> </button>";
+                            // 取消
+                            row = row + "    <button type='button' class='btn-warning' name='check' title='取消假單' onclick='CRUD(4, " + JData.call_off.SERIALNO[i] + ")'><i class='fa fa-times'></i> </button>";
                             row = row + "</tr>";
                             $('#_content').append(row);
                         }
                     }
-
-                } else if (oper == 1) { //新增
-                    toastr["success"]("資料新增成功!");
-                    CRUD(0); //reload
-                } else if (oper == 2) { //修改
-                    toastr["success"]("資料修改成功!");
-                    CRUD(0); //reload
-                } else if (oper == 3) { //刪除
-                    toastr["success"]("資料刪除成功!");
-                    CRUD(0); //reload
-                } else if (oper == 4) { //審核加班
-                    toastr["success"]("資料審核成功!");
+                } else if (oper == 4) { //取消假單
+                    toastr["success"](JData.submit_result + "本假單取消成功!");
                     CRUD(0); //reload
                 }
             }
