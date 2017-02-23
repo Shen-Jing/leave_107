@@ -68,7 +68,7 @@ function init_table() {
             type: 'POST',
             dataType: 'json'
         },
-        "dom": 't'
+        "dom": 'tp'
     });
 
     $('#Btable_dealing').DataTable({
@@ -98,7 +98,7 @@ function init_table() {
             type: 'POST',
             dataType: 'json'
         },
-        "dom": 't'
+        "dom": 'tp'
     });
 
     $('#Btable_rejected').DataTable({
@@ -125,7 +125,7 @@ function init_table() {
             type: 'POST',
             dataType: 'json'
         },
-        "dom": 't'
+        "dom": 'tp'
     });
 
     $('#Btable_dealing tbody').on('click', 'button.details-control', function() {
