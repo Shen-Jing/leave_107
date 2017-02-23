@@ -34,7 +34,7 @@ class ORACLE{
 					//error occur and print error and sql
 					$oci_err=@OCIError($stmt);
 					foreach ($oci_err as $key => $value) {
-						mb_convert_encoding($oci_err, "BIG5", "UTF-8");
+						$oci_err[$key] = iconv(mb_detect_encoding($oci_err[$key]), "BIG5", "UTF-8");
 					}
 					//$oci_err = mb_convert_encoding($oci_err, "BIG5", "UTF-8");
 					return $oci_err; //add by boblee!
@@ -58,7 +58,7 @@ class ORACLE{
 					//error occur and print error and sql
 					$oci_err=@oci_error($stmt);
 					foreach ($oci_err as $key => $value) {
-						$oci_err[$key] = iconv(mb_detect_encoding($oci_err['message']), "UTF-8",$value);
+						$oci_err[$key] = iconv(mb_detect_encoding($oci_err[$key]), "UTF-8",$value);
 					}
 
 					// foreach ($oci_err as $key => $value) {

@@ -385,7 +385,7 @@ function Send()
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
     });
 }
-function Send()
+function close()
 {
   $("#ChangeModal2").modal("hide");
 }

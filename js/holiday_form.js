@@ -8,6 +8,15 @@ $( // 表示網頁完成後才會載入
         // 部門：MQ5等等的編號
         var depart = $('#hide-depart').text();
 
+        year = year.toString();
+        month = month.toString();
+        day = day.toString();
+        if (year.length < 3)
+            year = '0' + year;
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
         $("body").tooltip({
             selector: "[title]"
         });
@@ -96,8 +105,6 @@ $( // 表示網頁完成後才會載入
                 // console.log(xhr.responseText);
             }
         });
-
-
 
         // 若出差地點的option
         var place = ['基隆市', '台北市', '新北市',
@@ -415,14 +422,15 @@ $( // 表示網頁完成後才會載入
 
         $('#holidayform').bootstrapValidator({
             feedbackIcons: {
-              valid: 'fa fa-check',
-              invalid: 'fa fa-times',
-              validating: 'fa fa-refresh'
+                valid: 'fa fa-check',
+                invalid: 'fa fa-times',
+                validating: 'fa fa-refresh'
             },
             // submitButtons: 'button[type="button"]',
-            excluded: [':not(:visible)'],
+            // excluded: [':not(:visible)'],
             fields: {
                 vtype: {
+                    trigger: "change",
                     validators: {
                         notEmpty: {
                             message: '請選擇假別'
@@ -430,6 +438,7 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 agentno: {
+                    trigger: "change",
                     validators: {
                         notEmpty: {
                             message: '請選擇職務代理人'
@@ -437,9 +446,22 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 leave_start: {
+                    trigger: "change",
                     validators: {
                         notEmpty: {
-                            message: '請假日期不可空白！'
+                            message: '請假日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                leave_end: {
+                    trigger: "change",
+                    validators: {
+                        notEmpty: {
+                            message: '請假日期不可空白'
                         },
                         date: {
                             format: 'YYYY/MM/DD',
@@ -448,6 +470,15 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 mark: {
+                    trigger: "blur",
+                    validators: {
+                        notEmpty: {
+                            message: '請輸入出差或公假事由'
+                        },
+                    }
+                },
+                remark: {
+                    trigger: "change",
                     validators: {
                         stringLength: {
                             max: 80,
@@ -455,7 +486,26 @@ $( // 表示網頁完成後才會載入
                         }
                     }
                 },
+                on_dept: {
+                    trigger: "change",
+                    validators: {
+                        stringLength: {
+                            max: 30,
+                            message: '出差服務單位長度超過上限，請簡要說明！'
+                        }
+                    }
+                },
+                on_duty: {
+                    trigger: "change",
+                    validators: {
+                        stringLength: {
+                            max: 30,
+                            message: '出差擔任職務長度超過上限，請簡要說明！'
+                        }
+                    }
+                },
                 budget: {
+                    trigger: "change",
                     validators: {
                         notEmpty: {
                             message: '請輸入經費來源'
@@ -465,24 +515,66 @@ $( // 表示網頁完成後才會載入
                             message: '備註欄長度超過上限，請簡要說明！'
                         }
                     }
-                }
-            },
-            submitHandler: function(validator, form, submitButton) {
-                formSubmit();
-                // $('#helloModal')
-                //     .find('.modal-title').html('Hello ' + fullName).end()
-                //     .modal();
+                },
+                permit: {
+                    trigger: "change",
+                    validators: {
+                        notEmpty: {
+                            message: '請輸入出差奉派文號'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '備註欄長度超過上限，請簡要說明！'
+                        }
+                    }
+                },
             }
+        });
+
+        $('#holidayform').on('submit', function(e) {
+            //alert("j");
+            e.preventDefault();
+            formSubmit();
+            // var date = new Date();
+            // var year = date.getFullYear() - 1911;
+            // $.ajax({
+            //     url: 'ajax/holiday_form_ajax.php',
+            //     data: $('form[name="holidayform"]').serialize()
+            //     + "&oper=submit" + "&this_serialno=" + $('#hide-serial').text()
+            //     + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
+            //     + "&party=" + $('#party').text() + "&year=" + year,
+            //     type: 'POST',
+            //     dataType: "json",
+            //     success: function(JData) {
+            //         if (JData.error_code){
+            //             toastr["error"](JData.error_message);
+            //             message(JData.error_message, "danger", 5000);
+            //         }
+            //         else {
+            //             toastr["success"](JData.submit_result);
+            //             // reload
+            //         }
+            //     },
+            //     error: function(xhr, ajaxOptions, thrownError) {
+            //         toastr["error"]("呈交表單出了點狀況！");
+            //         // console.log(xhr.responseText);
+            //     }
+            // });
         });
     } // function
 );
 
 function formSubmit(){
+    if( !$("#holidayform").data('bootstrapValidator')
+        .isValid()
+      )
+        return;
+
     var date = new Date();
     var year = date.getFullYear() - 1911;
     $.ajax({
         url: 'ajax/holiday_form_ajax.php',
-        data: $('form[name="holiday"]').serialize()
+        data: $('form[name="holidayform"]').serialize()
         + "&oper=submit" + "&this_serialno=" + $('#hide-serial').text()
         + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
         + "&party=" + $('#party').text() + "&year=" + year,

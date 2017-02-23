@@ -188,8 +188,8 @@
 			$ndate = $db -> query_array($sql);
 			$nd = $ndate['NDATE'][0];
 			$SQLStr2 = "update holidayform set CONDITION='-1' ,THREESIGND='$nd' where serialno = $serialno ";
-
-			if ($db -> query($SQLStr2))
+			$data_update = $db -> query($SQLStr2);
+			if (empty($data_update["message"]) )
 			{
 			        //*************
 					//補休時數恢復
@@ -208,12 +208,11 @@
 						      from   overtime_use
 						      where  serialno= $serialno";
 			            //echo $sql."<br>";
-						$stmt2=ociparse($conn,$sql);
-						ociexecute($stmt2,OCI_DEFAULT);
-						while (OCIFETCH($stmt2))
+						$data_temp = $db -> query_array($sql);
+						for( $i = 0 ; $i < count($data_temp) ; $i++)
 						{
-							$over_date = OCIRESULT($stmt2,OVER_DATE);
-						   	$use_hour = OCIRESULT($stmt2,USE_HOUR);
+							$over_date = $data_temp["OVER_DATE"];
+						   	$use_hour = $data_temp["USE_HOUR"];
 
 						   	$SQLStr2=  " update overtime o
 										set    nouse_time= o.nouse_time + $use_hour
@@ -242,63 +241,7 @@
 		}
 		else if($id == 2)
 		{
-			//錯誤
-			$str = "ist";
-			$sqlup=  "update holidayform set CONDITION='4' where pocard = '000000' and POVDATEB = '1051212' and CONDITION = '2'";
-			$ck_3 = $db -> query_trsac($sqlup);
-			if(!isset($ck_3)){
-				echo json_encode($ck_3);
-				exit;
-			}
-			//$m = $db -> create_savepoint("ist");
-			//oci_commit($db ->rp);
-
-			$sqlist2=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','2')";
-			$ck_2 = $db -> query_trsac($sqlist2);
-			if(!empty($ck_2['message'])){
-				echo json_encode($ck_2['message']);
-				exit;
-			}
-			//$db -> create_savepoint("ist2");
-			//$check = $db -> end_trsac();
-
-			$sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('111111111111111111111111111111','1051212','1051212','1')";
-			//<script>alert(aaa)</script>
-			// $sqlist=  "insert into holidayform (POCARD,POVDATEB,POVDATEE,CONDITION) values ('000000','1051212','1051212','1')";
-			// $ck_1 = $db -> query_trsac($sqlist);
-
-			// if(!empty($ck_1['message'])){
-			// 	echo json_encode($ck_1['message']);
-			// 	exit;
-			// }
-
-			
-			//$check = $db -> end_trsac();
-			// echo"OK";
-			// exit;
-			//$db -> rb_to_savepoint("ist");
-
-			// if(!$check)
-			// 	$db -> rb_to_savepoint("ist");
-			// echo json_encode($ck_1);
-			// exit;
-
-			$check = $db -> end_trsac();
-			if($check){
-				echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
-				exit;
-			}
-
-
-			// else{
-			// 		$check = $db -> end_trsac();
-			// 		echo json_encode("系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室");
-			// 		exit;
-			// }
-			exit;
-			// $SQLStr2=  "update holidayform set CONDITION='1' where serialno = 109236 ";
-			// $data_update = $db -> query($SQLStr2);
-			// echo json_encode("value");
+			// echo json_encode($empl_no);
 			// exit;
 			$sql="select lpad(to_char(sysdate,'yyyymmdd')-'19110000',7,'0') ndate
 			from dual";
@@ -320,8 +263,7 @@
 			$serialno = $data["SERIALNO"][$no];
 			$povtype  = $data["POVTYPE"][$no];
 			$nd = $ndate['NDATE'][0];
-			echo json_encode($data);
-			exit;
+
 			$SQLStr2=  "update holidayform set CONDITION='3' where serialno = $serialno ";
 			$data_update = $db -> query($SQLStr2);
 			if ( empty($data_update["message"]) )
@@ -348,8 +290,8 @@
 						// exit;
 						for($i = 0 ; $i < count($data_temp) ; $i++)
 						{
-						   $over_date = $data_temp["OVER_DATE"][$i];
-						   $use_hour = $data_temp["USE_HOUR"][$i];
+						   $over_date = $data_temp["OVER_DATE"][0];
+						   $use_hour = $data_temp["USE_HOUR"][0];
 						   $SQLStr2=  " update overtime o
 										set    nouse_time= o.nouse_time + $use_hour
 										where  empl_no= '$empl_no'
