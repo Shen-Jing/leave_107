@@ -27,7 +27,7 @@ $sql = "select empl_no
               /* $begin_date=$_POST['p_menu'].'0101';
                 $end_date=$_POST['p_menu'].'1231';*/
 
-                 $name=$_SESSION['empl_name'][0];
+                 $name=$_SESSION['empl_name'];
                  $empl_no="";
 
 
@@ -50,7 +50,7 @@ $sql = "select empl_no
                  {
                    $begin_date=$_POST['year'].'0101';
                    $end_date=$_POST['year'].'1231';
-                   
+
                  $sql = "SELECT count(*) count
                      FROM holidayform
                      where POCARD  in ('$userid','$empl_no')

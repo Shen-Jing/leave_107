@@ -254,8 +254,8 @@
                                             					</tr>
                                                       <tr>
                                             						<td colspan="4" align="center">
-                                            							<button class="btn btn-primary" name="check" onclick='close()'>離開或被退重送</button>
-                                                          <button class="btn btn-primary" name="check" onclick='Send()'>本班資料儲存</button>
+                                            							<button class="btn btn-primary" name="close" onclick='closeM()'>離開或被退重送</button>
+                                                          <button class="btn btn-primary" name="check" onclick='CheckData()'>本班資料儲存</button>
                                             						</td>
                                             					</tr>
                                             					</thead>

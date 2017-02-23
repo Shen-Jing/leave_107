@@ -82,12 +82,12 @@ function CRUD(oper) {
 
                             var row0 ="";
                             row0=row0+"<tr style=\"font-weight:bold\">";
-                            row0=row0+"<th>日期</th>";
-                            row0=row0+"<th>假別天數</th>";
-                            row0=row0+"<th>日期</th>";
-                            row0=row0+"<th>假別天數</th>";
-                            row0=row0+"<th>日期</th>";
-                            row0=row0+"<th>假別天數</th>";
+                            row0=row0+"<td class='td1 col-md-1' colspan='2'>日期</td>";
+                            row0=row0+"<td class='col-md-2' colspan='2'>假別天數</td>";
+                            row0=row0+"<td class='td1 col-md-1' colspan='2'>日期</td>";
+                            row0=row0+"<td class='col-md-2' colspan='2'>假別天數</td>";
+                            row0=row0+"<td class='td1 col-md-1' colspan='2'>日期</td>";
+                            row0=row0+"<td class='col-md-2' colspan='2'>假別天數</td>";
                             row0=row0+"</tr>";
                             var col=1;
 
@@ -108,9 +108,9 @@ function CRUD(oper) {
                                   if (pohdaye=='') pohdaye=0;
                                   if (pohoure=='') pohoure=0;
                                   if (condition=='1')
-                                row0=row0+"<th>" + povdateB + "</th><th>" + povtype + " " + povdays + "日" + povhours + "時" + "</th>";
+                                row0=row0+"<td class='td1 col-md-1' colspan='2'>" + povdateB + "</td><td class='col-md-2' colspan='2'>" + povtype + " " + povdays + "日" + povhours + "時" + "</td>";
                               else
-                                row0=row0+"<th><font color=\"red\">" + povdateB + "</font></th><th>" + povtype + " " + povdays + "日" + povhours + "時" + "</th>";
+                                row0=row0+"<td class='col-md-2' colspan='2'><font color=\"red\">" + povdateB + "</font></td><td class='col-md-2' colspan='2'>" + povtype + " " + povdays + "日" + povhours + "時" + "</td>";
 
                               col++;
                               if(col==4)
