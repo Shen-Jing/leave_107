@@ -12,7 +12,7 @@ $sql ="select distinct grpid, userid
     where sysid='LEAVE'
     order by grpid";
 $gu = $db -> query_array($sql);
-$sql = "SELECT empl_chn_name, psfempl.email
+$sql = "SELECT dept_no, dept_short_name, empl_chn_name, psfempl.email
 	      FROM  psfempl, psfcrjb, stfdept
 			  WHERE empl_no = crjb_empl_no
 			  AND crjb_depart = dept_no
@@ -20,7 +20,7 @@ $sql = "SELECT empl_chn_name, psfempl.email
 			  AND substr(empl_no, 1, 1) != 'A'
 			  AND crjb_quit_date IS NULL
 			  AND psfempl.email LIKE '%@cc.ncue.edu.tw'
-        ORDER BY psfempl.email";
+        ORDER BY dept_no";
 $u = $db -> query_array($sql);
 ?>
 <!-- Page Content -->
@@ -72,6 +72,19 @@ $u = $db -> query_array($sql);
         for ($i=0; $i < sizeof($u['EMAIL']); $i++) {
           $userid = substr($u['EMAIL'][$i], 0, -15) ;
           $empl_chn_name = $u['EMPL_CHN_NAME'][$i];
+          $dept_short_name = $u['DEPT_SHORT_NAME'][$i];
+          $dept_no = $u['DEPT_NO'][$i];
+          if ($i == 0)
+          {
+            echo "<li class='disable'>$dept_no - $dept_short_name<ol style='display: none'>";
+            $tmp = $dept_no;
+          }
+          else if (strcmp($dept_no, $tmp) != 0)
+          {
+            echo "</ol></li>";
+            echo "<li class='disable'>$dept_no - $dept_short_name<ol style='display: none'>";
+            $tmp = $dept_no;
+          }
           echo "<li id='$userid' class='disable'>$userid - $empl_chn_name</li>";
         }
         ?>

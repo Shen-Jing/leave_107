@@ -78,6 +78,7 @@ $(function(){
         var id = $('#' + grpid).children('ol').children().eq(i).attr('id');
         $('#right > ol #' + id).addClass('disable');
       }
+      $('#right > ol > li').addClass('disable');
     }
   });
   $('#filter').on('input', function() {
@@ -85,9 +86,13 @@ $(function(){
     if (input != '')
     {
       $('.user li').hide();
+      $('.user li[id^=' + input + ']').parent().parent().show();
       $('.user li[id^=' + input + ']').show();
     }
     else
       $('.user li').show();
+  });
+  $('li').has('ol').click(function() {
+    $(this).children('ol').slideToggle();
   });
 });

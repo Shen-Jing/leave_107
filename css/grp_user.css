@@ -77,5 +77,7 @@ ol.root li.placeholder:before {
 .disable {
   background-color: gray !important;
   color: white;
-  background-color: ;
+}
+.disable :not(.disable) {
+  color: black;
 }

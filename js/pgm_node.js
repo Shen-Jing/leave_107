@@ -208,4 +208,7 @@ $(function(){
       }
     });
   });
+  $('li').has('ol').click(function() {
+    $(this).children('ol').slideToggle();
+  });
 });
