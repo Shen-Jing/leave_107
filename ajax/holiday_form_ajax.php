@@ -198,6 +198,31 @@
     }
   }
 
+  if ($_POST['oper'] == "refresh_form"){
+    $empl_no = $_POST['empl_no'];
+    $vocdate = $_POST['vocdate'];
+
+    // 送出表單用的serail_no
+    $sql = "SELECT max(serialno) serialno
+            FROM holidayform";
+    $tmp_data = $db -> query_array($sql);
+    $data['qry_serial'] = $tmp_data['SERIALNO'][0] + 1;
+
+    // 可補休之加班時數
+    $sql = "SELECT over_date, nouse_time,
+            substr(over_date,1,3) || '/' || substr(over_date,4,2) || '/' || substr(over_date,6,2) over_date2
+            FROM   overtime
+            WHERE  empl_no='$empl_no'
+            AND    person_check='1'
+            AND    nouse_time > 0
+            AND    due_date >= '$vocdate'
+            ORDER BY over_date";
+    $tmp_data = $db -> query_array($sql);
+    $data['qry_nouse'] = $tmp_data;
+
+    echo json_encode($data);
+    exit;
+  }
   if ($_POST['oper'] == "submit"){
     $empl_no = $_SESSION['empl_no'];
     $depart = $_SESSION['depart'];
@@ -773,5 +798,6 @@
     // print_r($GLOBALS);
 
   }
+
 
 ?>

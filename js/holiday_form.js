@@ -1,10 +1,10 @@
+var date = new Date();
+var year = date.getFullYear() - 1911;
+var ad_year = date.getFullYear();
+var month = date.getMonth() + 1;
+var day = date.getDate();
 $( // 表示網頁完成後才會載入
     function() {
-        var date = new Date();
-        var year = date.getFullYear() - 1911;
-        var ad_year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
         // 部門：MQ5等等的編號
         var depart = $('#hide-depart').text();
 
@@ -76,7 +76,6 @@ $( // 表示網頁完成後才會載入
                 }
 
                 // 可補休之加班時數
-                $('#qry_nouse').append(row0);
                 var txt_append = "";
                 data_nouse = JData.qry_nouse;
                 for (var i = 0; i < data_nouse.OVER_DATE2.length; i++) {
@@ -587,7 +586,8 @@ function formSubmit(){
             }
             else {
                 toastr["success"](JData.submit_result);
-                // reload
+                // 刷新serailno, 加班補休
+                refresh_form();
             }
         },
         error: function(xhr, ajaxOptions, thrownError) {
@@ -595,6 +595,40 @@ function formSubmit(){
             // console.log(xhr.responseText);
         }
     });
+}
+
+// 刷新serailno, 加班補休
+function refresh_form(){
+  $.ajax({
+      url: 'ajax/holiday_form_ajax.php',
+      data: {
+        oper: 'refresh_form',
+        empl_no: $('#empl_no').text(),
+        vocdate: "" + year + month + day,
+      },
+      type: 'POST',
+      dataType: "json",
+      success: function(JData) {
+          // serialno
+          $('#hide-serial').text(JData.qry_serial);
+
+          // 可補休之加班時數
+          $('#qry_nouse').empty();
+          var txt_append = "";
+          data_nouse = JData.qry_nouse;
+          for (var i = 0; i < data_nouse.OVER_DATE2.length; i++) {
+              txt_append = "";
+              if ( (i + 1) % 5 == 0)
+                  txt_append += data_nouse['OVER_DATE2'][i] + "(" + data_nouse['NOUSE_TIME'][i] + ") \n";
+              else
+                  txt_append += data_nouse['OVER_DATE2'][i] + "(" + data_nouse['NOUSE_TIME'][i] + ") _";
+              $('#qry_nouse').append(txt_append);
+          }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+          // console.log(xhr.responseText);
+      }
+  });
 }
 
 function leave_time_option() {

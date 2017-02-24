@@ -39,16 +39,16 @@
                                     </table>
                                         <table class="table table-striped table-bordered dt-responsive nowrap" >
 
-                                    <thead>
+
 
                                         <tr style="font-weight:bold">
-                                            <td>姓名</td>
-                                            <td id="empl_name"></td>
-                                            <td>員工編號</td>
-                                            <td id="empl_no"></td>
+                                            <td class='td1 col-md-3' colspan='2' >姓名</td>
+                                            <td class='col-md-3' colspan='2' id="empl_name"></td>
+                                            <td class='td1 col-md-3' colspan='3'>員工編號</td>
+                                            <td class='col-md-3' colspan='2' id="empl_no"></td>
                                         </tr>
 
-                                    </thead>
+
 
 
                                       <table id="Table_Detail" class="table table-striped table-bordered dt-responsive nowrap" width="100%" ></table>

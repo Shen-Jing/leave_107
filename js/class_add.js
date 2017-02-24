@@ -385,7 +385,48 @@ function Send()
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
     });
 }
-function close()
+function CheckData()
+{
+  var oyear=$ ('#ocyear').val();
+  var omonth=$ ('#ocmonth').val();
+  var oday=$ ('#ocday').val();
+
+  var cyear=$ ('#ccyear').val();
+  var cmonth=$ ('#ccmonth').val();
+  var cday=$ ('#ccday').val();
+
+  var class_subject=$('#subject-name').val();
+  var class_section2=$ ('#class_section2').val();
+  var class_room=$('#class_room').val();
+  var class_memo=$('#class_memo').val();
+
+  var class_name=$('#class-name').val();
+
+  var class_year=$ ('#qry_class_year').val();
+  var class_acadm=$ ('#qry_acadm').val();
+
+  $.ajax({
+      url: 'ajax/class_add_ajax.php',
+      data: { oper: 'ch' },
+      type: 'POST',
+      dataType: "json",
+      success: function() {
+        if(class_section2=="")
+        {
+          toastr["error"]("補課節次未填寫!");
+        }else if(class_room=="")
+          toastr["error"]("補課教室未填寫!");
+        else
+        {
+
+          Send();
+        }
+
+      },
+      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+    });
+}
+function closeM()
 {
   $("#ChangeModal2").modal("hide");
 }
