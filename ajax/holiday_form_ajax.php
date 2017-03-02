@@ -96,12 +96,6 @@
     $tmp_data = $db -> query_array($sql);
     $data['qry_party'] = $tmp_data;
 
-    // 送出表單用的serail_no
-    $sql = "SELECT max(serialno) serialno
-            FROM holidayform";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_serial'] = $tmp_data['SERIALNO'][0] + 1;
-
     echo json_encode($data);
     exit;
   }
@@ -202,12 +196,6 @@
     $empl_no = $_POST['empl_no'];
     $vocdate = $_POST['vocdate'];
 
-    // 送出表單用的serail_no
-    $sql = "SELECT max(serialno) serialno
-            FROM holidayform";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_serial'] = $tmp_data['SERIALNO'][0] + 1;
-
     // 可補休之加班時數
     $sql = "SELECT over_date, nouse_time,
             substr(over_date,1,3) || '/' || substr(over_date,4,2) || '/' || substr(over_date,6,2) over_date2
@@ -252,7 +240,6 @@
     }
 
     /* 表單資料 */
-    $serialno = $_POST["this_serialno"];  //961109 add
     $agent_depart = @$_POST['agent_depart'];
     if ($agent_depart == '')
       $agent_depart = $depart;
@@ -289,7 +276,6 @@
     // 差假合計日數是否含例假日
     $saturday = $_POST["saturday"];
     $sunday = '0';
-    $this_serialno = $_POST["this_serialno"];
     $filestatus = "";
     $notefilename  = "";
     // 經費來源
@@ -307,6 +293,13 @@
     $party = $_POST['party'];
     // 寒暑假
     $voc = $_POST['voc'];
+
+    // 取假單序號
+    // 送出表單用的serial_no
+    $sql = "SELECT max(serialno) serialno
+            FROM holidayform";
+    $data = $db -> query_array($sql);
+    $this_serialno = $serialno = $data['SERIALNO'][0] + 1;
 
     // 轉換成民國格式
     $byear -= 1911;

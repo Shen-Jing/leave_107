@@ -95,10 +95,6 @@ $( // 表示網頁完成後才會載入
                     $('#vocation').append('1');
                 else
                     $('#vocation').append('0');
-
-                // serialno
-                $('#hide-serial').append(JData.qry_serial);
-
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 // console.log(xhr.responseText);
@@ -429,7 +425,7 @@ $( // 表示網頁完成後才會載入
             // excluded: [':not(:visible)'],
             fields: {
                 vtype: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請選擇假別'
@@ -437,7 +433,7 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 agentno: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請選擇職務代理人'
@@ -445,10 +441,10 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 leave_start: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         notEmpty: {
-                            message: '請假日期不可空白'
+                            message: '日期不可空白'
                         },
                         date: {
                             format: 'YYYY/MM/DD',
@@ -457,10 +453,82 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 leave_end: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         notEmpty: {
-                            message: '請假日期不可空白'
+                            message: '日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                depart_time: {
+                    trigger: "blur change",
+                    validators: {
+                        notEmpty: {
+                            message: '日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                immig_time: {
+                    trigger: "blur change",
+                    validators: {
+                        notEmpty: {
+                            message: '日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                bus_trip_start: {
+                    trigger: "blur change",
+                    validators: {
+                        notEmpty: {
+                            message: '日期不可空白'
+                        },
+                        // date: {
+                        //     format: 'YYYY/MM/DD HH時',
+                        //     message: '不正確的日期格式！'
+                        // }
+                    }
+                },
+                bus_trip_end: {
+                    trigger: "blur change",
+                    validators: {
+                        notEmpty: {
+                            message: '日期不可空白'
+                        },
+                        // date: {
+                        //     format: 'YYYY/MM/DD HH時',
+                        //     message: '不正確的日期格式！'
+                        // }
+                    }
+                },
+                meeting_start: {
+                    trigger: "blur change",
+                    validators: {
+                        notEmpty: {
+                            message: '日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                meeting_end: {
+                    trigger: "blur change",
+                    validators: {
+                        notEmpty: {
+                            message: '日期不可空白'
                         },
                         date: {
                             format: 'YYYY/MM/DD',
@@ -469,7 +537,7 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 mark: {
-                    trigger: "blur",
+                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請輸入出差或公假事由'
@@ -477,7 +545,7 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 remark: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         stringLength: {
                             max: 80,
@@ -486,7 +554,7 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 on_dept: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         stringLength: {
                             max: 30,
@@ -495,7 +563,7 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 on_duty: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         stringLength: {
                             max: 30,
@@ -504,7 +572,7 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 budget: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請輸入經費來源'
@@ -516,7 +584,7 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 permit: {
-                    trigger: "change",
+                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請輸入出差奉派文號'
@@ -531,34 +599,8 @@ $( // 表示網頁完成後才會載入
         });
 
         $('#holidayform').on('submit', function(e) {
-            //alert("j");
             e.preventDefault();
             formSubmit();
-            // var date = new Date();
-            // var year = date.getFullYear() - 1911;
-            // $.ajax({
-            //     url: 'ajax/holiday_form_ajax.php',
-            //     data: $('form[name="holidayform"]').serialize()
-            //     + "&oper=submit" + "&this_serialno=" + $('#hide-serial').text()
-            //     + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
-            //     + "&party=" + $('#party').text() + "&year=" + year,
-            //     type: 'POST',
-            //     dataType: "json",
-            //     success: function(JData) {
-            //         if (JData.error_code){
-            //             toastr["error"](JData.error_message);
-            //             message(JData.error_message, "danger", 5000);
-            //         }
-            //         else {
-            //             toastr["success"](JData.submit_result);
-            //             // reload
-            //         }
-            //     },
-            //     error: function(xhr, ajaxOptions, thrownError) {
-            //         toastr["error"]("呈交表單出了點狀況！");
-            //         // console.log(xhr.responseText);
-            //     }
-            // });
         });
     } // function
 );
@@ -574,8 +616,7 @@ function formSubmit(){
     $.ajax({
         url: 'ajax/holiday_form_ajax.php',
         data: $('form[name="holidayform"]').serialize()
-        + "&oper=submit" + "&this_serialno=" + $('#hide-serial').text()
-        + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
+        + "&oper=submit" + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
         + "&party=" + $('#party').text() + "&year=" + year,
         type: 'POST',
         dataType: "json",
@@ -609,9 +650,6 @@ function refresh_form(){
       type: 'POST',
       dataType: "json",
       success: function(JData) {
-          // serialno
-          $('#hide-serial').text(JData.qry_serial);
-
           // 可補休之加班時數
           $('#qry_nouse').empty();
           var txt_append = "";

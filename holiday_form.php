@@ -29,7 +29,6 @@
                                 <table class="table table-condensed table-hover table-bordered">
                           					<tr>
                                       <td id="hide-depart" style="display:none"><?=$depart ?></td>
-                                      <td id="hide-serial" style="display:none"></td>
                                       <td id="hide-check" style="display:none">fe</td>
                           						<td class="td1 col-sm-2">員工編號</td>
                                       <td class="col-sm-4"><span id="empl_no"><?=$empl_no ?></span></td>
@@ -216,12 +215,10 @@
                                         <span style="color:blue">起訖時間</span>
                                       </td>
                                       <td colspan="3">
-                                        <div class='col-sm-5'>
-                                          <div class="form-group">
-                                            <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start">
-                                          </div>
+                                        <div class="form-group col-sm-5">
+                                          <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start">
                                         </div>
-                                        <div class='col-sm-5'>
+                                        <div class="form-group col-sm-5">
                                           <div class="form-group">
                                             <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end' name="bus_trip_end">
                                           </div>
@@ -233,10 +230,10 @@
                                         <span style="color: red">出國出入境時間</span>
                                       </td>
                                       <td colspan="3">
-                                        <div class='col-sm-5'>
+                                        <div class="form-group col-sm-5">
                                           <input type='text' class="form-control" placeholder="出境時間" id='depart-time' name="depart_time">
                                         </div>
-                                        <div class='col-sm-5'>
+                                        <div class="form-group col-sm-5">
                                           <input type='text' class="form-control" placeholder="入境時間" id='immig-time' name="immig_time">
                                         </div>
                                       </td>
@@ -246,10 +243,10 @@
                                         <span style="color: red">出國會議(研究)日程</span>
                                       </td>
                                       <td colspan="3">
-                                        <div class='col-sm-5'>
+                                        <div class="formm-group col-sm-5">
                                           <input type='text' class="form-control" placeholder="出境時間" id='meeting-start' name="meeting_start">
                                         </div>
-                                        <div class='col-sm-5'>
+                                        <div class="formm-group col-sm-5">
                                           <input type='text' class="form-control" placeholder="入境時間" id='meeting-end' name="meeting_end">
                                         </div>
                                       </td>
