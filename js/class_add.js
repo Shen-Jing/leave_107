@@ -113,7 +113,7 @@ function CRUD(oper) {
             row0 = row0 + JData.POVHOURS[i];
             row0 = row0 + "時";
             row0 = row0 + "</td><td  style='text-align:center;'>" ;
-            row0 = row0 + "<button type='button' class=\"btn btn-default\" onclick='ChangeClick("+serialno+");'>填補或修改</button>" ;
+            row0 = row0 + "<button type='button' class=\"btn btn-default\" onclick='NextClick("+serialno+");'>填補或修改</button>" ;
             row0 = row0 + "</td></tr>";
 
 
@@ -130,21 +130,18 @@ function CRUD(oper) {
   });
 
 }
-function ChangeClick(serialno)
+function queryyear()
 {
-  $("#ChangeModal1 .modal-title").html("修改");
-  $("#ChangeModal1").modal("show"); //弹出框show
-
+  alert("in");
   $.ajax({
       url: 'ajax/class_add_ajax.php',
-      data: { oper: 'qry_class'},
+      data: { oper: 'qry_class' },
       type: 'POST',
       dataType: "json",
       success: function(JData) {
-        var serialnoVar=serialno;
+
         $('#qry_class_year').empty();
         $('#qry_acadm').empty();
-        $('#class-modal').empty();
         row0 = "<option selected disabled class='text-hide'>請選擇年份</option>";
         $ ('#qry_class_year').append(row0);
         for (var i = JData["year"] - 1 ; i <= JData["year"]+1 ; i++)
@@ -163,11 +160,11 @@ function ChangeClick(serialno)
                 row = "<option value=" +i+ ">" + i + " </option>";
             $ ('#qry_acadm').append(row);
         }
-        row0="<button type=\"button\" class=\"btn btn-default\" onclick='NextClick("+serialnoVar+");'>下一步</button>";
-        $ ('#class-modal').append(row0);
+
+
+
       },
-      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);
-      alert("error!!");}
+      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
   });
 }
 
@@ -177,7 +174,7 @@ function NextClick(serialno)
   $("#ChangeModal2 .modal-title").html("資料填補");
   $("#ChangeModal2").modal("show"); //弹出框show
 
-
+queryyear();
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: 1 ,serialnoVar: serialno},
@@ -185,6 +182,7 @@ function NextClick(serialno)
       dataType: "json",
       success: function(JData) {
         $('#class_content').empty();
+
         if (JData.error_code)
             toastr["error"](JData.error_message);
         else{
@@ -240,6 +238,7 @@ function NextClick(serialno)
       },
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
   });
+
 
 
 }

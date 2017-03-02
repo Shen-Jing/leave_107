@@ -74,8 +74,9 @@
                       <div class="row">
                           <div class="col-lg-12">
                               <!-- Modal -->
-                              <!--修改頁面1-->
-                              <div class="modal fade" id="ChangeModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+                              <!--修改頁面2-->
+                              <div class="modal fade" id="ChangeModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                   <div class="modal-dialog modal-lg">
                                       <div class="modal-content">
                                           <!-- Modal Header -->
@@ -84,8 +85,9 @@
                                                   <span aria-hidden="true">&times;</span>
                                                   <span class="sr-only">Close</span>
                                               </button>
-                                              <h4 class="modal-title" id="ModalLabel1">選擇時間</h4>
+                                              <h4 class="modal-title" id="ModalLabel2">資料填補</h4>
                                           </div>
+                                          
                                           <!-- Modal Body -->
                                           <div class="modal-body">
 
@@ -106,30 +108,8 @@
 
 
                                           </div>
-                                          <!-- Modal Footer -->
-                                          <div class="modal-footer">
-                                              <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                  關閉
-                                              </button>
-                                              <!-- <button id="btn-save" type="button" class="btn btn-primary">
-                                                  儲存
-                                              </button> -->
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                              <!--修改頁面2-->
-                              <div class="modal fade" id="ChangeModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog modal-lg">
-                                      <div class="modal-content">
-                                          <!-- Modal Header -->
-                                          <div class="modal-header">
-                                              <button type="button" class="close" data-dismiss="modal">
-                                                  <span aria-hidden="true">&times;</span>
-                                                  <span class="sr-only">Close</span>
-                                              </button>
-                                              <h4 class="modal-title" id="ModalLabel2">資料填補</h4>
-                                          </div>
+
+
                                           <!-- Modal Body -->
                                           <div class="modal-body">
                                             <div class="panel-body">
