@@ -118,7 +118,7 @@ function CRUD(oper) {
 
         afterSubmit: function(response, postdata) {
             oGrid.jqGrid('setGridParam', {datatype:'json'}).trigger('reloadGrid'); //Reload after submit
-            if(response.responseText == null){
+            if(JSON.parse(response.responseText) == 'error'){
                 bootbox.alert({
                     message: '錯誤!',
                     backdrop: true
