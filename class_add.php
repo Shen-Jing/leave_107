@@ -87,17 +87,17 @@
                                               </button>
                                               <h4 class="modal-title" id="ModalLabel2">資料填補</h4>
                                           </div>
-                                          
+
                                           <!-- Modal Body -->
                                           <div class="modal-body">
 
-                                                <div class="col-md-12">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         請選擇目前學年度:
                                                         <select class="form-control" name="qry_class_year" id="qry_class_year" style='display: inline-block; width: auto;'></select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         學期:
                                                         <select class="form-control" name="qry_acadm" id="qry_acadm" style='display: inline-block; width: auto;'></select>
@@ -213,7 +213,7 @@
                                             						</td>
 
                                                         <td class="col-md-2 td1" align="center">補課節次</td>
-                                          							<td class="col-md-4" >第<input type="text" class="form-control" name="class_section2" id="class_section2" value="" size="25" maxlength="30" required>節</td>
+                                          							<td class="col-md-4" >第<input type="text" class="form-control" name="class_section2" id="class_section2" required>節</td>
                                             					</tr>
                                             					</thead>
 

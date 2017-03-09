@@ -181,10 +181,11 @@ $sql = "select empl_no
                    $class_year=$_POST['class_year'];
                    $class_acadm=$_POST['class_acadm'];
                    $insert =
-	                     "insert into haveclass(CLASS_SERIALNO,CLASS_NO,CLASS_DEPART,CLASS_NAME, CLASS_CODE, CLASS_SUBJECT,CLASS_ID,CLASS_DATE, CLASS_WEEK , CLASS_SECTION,  CLASS_DATE2, CLASS_WEEK2 ,CLASS_SECTION2 ,CLASS_ROOM ,CLASS_MEMO, CLASS_SELCODE, CLASS_YEAR,CLASS_ACADM)
-	                     values ('$serialno',$class_no,'$depart','','','$class_subject','',
+	                     "INSERT INTO haveclass(CLASS_SERIALNO,CLASS_NO,CLASS_DEPART,CLASS_NAME, CLASS_CODE, CLASS_SUBJECT,CLASS_ID,CLASS_DATE, CLASS_WEEK , CLASS_SECTION,  CLASS_DATE2, CLASS_WEEK2 ,CLASS_SECTION2 ,CLASS_ROOM ,CLASS_MEMO, CLASS_SELCODE, CLASS_YEAR,CLASS_ACADM)
+	                     values ('$serialno',$class_no,'$depart','0','0','$class_subject','0',
 				               '$class_date','$class_week','$class_section','$class_date2','$class_week2',  '$class_section2','$class_room','$class_memo', '','$class_year','$class_acadm')";
                        $db->query($insert);
+                        
                       //下面這是原本的
                       /* $insert =
     	                     "insert into haveclass(CLASS_SERIALNO,CLASS_NO,CLASS_DEPART,CLASS_NAME, CLASS_CODE, CLASS_SUBJECT,CLASS_ID,CLASS_DATE, CLASS_WEEK , CLASS_SECTION,  CLASS_DATE2, CLASS_WEEK2 ,CLASS_SECTION2 ,CLASS_ROOM ,CLASS_MEMO, CLASS_SELCODE, CLASS_YEAR,CLASS_ACADM)

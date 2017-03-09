@@ -132,7 +132,7 @@ function CRUD(oper) {
 }
 function queryyear()
 {
-  alert("in");
+
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: 'qry_class' },
@@ -186,8 +186,9 @@ queryyear();
         if (JData.error_code)
             toastr["error"](JData.error_message);
         else{
-        if (JData.COUNT=="0"){
-            var row_part_new = "<center style='color:red'>本月無任何記錄。</center><br>";
+        if (JData.CLASS_SERIALNO.length==0){
+            var row_part_new = "<center style='color:red'>本月無任何填寫記錄。</center><br>";
+            //alert("No record");
             $('#class_content').append(row_part_new);
 
         }else {
@@ -370,7 +371,7 @@ function Send()
 
   var class_year=$ ('#qry_class_year').val();
   var class_acadm=$ ('#qry_acadm').val();
-
+  alert(class_acadm);
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: 'send' ,classsubject:class_subject,byear:oyear,bmonth:omonth,bday:oday
