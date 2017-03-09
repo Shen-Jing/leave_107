@@ -25,7 +25,7 @@
                               國立彰化師範大學 教職員請假/出差作業
                           </div>
                           <div class="panel-body">
-                              <form name="holidayform" id="holidayform" class="form-inline col-sm-12 table-responsive">
+                              <form name="holidayform" id="holidayform" data-bv-live="disabled">
                                 <table class="table table-condensed table-hover table-bordered">
                           					<tr>
                                       <td id="hide-depart" style="display:none"><?=$depart ?></td>

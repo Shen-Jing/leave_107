@@ -23,7 +23,7 @@ function init_table() {
                 "targets": 8,
                 "data": "SERIALNO",
                 "orderable": false,
-                "render": function(data) { return "<a target='_new' href='update_form.php?sn=" + data + "' class='btn btn-warning'><i class='fa fa-pencil'></i></a>" }
+                "render": function(data) { return "<a target='_new' href='update_form.php?sn=" + data + "' class='btn btn-warning'><i class='fa fa-pencil'></i></a><a href='#' class='btn btn-danger'><i class='fa fa-times' aria-hidden='true'></i></a>" }
             },
             { "className": "dt-center", "targets": "_all" }
         ],

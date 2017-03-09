@@ -8,7 +8,7 @@ $d = $db -> query_array($sql);
 ﻿        <!-- Sidebar wrapper over SB Admin 2 sidebar -->
         <div id="sidebar-wrapper">
             <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
+                <div class="sidebar-nav collapse navbar-collapse" id="menuNav">
                     <ul class="nav" id="side-menu">
                       <?
                         $parent_previous = "";
@@ -43,7 +43,7 @@ $d = $db -> query_array($sql);
                             else
                               echo "<ul class='nav nav-second-level'>\r\n";
                           }else
-                            echo "<a href='$pgmurl'$new><i class='fa $folder_img fa-fw'></i><span class='masked'>$pgmname</span></a>\r\n</li>\r\n";
+                            echo "<a href='$pgmurl'$new><i class='fa $folder_img fa-fw'></i>$pgmname</a>\r\n</li>\r\n";
 
                           $parent_previous = $parent_folder;
                           if($pgmurl == "")
