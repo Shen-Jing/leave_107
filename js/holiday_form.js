@@ -49,7 +49,7 @@ $( // 表示網頁完成後才會載入
                 // 假別 select欄位
                 var row0 = "<option selected disabled class='text-hide'>請選擇假別</option>";
                 $('#qry_vtype').append(row0);
-                for (var i = 0; i < JData.qry_vtype.CODE_FIELD.length; i++) {
+                for (var i = 1; i < JData.qry_vtype.CODE_FIELD.length; i++) {
                     var row = "<option value=" + JData.qry_vtype.CODE_FIELD[i] + ">" + JData.qry_vtype.CODE_CHN_ITEM[i] + "</option>";
                     $('#qry_vtype').append(row);
                 }
@@ -113,7 +113,7 @@ $( // 表示網頁完成後才會載入
         var row0 = "<option selected disabled class='text-hide'>請選擇出差地點</option>";
         $('#qry_eplace').append(row0);
         for (var i = 0; i < place.length; i++) {
-            var row = "<option value=" + i + ">" + place[i] + "</option>";
+            var row = "<option value=" + place[i] + ">" + place[i] + "</option>";
             $('#qry_eplace').append(row);
         }
 
@@ -124,7 +124,7 @@ $( // 表示網頁完成後才會載入
         var row0 = "<option selected disabled class='text-hide'>請選擇出差原因</option>";
         $('#qry_extracase').append(row0);
         for (var i = 0; i < extracase.length; i++) {
-            var row = "<option value=" + i + ">" + extracase[i] + "</option>";
+            var row = "<option value=" + extracase[i] + ">" + extracase[i] + "</option>";
             $('#qry_extracase').append(row);
         }
 
@@ -357,11 +357,11 @@ $( // 表示網頁完成後才會載入
         $("#qry_eplace").change(function(){
             // 若出差地點選擇「自行輸入」 => enable input text讓使用者輸入
             if ($('#qry_eplace').val() == "23") {
-                $('#place-row > td:nth-child(3) > input').prop("disabled", false);
-                $('#place-row > td:nth-child(3) > input').focus();
+                $('#place-row > td > div > input').prop("disabled", false);
+                $('#place-row > td > div > input').focus();
             }
             else {
-                $('#place-row > td:nth-child(3) > input').prop("disabled", true);
+                $('#place-row > td > div > input').prop("disabled", true);
             }
         });
         // 是否出國的radio checked改變
@@ -370,8 +370,8 @@ $( // 表示網頁完成後才會載入
             if ($('input[name="abroad"]:checked').val() == "1") {
                 // 出差地點show來填出國地點
                 $('#place-row').show();
-                $('#place-row > td:nth-child(3) > input').prop("disabled", false);
-                $('#place-row > td:nth-child(3) > input').focus();
+                $('#place-row > td > div > input').prop("disabled", false);
+                $('#place-row > td > div > input').focus();
                 // 並且將出差地點改為「自行輸入」一項
                 $('#qry_eplace').val("23");
                 // 並且出差地點不可更換
@@ -392,7 +392,7 @@ $( // 表示網頁完成後才會載入
             }
             else {
                 // 若沒有要出國就不開放填寫
-                $('#place-row > td:nth-child(3) > input').prop("disabled", true);
+                $('#place-row > td > div > input').prop("disabled", true);
                 // 且出差地點開放選取國內地點
                 $('#qry_eplace').prop("disabled", false);
 
@@ -416,32 +416,42 @@ $( // 表示網頁完成後才會載入
         });
 
         $('#holidayform').bootstrapValidator({
+            live: 'submitted',
             feedbackIcons: {
                 valid: 'fa fa-check',
                 invalid: 'fa fa-times',
                 validating: 'fa fa-refresh'
             },
-            // submitButtons: 'button[type="button"]',
-            // excluded: [':not(:visible)'],
             fields: {
                 vtype: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請選擇假別'
                         }
                     }
                 },
+                depart: {
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇單位'
+                        }
+                    }
+                },
                 agentno: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請選擇職務代理人'
                         }
                     }
                 },
+                agent_depart: {
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇職務代理人單位'
+                        }
+                    }
+                },
                 leave_start: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '日期不可空白'
@@ -453,7 +463,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 leave_end: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '日期不可空白'
@@ -465,7 +474,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 depart_time: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '日期不可空白'
@@ -477,7 +485,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 immig_time: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '日期不可空白'
@@ -489,19 +496,13 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 bus_trip_start: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '日期不可空白'
                         },
-                        // date: {
-                        //     format: 'YYYY/MM/DD HH時',
-                        //     message: '不正確的日期格式！'
-                        // }
                     }
                 },
                 bus_trip_end: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '日期不可空白'
@@ -513,7 +514,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 meeting_start: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '日期不可空白'
@@ -525,7 +525,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 meeting_end: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '日期不可空白'
@@ -536,8 +535,21 @@ $( // 表示網頁完成後才會載入
                         }
                     }
                 },
+                eplace: {
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇地點'
+                        },
+                    }
+                },
+                eplace_text: {
+                    validators: {
+                        notEmpty: {
+                            message: '請填寫地點'
+                        },
+                    }
+                },
                 mark: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請輸入出差或公假事由'
@@ -545,7 +557,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 remark: {
-                    trigger: "blur change",
                     validators: {
                         stringLength: {
                             max: 80,
@@ -553,8 +564,14 @@ $( // 表示網頁完成後才會載入
                         }
                     }
                 },
+                extracase: {
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇出差原因類型'
+                        },
+                    }
+                },
                 on_dept: {
-                    trigger: "blur change",
                     validators: {
                         stringLength: {
                             max: 30,
@@ -563,7 +580,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 on_duty: {
-                    trigger: "blur change",
                     validators: {
                         stringLength: {
                             max: 30,
@@ -572,30 +588,28 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 budget: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請輸入經費來源'
                         },
-                        stringLength: {
-                            max: 50,
-                            message: '備註欄長度超過上限，請簡要說明！'
-                        }
                     }
                 },
                 permit: {
-                    trigger: "blur change",
                     validators: {
                         notEmpty: {
                             message: '請輸入出差奉派文號'
                         },
-                        stringLength: {
-                            max: 50,
-                            message: '備註欄長度超過上限，請簡要說明！'
-                        }
                     }
                 },
-            }
+            },
+        })
+        .on('status.field.bv', function (e, data) {
+            // $(e.target)  --> The field element
+            // data.bv      --> The BootstrapValidator instance
+            // data.field   --> The field name
+            // data.element --> The field element
+
+            data.bv.disableSubmitButtons(false);
         });
 
         $('#holidayform').on('submit', function(e) {

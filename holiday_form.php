@@ -25,7 +25,7 @@
                               國立彰化師範大學 教職員請假/出差作業
                           </div>
                           <div class="panel-body">
-                              <form name="holidayform" id="holidayform" class="form-inline col-sm-12 table-responsive" data-bv-live="enabled" data-bv-trigger="change">
+                              <form name="holidayform" id="holidayform" class="form-inline col-sm-12 table-responsive">
                                 <table class="table table-condensed table-hover table-bordered">
                           					<tr>
                                       <td id="hide-depart" style="display:none"><?=$depart ?></td>
@@ -139,11 +139,15 @@
                                     <tr id="place-row" style="display: none;">
                                       <td class="td1 col-sm-2"><span style="color: red;">出差/公假地點</span></td>
                                       <td class="col-sm-4">
-                                        <select name="eplace" id="qry_eplace" class="form-control">
-                                        </select>
-  																	  <td class="col-sm-6" colspan="2">
-  																			<input type="text" class="form-control" name="eplace_text" value="" maxlength="50" placeholder="請自行輸入地點" disabled="true">
-  																		</td>
+                                        <div class="form-group">
+                                          <select name="eplace" id="qry_eplace" class="form-control">
+                                          </select>
+                                        </div>
+                                      <td class="col-sm-6" colspan="2">
+                                        <div class="form-group">
+                                          <input type="text" class="form-control" name="eplace_text" value="" maxlength="50" placeholder="請自行輸入地點" disabled="true">
+                                        </div>
+                                      </td>
                                     </tr>
                                     <tr id="nouse" style="display: none;">
                           						<td class="td1 col-sm-2"><span style="color: red;">可補休之加班時數</span></td>
@@ -176,8 +180,10 @@
                                         <span style="color:blue">出差原因類型</span>
                             				  </td>
                             				  <td class="col-sm-10" colspan="3">
-                                        <select name='extracase' id="qry_extracase" class="form-control">
-                                        </select>
+                                        <div class="form-group">
+                                          <select name='extracase' id="qry_extracase" class="form-control">
+                                          </select>
+                                        </div>
                             				  </td>
                         				    </tr>
                           				  <tr class="bus-trip">
@@ -186,7 +192,7 @@
                       				        </td>
                       				        <td class="col-sm-10" colspan="3">
                                         <div class="form-group">
-                                          <input type="text" class="form-control" size="50" name="on_dept" value="" maxlength="25" placeholder="限25個中文字">
+                                          <input type="text" class="form-control" size="50" name="on_dept" value="" maxlength="30" placeholder="限30個中文字">
                                         </div>
                                       </td>
                           				  </tr>
@@ -196,7 +202,7 @@
                           				    </td>
                           				    <td class="col-sm-10" colspan="3">
                                         <div class="form-group">
-                                          <input type="text" class="form-control" size="50" name="on_duty" value="" maxlength="25" placeholder="限25個中文字">
+                                          <input type="text" class="form-control" size="50" name="on_duty" value="" maxlength="30" placeholder="限30個中文字">
                                         </div>
         				                      </td>
                           				  </tr>
@@ -215,10 +221,12 @@
                                         <span style="color:blue">起訖時間</span>
                                       </td>
                                       <td colspan="3">
-                                        <div class="form-group col-sm-5">
-                                          <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start">
+                                        <div class="col-sm-5">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start">
+                                          </div>
                                         </div>
-                                        <div class="form-group col-sm-5">
+                                        <div class="col-sm-5">
                                           <div class="form-group">
                                             <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end' name="bus_trip_end">
                                           </div>
@@ -230,11 +238,15 @@
                                         <span style="color: red">出國出入境時間</span>
                                       </td>
                                       <td colspan="3">
-                                        <div class="form-group col-sm-5">
-                                          <input type='text' class="form-control" placeholder="出境時間" id='depart-time' name="depart_time">
+                                        <div class="col-sm-5">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" placeholder="出境時間" id='depart-time' name="depart_time">
+                                          </div>
                                         </div>
-                                        <div class="form-group col-sm-5">
-                                          <input type='text' class="form-control" placeholder="入境時間" id='immig-time' name="immig_time">
+                                        <div class="col-sm-5">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" placeholder="入境時間" id='immig-time' name="immig_time">
+                                          </div>
                                         </div>
                                       </td>
                                     </tr>
@@ -243,11 +255,15 @@
                                         <span style="color: red">出國會議(研究)日程</span>
                                       </td>
                                       <td colspan="3">
-                                        <div class="formm-group col-sm-5">
-                                          <input type='text' class="form-control" placeholder="出境時間" id='meeting-start' name="meeting_start">
+                                        <div class="col-sm-5">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" placeholder="出境時間" id='meeting-start' name="meeting_start">
+                                          </div>
                                         </div>
-                                        <div class="formm-group col-sm-5">
-                                          <input type='text' class="form-control" placeholder="入境時間" id='meeting-end' name="meeting_end">
+                                        <div class="col-sm-5">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" placeholder="入境時間" id='meeting-end' name="meeting_end">
+                                          </div>
                                         </div>
                                       </td>
                                     </tr>

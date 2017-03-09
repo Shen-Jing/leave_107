@@ -262,8 +262,11 @@
     list($oyear, $omonth, $oday) = explode("/", $_POST['depart_time']);
     list($iyear, $imonth, $iday) = explode("/", $_POST['immig_time']);
     $vtype = $_POST['vtype'];
-    $eplace = @$_POST['eplace'];
-    $eplace_text = @$_POST['eplace_text'];
+    // 若沒有傳送自行輸入差假地點之值
+    if (@$_POST['eplace_text'] === null)
+      $eplace = @$_POST['eplace'];
+    else
+      $eplace = @$_POST['eplace_text'];
     $extracase = @$_POST['extracase'];
     // 研發經費
     $research = '0';
@@ -334,6 +337,7 @@
       $etime = substr($etime, 0, 2);
     }
     require "../calculate_time.php"; // 統計此次請假總天數，提到此判斷寒暑休
+
     //*************************************************************************
     //**                資料檢核
     //*************************************************************************
