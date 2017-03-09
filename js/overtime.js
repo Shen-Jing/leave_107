@@ -53,65 +53,93 @@ $( // 表示網頁完成後才會載入
             $('#end_time').data("DateTimePicker").date(e.date);
         });
 
-        // $("holiday").bootstrapValidator({
-        //     feedbackIcons: {
-        //         valid: 'fa fa-check',
-        //         invalid: 'fa fa-times',
-        //         validating: 'fa fa-refresh'
-        //     },
-        //     // submitButtons: 'button[type="button"]',
-        //     // excluded: [':not(:visible)'],
-        //     fields: {
-        //         btime: {
-        //             trigger: "change",
-        //             validators: {
-        //                 notEmpty: {
-        //                     message: '請選擇開始加班刷卡時間'
-        //                 }
+        // $('form[data-toggle="validator"]').validator({
+        //     custom: {
+        //         signed: function($el){
+        //             var date = $("#signed_date").val();
+        //             alert(date);
+        //             var reg = new RegExp("^([0-9]{4})[./]{1}([0-9]{1,2})[./]{1}([0-9]{1,2})$");
+        //             var infoValidation = true;
+        //             if (reg.test(date))
+        //             {
+        //                 alert("format valid!");
         //             }
-        //         },
-        //         etime: {
-        //             trigger: "change",
-        //             validators: {
-        //                 notEmpty: {
-        //                     message: '請選擇結束加班刷卡時間'
-        //                 }
-        //             }
-        //         },
-        //         begin_time: {
-        //             trigger: "change",
-        //             validators: {
-        //                 notEmpty: {
-        //                     message: '請假日期不可空白'
-        //                 },
-        //                 date: {
-        //                     format: 'YYYY/MM/DD',
-        //                     message: '不正確的日期格式！'
-        //                 }
-        //             }
-        //         },
-        //         end_time: {
-        //             trigger: "change",
-        //             validators: {
-        //                 notEmpty: {
-        //                     message: '請假日期不可空白'
-        //                 },
-        //                 date: {
-        //                     format: 'YYYY/MM/DD',
-        //                     message: '不正確的日期格式！'
-        //                 }
-        //             }
-        //         },
-        //         reason: {
-        //             trigger: "blur",
-        //             validators: {
-        //                 notEmpty: {
-        //                     message: '請輸入加班簽呈文號或加班原因'
-        //                 },
-        //             }
-        //         },
+        //         }
         //     }
         // });
+
+        //bootstrapValidator
+        $("#holiday").bootstrapValidator({
+            feedbackIcons: {
+                valid: 'fa fa-check',
+                invalid: 'fa fa-times',
+                validating: 'fa fa-refresh'
+            },
+            // submitButtons: 'button[type="button"]',
+            // excluded: [':not(:visible)'],
+            fields: {
+                signed_date: {
+                    trigger: "change",
+                    validators: {
+                        notEmpty: {
+                            message: '加班簽呈日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                btime: {
+                    trigger: "change",
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇開始加班刷卡時間'
+                        }
+                    }
+                },
+                etime: {
+                    trigger: "change",
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇結束加班刷卡時間'
+                        }
+                    }
+                },
+                begin_time: {
+                    trigger: "change",
+                    validators: {
+                        notEmpty: {
+                            message: '請假日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                end_time: {
+                    trigger: "change",
+                    validators: {
+                        notEmpty: {
+                            message: '請假日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                reason: {
+                    trigger: "blur",
+                    validators: {
+                        notEmpty: {
+                            message: '請輸入加班簽呈文號或加班原因'
+                        },
+                    }
+                },
+            }
+        });
 
         $.ajax({
             url: 'ajax/overtime_ajax.php',
@@ -206,12 +234,24 @@ $( // 表示網頁完成後才會載入
             error: function(xhr, ajaxOptions, thrownError) {/*console.log(xhr.responseText);alert(xhr.responseText);*/}
         });
 
+        $('#holiday').on('submit', function(e) {
+            e.preventDefault();
+            formSubmit();
+
+        });
     }
 );
 
+// function timesum()
 
-function timesum()
+function formSubmit()
 {
+
+    if( !$("#holiday").data('bootstrapValidator')
+        .isValid()
+      )
+        return;
+
     var signed_date, begin_time, end_time;
     var btval, etval, reval;
 
@@ -238,9 +278,13 @@ function timesum()
                 toastr["error"](JData.error_message);
             else
             {
-                alert(JData);
+                if(JData.length == 7)
+                    toastr["success"](JData);
+                else
+                    toastr["error"](JData);
+                //location.reload();
             }
         },
-        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);/*location.reload();*/}
     });
 }

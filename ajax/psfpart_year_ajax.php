@@ -37,7 +37,7 @@
     		echo json_encode('error');
     		exit;
     	}
-    	else if(substr($senior,0,3) > $year || substr($senior,0,3) <= 0 || substr($senior,3,2) > 12)
+    	else if(substr($senior,0,3) <= 0 || substr($senior,3,2) > 12)
     	{
     		echo json_encode('error');
     		exit;

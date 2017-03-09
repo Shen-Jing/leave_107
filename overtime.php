@@ -17,7 +17,7 @@
 <div id="page-wrapper">
 	<div class="container-fluid" >
 		<? include ("inc/page-header.php"); ?>
-		<form class="form-horizontal" role="form" name="holiday" id="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" method="post"   ENCTYPE="multipart/form-data">
+		<form data-toggle="validator" class="form-horizontal" role="form" name="holiday" id="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" method="post"   ENCTYPE="multipart/form-data">
 
 		<div class="panel panel-primary">
 			<div class="panel-heading" style="text-align:left">
@@ -25,88 +25,143 @@
 			</div>
 			<div class="panel-body panel-height">
 				<table class="table table-bordered" id="table1">
-					<thead>
+					<!-- <thead> -->
 						<tr>
-							<td class="col-md-2 td1" align="center">員工編號</td>
-							<td class="col-md-4" id="empl_no"></td>
-							<td class="col-md-2 td1" align="center">姓名</td>
-							<td class="col-md-4" id="empl_name"></td>
-						</tr>
-
-						<tr>
-							<td class="col-md-2 td1" align="center"> 單位</td>
-							<td class="col-md-4" id="dname"></td>
-							<td class="col-md-2 td1" align="center"> 職稱</td>
-							<td class="col-md-4" id="tname"></td>
-						</tr>
-					</thead>
-
-					<thead>
-					<tr>
-						<td class="col-md-2 td1" align="center">加班原因</td>
-						<td class="col-md-4" colspan=3>
-							<div class='form-group'>
-								<div class='col-md-12'>
-									加班簽呈日期：<input type='text' class="form-control" id='signed_date' name="signed_date">
-									<font size='2' color='darkred'>(學校統一加班無提簽日期者，請以加班日期代替) </font>
-								</div>
+							<div class="row">
+								<td class="col-xs-2 col-md-1 td1" align="center">員工編號</td>
+								<td class="col-xs-2 col-md-2" id="empl_no"></td>
+								<td class="col-xs-1 col-md-1 td1" align="center">姓名</td>
+								<td class="col-xs-2 col-md-2" id="empl_name"></td>
 							</div>
+						</tr>
 
-							<div class='form-group'>
-								<div class='col-md-12'>
-									加班簽呈文號：<input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" required><font size='2' color='darkred'> (學校統一加班無提簽文號者，請說明加班原因)</font>
+						<tr>
+							<div class="row">
+								<td class="col-xs-2 col-md-1 td1" align="center"> 單位</td>
+								<td class="col-xs-2 col-md-2" id="dname"></td>
+								<td class="col-xs-1 col-md-1 td1" align="center"> 職稱</td>
+								<td class="col-xs-2 col-md-2" id="tname"></td>
+							</div>
+						</tr>
+					<!-- </thead> -->
 
-									<div style="font-size:15px">　<input type="radio" name="pay_type" value="1" checked style="border:none">6個月內補休
-										<input type="radio" name="pay_type" value="2"  style="border:none" onclick="javascript:alert('因本校無該項經費及預算，請勾選加班補休。');holiday.pay_type[0].checked='true';">請領加班費
+					<!-- <thead> -->
+					<tr>
+						<div class="row">
+							<td class="col-md-1 td1" align="center">加班原因</td>
+							<td class="col-md-1" colspan=3>
+								<div class='form-group has-feedback'>
+									<div class="row">
+										<div class="col-xs-7 col-md-3">
+											<span>加班簽呈日期：</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class='col-xs-8'>
+											<input type='text' class="form-control" id='signed_date' name="signed_date" required>
+											<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<font size='2' color='darkred'>(學校統一加班無提簽日期者，請以加班日期代替) </font>
+										</div>
 									</div>
 								</div>
-						 	</div>
 
-						</td>
+								<div class='form-group has-feedback'>
+									<div class="row">
+										<div class='col-xs-7 col-md-3'>
+											<span>加班簽呈文號：</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-8">
+											<input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" required>
+											<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<font size='2' color='darkred' required> (學校統一加班無提簽文號者，請說明加班原因)</font>
+										</div>
+									</div>
+								</div>
+								<div style="font-size:15px">　<input type="radio" name="pay_type" value="1" checked style="border:none">6個月內補休
+										<input type="radio" name="pay_type" value="2"  style="border:none" onclick="javascript:alert('因本校無該項經費及預算，請勾選加班補休。');
+										holiday.pay_type[0].checked='true';">請領加班費
+								</div>
+							</td>
+
+						</div>
 					</tr>
-					</thead>
+					<!-- </thead> -->
 
-					<thead>
+					<!-- <thead> -->
 					<tr>
-						<td class="td1" align="center">加班日期</td>
+						<td class="col-md-1 td1" align="center">加班日期</td>
 						<td colspan="3" style="position: relative">
-							<input type='text' class="form-control" id='begin_time' name="begin_time">
-							~<input type='text' class="form-control" id='end_time' name="end_time">
+							<div class='form-group has-feedback'>
+								<div class="row">
+									<div class="col-xs-8">
+										<input type='text' class="form-control" id='begin_time' name="begin_time" required>
+										<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-1">
+									<span>到</span>
+								</div>
+							</div>
+							<div class='form-group has-feedback'>
+								<div class="row">
+									<div class="col-xs-8">
+										<input type='text' class="form-control" id='end_time' name="end_time" required>
+										<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
+									</div>
+								</div>
+							</div>
 						</td>
 					</tr>
-					</thead>
+					<!-- </thead> -->
 
-					<thead>
+					<!-- <thead> -->
 					<tr>
-						<td class="td1" align="center">加班刷卡時間</td>
-						<td class="col-md-5">
+						<td class="col-md-1 td1" align="center">加班刷卡時間</td>
+						<td class="col-md-3">
 							<div class='form-group'>
-								<div class='col-md-6'>
-									<font color='darkred' size='2'>開始加班刷卡資料
-									<select class='form-control' style='width:auto; display: inline-block;' id="btime" name='btime' onChange=''></select>
-									<br>
-									<font color='red' size='2'>1.例假日請選實際刷進時間。
-								                             <br>2.上班日請選「得下班時間」
-															 <br>例如：8:11上班則選17:11
+								<div class="row">
+									<div class='col-md-5'>
+										<font color='darkred' size='2'>開始加班刷卡資料</font>
+										<select class='form-control' style='width:auto; display: inline-block;' id="btime" name='btime'></select>
+										<br>
+										<font color='red' size='2'>1.例假日請選實際刷進時間。
+									                             <br>2.上班日請選「得下班時間」
+																 <br>例如：8:11上班則選17:11</font>
+									</div>
 								</div>
 							</div>
 						</td>
 
-						<td class="col-md-5" colspan="2">
+						<td class="col-md-2" colspan="2">
 							<div class='form-group'>
-								<div class='col-md-6'>
-									<font color='darkred' size='2'>結束加班刷卡資料
-									<select class='form-control' style='width:auto; display: inline-block;' id='etime' name='etime' onChange=''></select>
-									<br>
-									<font color='red' size='2'>1.請選實際刷退時間<br>
-																2.畢業典禮「等」不必刷退請選17:00
+								<div class="row">
+									<div class='col-md-5'>
+										<font color='darkred' size='2'>結束加班刷卡資料</font>
+										<select class='form-control' style='width:auto; display: inline-block;' id='etime' name='etime' ></select>
+										<br>
+										<font color='red' size='2'>1.請選實際刷退時間<br>
+																	2.畢業典禮「等」不必刷退請選17:00</font>
+									</div>
 								</div>
 							</div>
 					  </td>
 					</tr>
 					<tr>
 						<td colspan="4" align="center">
-							<button class="btn btn-primary" name="check" onclick='timesum();'>送出計算</button>
+							<button type="submit" class="btn btn-primary" name="check" >送出計算</button>
+							<!-- onclick='timesum();' -->
 						</td>
 					</tr>
 					<tr>
@@ -137,7 +192,7 @@
 
 						</td>
 					</tr>
-					</thead>
+					<!-- </thead> -->
 
 				</table>
 			</div>
