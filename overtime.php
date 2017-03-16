@@ -17,13 +17,13 @@
 <div id="page-wrapper">
 	<div class="container-fluid" >
 		<? include ("inc/page-header.php"); ?>
-		<form data-toggle="validator" class="form-horizontal" role="form" name="holiday" id="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" method="post"   ENCTYPE="multipart/form-data">
 
 		<div class="panel panel-primary">
 			<div class="panel-heading" style="text-align:left">
 			    加班申請作業
 			</div>
 			<div class="panel-body panel-height">
+				<form data-toggle="validator" class="form-horizontal" role="form" name="holiday" id="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" method="post"   ENCTYPE="multipart/form-data">
 				<table class="table table-bordered" id="table1">
 					<!-- <thead> -->
 						<tr>
