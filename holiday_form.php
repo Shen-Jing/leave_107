@@ -25,7 +25,7 @@
                               國立彰化師範大學 教職員請假/出差作業
                           </div>
                           <div class="panel-body">
-                              <form name="holidayform" id="holidayform" data-bv-live="disabled">
+                              <form name="holidayform" id="holidayform" class="form-inline">
                                 <table class="table table-condensed table-hover table-bordered">
                           					<tr>
                                       <td id="hide-depart" style="display:none"><?=$depart ?></td>
@@ -72,9 +72,11 @@
                                     </tr>
                           					<tr>
                           						<td class="td1 col-sm-2">請假開始日期</td>
-                                      <td class="col-sm-4">
-                                        <div class="form-group">
-                                          <input type='text' class="form-control" id='leave-start' name="leave_start">
+                                      <td>
+                                        <div class="col-sm-4">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" id='leave-start' name="leave_start">
+                                          </div>
                                         </div>
                             					</td>
                         							<td class="td1 col-sm-2">請假開始時間</td>
@@ -89,9 +91,11 @@
                           					</tr>
                           					<tr>
                           						<td class="td1 col-sm-2">請假結束日期</h3>
-                                      <td class="col-sm-4">
-                                        <div class="form-group">
-                                          <input type='text' class="form-control" id='leave-end' name="leave_end">
+                                      <td>
+                                        <div class="col-sm-4">
+                                          <div class="form-group">
+                                            <input type='text' class="form-control" id='leave-end' name="leave_end">
+                                          </div>
                                         </div>
                             					</td>
   															      <td class="td1 col-sm-2">請假結束時間</td>

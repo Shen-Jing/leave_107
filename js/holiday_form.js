@@ -91,6 +91,7 @@ $( // 表示網頁完成後才會載入
                 $('#party').append(JData.qry_party.EMPL_PARTY[0]);
                 // 是否為寒暑假期間
                 var cn = JData.qry_voc.COUNT[0];
+                // 或許為vacation才對，但此處還是照舊頁面命名
                 if (cn > 0)
                     $('#vocation').append('1');
                 else
@@ -164,7 +165,6 @@ $( // 表示網頁完成後才會載入
         // clock_options.format = 'YYYY/MM/DD HH時';
 
         // 請假開始日期、結束日期
-
         $('#leave-start').datetimepicker(start_options);
         $('#leave-end').datetimepicker(end_options);
         $("#leave-start").on("dp.change", function (e) {
@@ -174,7 +174,7 @@ $( // 表示網頁完成後才會載入
             $('#leave-end').data("DateTimePicker").date(e.date);
         });
 
-        // 請假開始時間、結束時間
+        // 設定請假開始時間、結束時間的範圍
         leave_time_option();
 
         // 出國出入境時間
@@ -210,11 +210,14 @@ $( // 表示網頁完成後才會載入
 
         $('.bus-trip').hide();
 
-        // 勞基特休 / 教職特休
+        // 選擇假別變動時
         $("#qry_vtype").change(function(){
+            // 清空請假開始、結束時間的所有option
             $('#btime').empty();
             $('#etime').empty();
+            // 根據所選假別設定範圍
             leave_time_option();
+            // 勞基特休 / 教職休假
             if ($('#qry_vtype').val() == "23" || $('#qry_vtype').val() == "06") {
                 $.ajax({
                     url: 'ajax/holiday_form_ajax.php',
@@ -313,9 +316,26 @@ $( // 表示網頁完成後才會載入
             }
         });
 
+        // 限制時間選取
+        $("#btime").on("change", function(){
+            // 若不先轉為int，判斷大小會有問題
+            var bt = parseInt($(this).val()), et = parseInt($("#etime").val());
+            // 若開始時間超過結束時間
+            if (bt > et)
+                $("#etime").val($(this).val());
+            // 讓結束時間與選取的開始時間相同
+        });
+        $("#etime").on("change", function(){
+            var bt = parseInt($("#btime").val()), et = parseInt($(this).val());
+            // 若結束時間在開始時間之前
+            if (et < bt)
+                $("#btime").val($(this).val());
+            // 讓開始時間與選取的結束時間相同
+        });
+
         // 職務代理人單位
         // 若選擇其他單位，則須再選該代理人單位為何
-        $('#agent_depart').hide();
+        $("#agent_depart").hide();
         $("#qry_agentno").change(function(){
             if ($('#qry_agentno').val() == "0000000") {
                 $('#agent_depart').show();
@@ -417,11 +437,6 @@ $( // 表示網頁完成後才會載入
 
         $('#holidayform').bootstrapValidator({
             live: 'submitted',
-            feedbackIcons: {
-                valid: 'fa fa-check',
-                invalid: 'fa fa-times',
-                validating: 'fa fa-refresh'
-            },
             fields: {
                 vtype: {
                     validators: {
@@ -610,8 +625,9 @@ $( // 表示網頁完成後才會載入
             // data.element --> The field element
 
             data.bv.disableSubmitButtons(false);
-        });
+        }); // enable the submit buttons all the time
 
+        // 表單送出後，取消預設行為（submit）後，呼叫自定義ajax函式
         $('#holidayform').on('submit', function(e) {
             e.preventDefault();
             formSubmit();
@@ -619,6 +635,7 @@ $( // 表示網頁完成後才會載入
     } // function
 );
 
+// 自定義ajax
 function formSubmit(){
     if( !$("#holidayform").data('bootstrapValidator')
         .isValid()
@@ -652,7 +669,7 @@ function formSubmit(){
     });
 }
 
-// 刷新serailno, 加班補休
+// 刷新加班補休時數
 function refresh_form(){
   $.ajax({
       url: 'ajax/holiday_form_ajax.php',
@@ -682,12 +699,13 @@ function refresh_form(){
       }
   });
 }
-
+// 呼叫此func前，會先清空請假開始、結束時間的所有option後，
 function leave_time_option() {
-    // 請假開始、結束時間
+    // 根據是否寒暑假、特殊工作人員設定時間範圍
     var voc = $('#vocation').text();
     var party = $('#party').text();
     var vt = ['01', '02', '03'];
+    // 請假開始、結束時間
     var bt = 8, et;
     if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1 ) {
         bt = 8;
@@ -700,7 +718,7 @@ function leave_time_option() {
     else if (party == '1'){
         bt = 13;
         et = 21;
-    }//特殊上班人員
+    } //特殊上班人員
     else {
         bt = 8;
         et = 16;
@@ -771,7 +789,6 @@ function leave_time_option() {
             }
         }
         else {
-
             var row0 = "<option selected disabled class='text-hide'></option>";
             $('#btime').append(row0);
             for (var i = bt; i <= et; ++i) {
@@ -787,9 +804,7 @@ function leave_time_option() {
             }
         }
     }
+    // 將開始時間設為最早、結束時間設為最晚
     $('#btime').val($('#btime > option:nth-child(2)').val());
     $('#etime').val($('#etime > option:last').val());
-}
-function confirm_reset() {
-    return confirm("確定重填？");
 }
