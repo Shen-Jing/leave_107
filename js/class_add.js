@@ -90,7 +90,8 @@ function CRUD(oper) {
 
           for(var i=0;i<JData.EMPL_CHN_NAME.length;i++){
             /////////////////////////////////////////
-            var serialno=JData.SERIALNO[i];
+            //var serialno=JData.SERIALNO[i];
+            var serialno=9486;
             serailnoval=serialno;
             //var serialno=74951;
 
@@ -186,6 +187,7 @@ queryyear();
         if (JData.error_code)
             toastr["error"](JData.error_message);
         else{
+          EditDataFunc(serialno,classno);
         if (JData.CLASS_SERIALNO.length==0){
             var row_part_new = "<center style='color:red'>本月無任何填寫記錄。</center><br>";
             //alert("No record");
@@ -278,19 +280,20 @@ function EditDataFunc(serialno,classno)
           row0=row0+JData["holidaymark"];
           $('#holidy_mark').append(row0);
           classnoval=JData["class_no"];
-          row0 = "<$option selected disabled class='text-hide'>選擇科目</option>";
-          row0 =row0+ "<option value=1>電子學</option>";
-          row0 =row0+ "<option value=2>線性代數</option>";
-          row0 =row0+ "<option value=3>遊戲設計</option>";
-          row0 =row0+ "<option value=4>演算法</option>";
-          row0 =row0+ "<option value=5>作業系統</option>";
+          //alert(JData["class_no"]);
+          row0 = "<option selected disabled class='text-hide'>選擇科目</option>";
+          row0 =row0+ "<option value=\"電子學\">電子學</option>";
+          row0 =row0+ "<option value=\"線性代數\">線性代數</option>";
+          row0 =row0+ "<option value=\"遊戲設計\">遊戲設計</option>";
+          row0 =row0+ "<option value=\"演算法\">演算法</option>";
+          row0 =row0+ "<option value=\"作業系統\">作業系統</option>";
           $('#subject-name').append(row0);
           var classname="資工三"
           row0=classname;
           $('#class-name').append(row0);
 
 
-          row0 = "<$option selected disabled class='text-hide'>請選擇年份</option>";
+          row0 = "<option selected disabled class='text-hide'>請選擇年份</option>";
           $ ('#ocyear').append(row0);
           for (var i = JData["year"] - 1 ; i <= JData["year"]+1 ; i++)
           {
@@ -301,7 +304,7 @@ function EditDataFunc(serialno,classno)
               $ ('#ocyear').append(row);
           }
 
-          row0 = "<$option selected disabled class='text-hide'>請選擇月份</option>";
+          row0 = "<option selected disabled class='text-hide'>請選擇月份</option>";
           $ ('#ocmonth').append(row0);
           for (var i = 1; i <= 12 ; i++)
           {
@@ -309,7 +312,7 @@ function EditDataFunc(serialno,classno)
               $ ('#ocmonth').append(row);
           }
 
-          row0 = "<$option selected disabled class='text-hide'>請選擇日期</option>";
+          row0 = "<option selected disabled class='text-hide'>請選擇日期</option>";
           $ ('#ocday').append(row0);
           for (var i = 1; i <= 31 ; i++)
           {
@@ -317,7 +320,7 @@ function EditDataFunc(serialno,classno)
               $ ('#ocday').append(row);
           }
 
-          row0 = "<$option selected disabled class='text-hide'>請選擇年份</option>";
+          row0 = "<option selected disabled class='text-hide'>請選擇年份</option>";
           $ ('#ccyear').append(row0);
           for (var i = JData["year"] - 1 ; i <= JData["year"]+1 ; i++)
           {
@@ -328,7 +331,7 @@ function EditDataFunc(serialno,classno)
               $ ('#ccyear').append(row);
           }
 
-          row0 = "<$option selected disabled class='text-hide'>請選擇月份</option>";
+          row0 = "<option selected disabled class='text-hide'>請選擇月份</option>";
           $ ('#ccmonth').append(row0);
           for (var i = 1; i <= 12 ; i++)
           {
@@ -336,12 +339,27 @@ function EditDataFunc(serialno,classno)
               $ ('#ccmonth').append(row);
           }
 
-          row0 = "<$option selected disabled class='text-hide'>請選擇日期</option>";
+          row0 = "<option selected disabled class='text-hide'>請選擇日期</option>";
           $ ('#ocday').append(row0);
           for (var i = 1; i <= 31 ; i++)
           {
                   row = "<option value=" +i+ ">" + i + " </option>";
               $ ('#ccday').append(row);
+          }
+
+          row0 = "<option selected disabled class='text-hide'>請選擇節次</option>";
+          $ ('#class_section21').append(row0);
+          for (var i = 1; i <= 13 ; i++)
+          {
+                  row = "<option value=" +i+ ">" + i + " </option>";
+              $ ('#class_section21').append(row);
+          }
+          row0 = "<option selected disabled class='text-hide'>請選擇節次</option>";
+          $ ('#class_section22').append(row0);
+          for (var i = 1; i <= 13 ; i++)
+          {
+                  row = "<option value=" +i+ ">" + i + " </option>";
+              $ ('#class_section22').append(row);
           }
 
 
@@ -352,7 +370,7 @@ function EditDataFunc(serialno,classno)
     });
 }
 
-function Send()
+function Send(serailnoval)
 {
   var oyear=$ ('#ocyear').val();
   var omonth=$ ('#ocmonth').val();
@@ -363,7 +381,7 @@ function Send()
   var cday=$ ('#ccday').val();
 
   var class_subject=$('#subject-name').val();
-  var class_section2=$ ('#class_section2').val();
+  var class_section2=$ ('#class_section21').val();
   var class_room=$('#class_room').val();
   var class_memo=$('#class_memo').val();
 
@@ -371,7 +389,8 @@ function Send()
 
   var class_year=$ ('#qry_class_year').val();
   var class_acadm=$ ('#qry_acadm').val();
-  alert(class_acadm);
+  //alert(oyear);
+  //alert(serailnoval);
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: 'send' ,classsubject:class_subject,byear:oyear,bmonth:omonth,bday:oday
@@ -385,7 +404,7 @@ function Send()
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
     });
 }
-function CheckData()
+function CheckData(serailnoval)
 {
   var oyear=$ ('#ocyear').val();
   var omonth=$ ('#ocmonth').val();
@@ -396,7 +415,7 @@ function CheckData()
   var cday=$ ('#ccday').val();
 
   var class_subject=$('#subject-name').val();
-  var class_section2=$ ('#class_section2').val();
+  var class_section2=$ ('#class_section21').val();
   var class_room=$('#class_room').val();
   var class_memo=$('#class_memo').val();
 
@@ -419,7 +438,7 @@ function CheckData()
         else
         {
 
-          Send();
+          Send(serailnoval);
         }
 
       },

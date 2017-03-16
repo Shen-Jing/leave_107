@@ -213,7 +213,14 @@
                                             						</td>
 
                                                         <td class="col-md-2 td1" align="center">補課節次</td>
-                                          							<td class="col-md-4" >第<input type="text" class="form-control" name="class_section2" id="class_section2" required>節</td>
+                                          							<td class="col-md-4" >
+                                                          <div class='form-group'>
+                                                            <div class='col-md-12'>
+                                            									第<select class='form-control' style='width:auto; display: inline-block;' name='class_section21' id='class_section21' onChange=''></select>節~<br>
+                                            									第<select class='form-control' style='width:auto; display: inline-block;' id='class_section22' name='class_section22' onChange=''></select>節
+                                            								</div>
+                                            							</div>
+                                                        </td>
                                             					</tr>
                                             					</thead>
 
@@ -235,7 +242,7 @@
                                                       <tr>
                                             						<td colspan="4" align="center">
                                             							<button class="btn btn-primary" name="close" onclick='closeM()'>離開或被退重送</button>
-                                                          <button class="btn btn-primary" name="check" onclick='CheckData()'>本班資料儲存</button>
+                                                          <button class="btn btn-primary" name="check" onclick='CheckData(9487)'>本班資料儲存</button>
                                             						</td>
                                             					</tr>
                                             					</thead>
