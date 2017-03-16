@@ -487,16 +487,15 @@ a.dt-button.blue {
     font-weight: bold;
 }
 
-/* bootstrapvalidator Color of valid field */
-#holidayform .has-error .control-label,
-#holidayform .has-error .help-block,
-#holidayform .has-error .form-control-feedback {
-    color: #f39c12;
-}
-
-/* border color of valid field */
+/* border color of valid field(bootstrapvalidator) */
 #holidayform .has-success input{
     border-color: rgb(204, 204, 204);
+}
+/* 當success時，去除select的綠線，與預設相同 */
+#holidayform .has-success .form-control{
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
 }
 /* border color of valid field(when focus) */
 #holidayform .has-success .form-control:focus {

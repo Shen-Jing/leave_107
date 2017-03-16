@@ -658,6 +658,8 @@ function formSubmit(){
             }
             else {
                 toastr["success"](JData.submit_result);
+                if (JData.submit_remind != "")
+                  toastr["success"](JData.submit_remind);
                 // 刷新serailno, 加班補休
                 refresh_form();
             }

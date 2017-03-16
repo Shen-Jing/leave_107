@@ -218,7 +218,8 @@
     $title = $_SESSION['title_id'];
     $name = $_SESSION['empl_name'];
     $dept_name = $_SESSION['dept_name'];
-
+    // 有別於submit_result的表單結果，remind是較為不重要的提醒（如請事假提醒惠幾天、會扣錢）
+    $submit_remind = "";
     $condi = 0;  // 請假是否成功
     $flag = 0;
 
@@ -327,7 +328,7 @@
     $odate = $oyear . $omonth . $oday;
     $idate = $iyear . $imonth . $iday;
 
-    //半小時的轉成整數
+    // 半小時的轉成整數
     if (substr($btime, 2, 2) == '30') {
   	  $btime_bk = $btime;
       $btime = substr($btime, 0, 2);
@@ -459,9 +460,13 @@
   		$tot_day_04 = $tot_day;   //先暫存，免被覆蓋
   		$tot_hour_04 = $tot_hour;
       // echo $edate;
+      // print_r();
   		require "../calculate_tot.php";  // 統計之前事假總天數 961123
   		$pohdaye = $pohdaye + $tot_day_04;		//加上此次請假日數
   		$pohoure = $pohoure + $tot_hour_04;
+      // echo "\n";
+      // print_r();
+      // exit;
   			//時數超過八小時轉入天數
   		$temp_h = 0;
   		if ($pohoure > 8){
@@ -470,16 +475,13 @@
   			$pohoure = $temp_h;
       }
 	    if ($pohdaye > 7 || ($pohdaye == 7 and $pohoure > 0)){
-        $message = array("error_code" => 1,
-        "error_message" => "加上本次請假，您的事假已請：" . $pohdaye . "日" . $pohoure . "時",
-        "sql" => $sql);
-        echo json_encode($message);
-        exit;
-        // echo "<script> alert('".$str."');	if (confirm('您的事假已超過７天，會扣錢的喲！要取消此次假單嗎？請按「確定鍵」'))	 top.r.location.href='sign.php';</script>";
+        // 舊頁面是以script給使用者選擇是否要取消，但因新版改以ajax運作，故僅顯示提醒
+        $submit_remind = "加上本次請假，您的事假已請：" . $pohdaye . "日" . $pohoure . "時\n";
+        $submit_remind += "您的事假已超過７天，會扣錢的！";
 	    }
 	  }//事假
 
-    //統計會議日程天數   980630 add
+    // 統計會議日程天數   980630 add
     if ( ($vtype == '01' || $vtype == '02' || $vtype == '03') && $abroad == '1'){//出差、公假、出國
     	$sql = "SELECT count(*) count  FROM  ps_calendar
         			WHERE  lpad(calendar_yymm || lpad(to_char(calendar_dd), 2, '0'), 7, '0')
@@ -535,11 +537,11 @@
       $cnt_nouse = $i;
 
   		if ($nouse_sum < $total_over){
-         $message = array("error_code" => 1,
-         "error_message" => "補休時數超過可請時數，請先完成加班申請作業。",
-         "sql" => $sql);
-         echo json_encode($message);
-         exit;
+        $message = array("error_code" => 1,
+        "error_message" => "補休時數超過可請時數，請先完成加班申請作業。",
+        "sql" => $sql);
+        echo json_encode($message);
+        exit;
   		}
   		else {
   			$flag_11 = 1; //控制能否儲存
@@ -629,7 +631,7 @@
       //未兼行政教師及學術單位專案助理主管
   		$sql = "SELECT email FROM psfempl WHERE empl_no = '$bossno'";
   		if ($data = $db -> query_array($sql))
-  		  $mail_to = $data['EMAIL'];    //主管 mail liru
+  		  $mail_to = $data['EMAIL'][0];    //主管 mail liru
 	  } //未兼行政之教師
 
     //*************************************************************************
@@ -638,17 +640,31 @@
   	$sql = "SELECT email FROM psfempl
             WHERE empl_no='$empl_no'";
     if ($data = $db -> query_array($sql))
-      $mail_from = $data['EMAIL'];
+      $mail_from = $data['EMAIL'][0];
 
-    //設定使用者按"回覆"時要顯示的e-mail  Reply-To
-  	//$mail_headers = "From: $mail_from\r\nReply-To:lucy@cc.ncue.edu.tw\r\n";
+    // 設定使用者按"回覆"時要顯示的e-mail  Reply-To
+  	// $mail_headers = "From: $mail_from\r\nReply-To:lucy@cc.ncue.edu.tw\r\n";
     $mail_headers  = "From: edoc@cc2.ncue.edu.tw\r\n";
     $mail_headers .= "Reply-To:lucy@cc.ncue.edu.tw\r\n";
     $mail_headers .= "X-Mailer: PHP\r\n"; // mailer
     //設定有錯誤時自動回覆的e-mail  Return-Path :liru
     $mail_headers .= "Return-Path: edoc@cc2.ncue.edu.tw\r\n";
     $mail_headers .= "Content-type: text/html; charset=big5\r\n";
-  	 //$mail_headers="From: $mail_from";
+  	// $mail_headers="From: $mail_from";
+    // $ip = ($_SERVER[HTTP_X_FORWARDED_FOR] ? $_SERVER[HTTP_X_FORWARDED_FOR] : $_SERVER["REMOTE_ADDR"]);
+    // if ($ip != "120.107.178.158"){
+    // 	if ($_POST["check"] == "fe"){   //正常請假   ****
+    // 		$mail_subject = "職務代理人簽核通知";
+    //         $mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
+    // 		$mail_body = "您好，$name 欲於民國 $byear 年 $bmonth 月 $bday 日 至 $eyear 年 $emonth 月 $eday 日 請假<br>				 請您於請假期間代理其職務<br> 請至 人事請假系統 作簽核<br>				 網址 :<a href='https://apss.ncue.edu.tw/leave/nocdclogin.php' target='_blank'> https://apss.ncue.edu.tw/leave/nocdclogin.php </a>";
+    //     }
+    //     else {  //教師請
+    // 		$mail_subject = "人事線上差假系統請假--主管簽核通知";
+    //         $mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
+    // 		$mail_body =	"您好，$name 於民國 $byear 年 $bmonth 月 $bday 日 至 $eyear 年 $emonth 月 $eday 日 請假<br> 請至 人事請假系統 作簽核<br> 網址 :
+    // 		<a href='https://apss.ncue.edu.tw/leave/nocdclogin.php' target='_blank'> https://apss.ncue.edu.tw/leave/nocdclogin.php </a>";
+    //     }
+    // }
 
     //..............................................................
     //半小時的轉成整數 資料還原 10201 add
@@ -662,8 +678,10 @@
     $permit = str_replace("'", "", $permit);
     $extracase = str_replace("'", "", $extracase);
     $eplace = str_replace("'", "", $eplace);
+    // mdays是若需統計會議日程天數才會賦值
     if (!isset($mdays))
       $mdays = "";
+    // over_date只有在補休才會賦值
     if (!isset($over_date))
       $over_date = "";
 
@@ -703,8 +721,8 @@
       }
     }
     $data = $db -> query($sql);
-    // 若沒錯誤
     // 請假成功後，補休才能扣除
+    // 若沒錯誤
     if (empty($data['message'])){
       // 系統自動由最前面的日期扣除相等於補休之時數
 			//---------------------------------------------------------------
@@ -774,7 +792,8 @@
   		$submit_result = "請假成功！" . $filestatus;//."，但寄發email失敗";
       $message = array("error_code" => $data['code'],
       "error_message" => $data['message'],
-      "sql" => $sql, "submit_result" => $submit_result);
+      "sql" => $sql, "submit_result" => $submit_result,
+      "submit_remind" => $submit_remind);
       echo json_encode($message);
       exit;
     }
@@ -788,7 +807,8 @@
   	  }
       $message = array("error_code" => $data['code'],
       "error_message" => $data['message'],
-      "sql" => $sql, "submit_result" => $submit_result);
+      "sql" => $sql, "submit_result" => $submit_result,
+      "submit_remind" => $submit_remind);
       echo json_encode($message);
       exit;
     }
