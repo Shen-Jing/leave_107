@@ -58,7 +58,7 @@
 									</div>
 									<div class="row">
 										<div class='col-xs-8'>
-											<input type='text' class="form-control" id='signed_date' name="signed_date" required>
+											<input type='text' class="form-control" id='signed_date' name="signed_date" readonly="true">
 											<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
 										</div>
 									</div>
@@ -77,13 +77,13 @@
 									</div>
 									<div class="row">
 										<div class="col-xs-8">
-											<input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" required>
+											<input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" >
 											<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-xs-12">
-											<font size='2' color='darkred' required> (學校統一加班無提簽文號者，請說明加班原因)</font>
+											<font size='2' color='darkred' > (學校統一加班無提簽文號者，請說明加班原因)</font>
 										</div>
 									</div>
 								</div>
@@ -104,7 +104,7 @@
 							<div class='form-group has-feedback'>
 								<div class="row">
 									<div class="col-xs-8">
-										<input type='text' class="form-control" id='begin_time' name="begin_time" required>
+										<input type='text' class="form-control" id='begin_time' name="begin_time" readonly="true">
 										<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
 									</div>
 								</div>
@@ -117,7 +117,7 @@
 							<div class='form-group has-feedback'>
 								<div class="row">
 									<div class="col-xs-8">
-										<input type='text' class="form-control" id='end_time' name="end_time" required>
+										<input type='text' class="form-control" id='end_time' name="end_time" readonly="true">
 										<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
 									</div>
 								</div>
