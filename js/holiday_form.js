@@ -618,58 +618,53 @@ $( // 表示網頁完成後才會載入
                 },
             },
         })
-        .on('status.field.bv', function (e, data) {
-            // $(e.target)  --> The field element
-            // data.bv      --> The BootstrapValidator instance
-            // data.field   --> The field name
-            // data.element --> The field element
-
+        // 不論表單驗證正確與否時，皆可按下表單按鈕
+        // Triggered when any field is invalid
+        .on('error.field.bv', function(e, data) {
             data.bv.disableSubmitButtons(false);
-        }); // enable the submit buttons all the time
+        })
+        // Triggered when any field is valid
+        .on('success.field.bv', function(e, data) {
+            data.bv.disableSubmitButtons(false);
+        })
 
-        // 表單送出後，取消預設行為（submit）後，呼叫自定義ajax函式
-        $('#holidayform').on('submit', function(e) {
-            e.preventDefault();
-            formSubmit();
-        });
+        //submit by ajax----------------------------------
+	      .on('success.form.bv', function(e) {
+            var date = new Date();
+            var year = date.getFullYear() - 1911;
+            var postData = $(this).serialize()
+            + "&oper=submit" + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
+            + "&party=" + $('#party').text() + "&year=" + year;
+            var formURL = $('#holidayform').attr('action');
+            $.ajax({
+                url: 'ajax/' + formURL,
+                data: postData,
+                type: 'POST',
+                dataType: "json",
+                success: function(JData) {
+                    if (JData.error_code){
+                        toastr["error"](JData.error_message);
+                        message(JData.error_message, "danger", 5000);
+                    }
+                    else {
+                        toastr["success"](JData.submit_result);
+                        if (JData.submit_remind != "")
+                          toastr["success"](JData.submit_remind);
+                        // 刷新serailno, 加班補休
+                        refresh_form();
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    toastr["error"]("呈交表單出了點狀況！");
+                    // console.log(xhr.responseText);
+                }
+            });
+            e.preventDefault(); //STOP default action
+            e.unbind(); //unbind. to stop multiple form submit.
+        }); //send.click
+
     } // function
 );
-
-// 自定義ajax
-function formSubmit(){
-    if( !$("#holidayform").data('bootstrapValidator')
-        .isValid()
-      )
-        return;
-
-    var date = new Date();
-    var year = date.getFullYear() - 1911;
-    $.ajax({
-        url: 'ajax/holiday_form_ajax.php',
-        data: $('form[name="holidayform"]').serialize()
-        + "&oper=submit" + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
-        + "&party=" + $('#party').text() + "&year=" + year,
-        type: 'POST',
-        dataType: "json",
-        success: function(JData) {
-            if (JData.error_code){
-                toastr["error"](JData.error_message);
-                message(JData.error_message, "danger", 5000);
-            }
-            else {
-                toastr["success"](JData.submit_result);
-                if (JData.submit_remind != "")
-                  toastr["success"](JData.submit_remind);
-                // 刷新serailno, 加班補休
-                refresh_form();
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            toastr["error"]("呈交表單出了點狀況！");
-            // console.log(xhr.responseText);
-        }
-    });
-}
 
 // 刷新加班補休時數
 function refresh_form(){
