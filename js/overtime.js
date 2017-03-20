@@ -7,6 +7,7 @@ $( // 表示網頁完成後才會載入
         });
 
         var start_options = {
+            ignoreReadonly: true,
             defaultDate: new Date(),
             format: 'YYYY/MM/DD',
             tooltips: {
@@ -68,78 +69,6 @@ $( // 表示網頁完成後才會載入
         //     }
         // });
 
-        //bootstrapValidator
-        $("#holiday").bootstrapValidator({
-            feedbackIcons: {
-                valid: 'fa fa-check',
-                invalid: 'fa fa-times',
-                validating: 'fa fa-refresh'
-            },
-            // submitButtons: 'button[type="button"]',
-            // excluded: [':not(:visible)'],
-            fields: {
-                signed_date: {
-                    trigger: "change",
-                    validators: {
-                        notEmpty: {
-                            message: '加班簽呈日期不可空白'
-                        },
-                        date: {
-                            format: 'YYYY/MM/DD',
-                            message: '不正確的日期格式！'
-                        }
-                    }
-                },
-                btime: {
-                    trigger: "change",
-                    validators: {
-                        notEmpty: {
-                            message: '請選擇開始加班刷卡時間'
-                        }
-                    }
-                },
-                etime: {
-                    trigger: "change",
-                    validators: {
-                        notEmpty: {
-                            message: '請選擇結束加班刷卡時間'
-                        }
-                    }
-                },
-                begin_time: {
-                    trigger: "change",
-                    validators: {
-                        notEmpty: {
-                            message: '請假日期不可空白'
-                        },
-                        date: {
-                            format: 'YYYY/MM/DD',
-                            message: '不正確的日期格式！'
-                        }
-                    }
-                },
-                end_time: {
-                    trigger: "change",
-                    validators: {
-                        notEmpty: {
-                            message: '請假日期不可空白'
-                        },
-                        date: {
-                            format: 'YYYY/MM/DD',
-                            message: '不正確的日期格式！'
-                        }
-                    }
-                },
-                reason: {
-                    trigger: "blur",
-                    validators: {
-                        notEmpty: {
-                            message: '請輸入加班簽呈文號或加班原因'
-                        },
-                    }
-                },
-            }
-        });
 
         $.ajax({
             url: 'ajax/overtime_ajax.php',
@@ -234,57 +163,122 @@ $( // 表示網頁完成後才會載入
             error: function(xhr, ajaxOptions, thrownError) {/*console.log(xhr.responseText);alert(xhr.responseText);*/}
         });
 
-        $('#holiday').on('submit', function(e) {
-            e.preventDefault();
-            formSubmit();
+        //bootstrapValidator
+        $("#holiday").bootstrapValidator({
+            // submitButtons: 'button[type="button"]',
+            // excluded: [':not(:visible)'],
+            live: 'submitted',
+            fields: {
+                signed_date: {
+                    
+                    validators: {
+                        notEmpty: {
+                            message: '加班簽呈日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                btime: {
+                    
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇開始加班刷卡時間'
+                        }
+                    }
+                },
+                etime: {
+                    
+                    validators: {
+                        notEmpty: {
+                            message: '請選擇結束加班刷卡時間'
+                        }
+                    }
+                },
+                begin_time: {
+                    
+                    validators: {
+                        notEmpty: {
+                            message: '請假日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                end_time: {
+                    
+                    validators: {
+                        notEmpty: {
+                            message: '請假日期不可空白'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '不正確的日期格式！'
+                        }
+                    }
+                },
+                reason: {
+                    validators: {
+                        notEmpty: {
+                            message: '請輸入加班簽呈文號或加班原因'
+                        },
+                    }
+                },
+            }
+        })
+        // 不論表單驗證正確與否時，皆可按下表單按鈕
+        // Triggered when any field is invalid
+        .on('error.field.bv', function(e, data) {
+            data.bv.disableSubmitButtons(false);
+        })
+        // Triggered when any field is valid
+        .on('success.field.bv', function(e, data) {
+            data.bv.disableSubmitButtons(false);
+        })
+        //submit by ajax----------------------------------
+        .on( 'success.form.bv' , function(e) {
 
+            var signed_date, begin_time, end_time;
+            var btval, etval, reval;
+
+            signed_date = $('#signed_date').val();
+            begin_time = $('#begin_time').val();
+            end_time = $('#end_time').val();
+
+            btval = $('#btime').val();
+
+            etval = $('#etime').val();
+
+            var reason = $('#reason').val();
+
+            $.ajax({
+                url: 'ajax/overtime_ajax.php',
+                data:{  oper: 'timesum' , signed_date: signed_date, begin_time: begin_time,
+                        end_time: end_time,
+                        btime: btval, etime: etval, reason: reason
+                    },
+                type: 'POST',
+                dataType: "json",
+                success: function(JData) {
+                    if (JData.error_code)
+                        toastr["error"](JData.error_message);
+                    else
+                    {
+                        if(JData.length == 7)
+                            toastr["success"](JData);
+                        else
+                            toastr["error"](JData);
+                        //location.reload();
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);/*location.reload();*/}
+            });
+            e.preventDefault();
+            e.unbind();
         });
     }
 );
-
-// function timesum()
-
-function formSubmit()
-{
-
-    if( !$("#holiday").data('bootstrapValidator')
-        .isValid()
-      )
-        return;
-
-    var signed_date, begin_time, end_time;
-    var btval, etval, reval;
-
-    signed_date = $('#signed_date').val();
-    begin_time = $('#begin_time').val();
-    end_time = $('#end_time').val();
-
-    btval = $('#btime').val();
-
-    etval = $('#etime').val();
-
-    var reason = $('#reason').val();
-
-    $.ajax({
-        url: 'ajax/overtime_ajax.php',
-        data:{  oper: 'timesum' , signed_date: signed_date, begin_time: begin_time,
-                end_time: end_time,
-                btime: btval, etime: etval, reason: reason
-            },
-        type: 'POST',
-        dataType: "json",
-        success: function(JData) {
-            if (JData.error_code)
-                toastr["error"](JData.error_message);
-            else
-            {
-                if(JData.length == 7)
-                    toastr["success"](JData);
-                else
-                    toastr["error"](JData);
-                //location.reload();
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);/*location.reload();*/}
-    });
-}
