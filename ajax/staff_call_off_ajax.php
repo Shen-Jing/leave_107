@@ -61,19 +61,18 @@
   }
 
   // 取消假單
-  if ($_POST['oper'] == 4){
+  if ($_POST['oper'] == 4 || $_POST['oper'] == 5){
     $empl_no = $_SESSION['empl_no']; // 950620 liru change 登錄此系統者
     $serialno = $_POST['serialno'];
     // 系統日期
-    $sql = "SELECT lpad(to_char(SYSDATE,'yyyymmdd')-'19110000',7,'0') ndate
+    $sql = "SELECT lpad(to_char(SYSDATE, 'yyyymmdd') -'19110000', 7, '0') ndate
             FROM dual";
     $data = $db -> query_array($sql);
     $ndate = $data['NDATE'][0];
 
     $ndate2 = $empl_no . $ndate;
-
-    // $mail_from = "cdc@mail.ncue.edu.tw";
-    $mail_from = "S0354037@mail.ncue.edu.tw";
+    // cdc not cdc_(系統上線時要改回來)
+    $mail_from = "cdc_@mail.ncue.edu.tw";
     //設定使用者按"回覆"時要顯示的e-mail  Reply-To
     $mail_headers = "From: $mail_from\nReply-To:lucy@cc.ncue.edu.tw";
     $mail_headers .= "X-Mailer: PHP\n"; // mailer
@@ -95,15 +94,26 @@
     $povday    = $data['POVDAYS'][0];
     $povhour   = $data['POVHOURS'][0];
 
-    $sql = "UPDATE holidayform
-            SET condition = '-1', threesignd = '$ndate', manager_date = '$ndate2'
-            WHERE serialno = $serialno";
-    $mail_body = "$app_name 您好! \r\n 您的假單人事已取消 \r\n";
+    // 取消(真的取消假單)
+    if ($_POST['oper'] == 4){
+      $sql = "UPDATE holidayform
+              SET condition = '-1', threesignd = '$ndate', manager_date = '$ndate2'
+              WHERE serialno = $serialno";
+      $mail_body = "$app_name 您好! \r\n 您的假單人事已取消 \r\n";
+    }
+    elseif ($_POST['oper'] == 5) {
+      //不取消(請假者回到請假狀態)
+      $sql = "UPDATE holidayform
+            SET condition = '1', threesignd = '', manager_date = '$ndate2'
+            WHERE serialno = $serialno ";
+      $mail_body=" $app_name 您好! \r\n 您的假單人事評估結果--不取消 \r\n ";
+    }
+    $data = $db -> query($sql);
+
     if( mail($mail_to, $mail_subject, $mail_body, $mail_headers) )
-		  $submit_result = "已寄出email通知請假者\n";
+      $submit_result = "已寄出email通知請假者\n";
     else
       $submit_result = "email寄出失敗\n";
-    $data = $db -> query($sql);
 
     //*************
     //補休時數恢復
