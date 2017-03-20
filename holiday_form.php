@@ -75,7 +75,7 @@
                                       <td>
                                         <div class="col-sm-4">
                                           <div class="form-group">
-                                            <input type='text' class="form-control" id='leave-start' name="leave_start">
+                                            <input type='text' class="form-control" id='leave-start' name="leave_start" readonly>
                                           </div>
                                         </div>
                             					</td>
@@ -94,7 +94,7 @@
                                       <td>
                                         <div class="col-sm-4">
                                           <div class="form-group">
-                                            <input type='text' class="form-control" id='leave-end' name="leave_end">
+                                            <input type='text' class="form-control" id='leave-end' name="leave_end" readonly>
                                           </div>
                                         </div>
                             					</td>
@@ -227,12 +227,12 @@
                                       <td colspan="3">
                                         <div class="col-sm-5">
                                           <div class="form-group">
-                                            <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start">
+                                            <input type='text' class="form-control" placeholder="出差開始時間" id='bus-trip-start' name="bus_trip_start" readonly>
                                           </div>
                                         </div>
                                         <div class="col-sm-5">
                                           <div class="form-group">
-                                            <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end' name="bus_trip_end">
+                                            <input type='text' class="form-control" placeholder="出差結束時間" id='bus-trip-end' name="bus_trip_end" readonly>
                                           </div>
                                         </div>
                             					</td>
@@ -244,12 +244,12 @@
                                       <td colspan="3">
                                         <div class="col-sm-5">
                                           <div class="form-group">
-                                            <input type='text' class="form-control" placeholder="出境時間" id='depart-time' name="depart_time">
+                                            <input type='text' class="form-control" placeholder="出境時間" id='depart-time' name="depart_time" readonly>
                                           </div>
                                         </div>
                                         <div class="col-sm-5">
                                           <div class="form-group">
-                                            <input type='text' class="form-control" placeholder="入境時間" id='immig-time' name="immig_time">
+                                            <input type='text' class="form-control" placeholder="入境時間" id='immig-time' name="immig_time" readonly>
                                           </div>
                                         </div>
                                       </td>
@@ -261,12 +261,12 @@
                                       <td colspan="3">
                                         <div class="col-sm-5">
                                           <div class="form-group">
-                                            <input type='text' class="form-control" placeholder="出境時間" id='meeting-start' name="meeting_start">
+                                            <input type='text' class="form-control" placeholder="出境時間" id='meeting-start' name="meeting_start" readonly>
                                           </div>
                                         </div>
                                         <div class="col-sm-5">
                                           <div class="form-group">
-                                            <input type='text' class="form-control" placeholder="入境時間" id='meeting-end' name="meeting_end">
+                                            <input type='text' class="form-control" placeholder="入境時間" id='meeting-end' name="meeting_end" readonly>
                                           </div>
                                         </div>
                                       </td>

@@ -132,6 +132,7 @@ $( // 表示網頁完成後才會載入
         var start_options = {
             defaultDate: new Date(),
             format: 'YYYY/MM/DD',
+            ignoreReadonly: true,
             tooltips: {
                 clear: "清除所選",
                 close: "關閉日曆",
