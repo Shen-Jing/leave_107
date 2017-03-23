@@ -271,7 +271,7 @@
    if($_POST['oper'] == "qry_class_id")
    {
       $cls_name = '-';
-      $scr_period = '-';
+      $scr_period = '04-06';
 
       // $SQLStr2 = "select  d.cls_id||d.cls_name cls_name , a.SCR_PERIOD from      =>    未有TABLE，暫以假資料代替
       //             dean.s32_smscourse@schlink.us.oracle.com a ,
@@ -295,7 +295,10 @@
 
       //$class = $db -> query_array($SQLStr2);
 
-      echo json_encode("00454000資工二");
+      $data["class_name"] = "00454000資工二";
+      $data["scr_period"] = $scr_period;
+
+      echo json_encode($data);
       exit;
 
       // $_SESSION["class_name"]= $cls_name;    //班別代碼+上課班別名稱
@@ -305,13 +308,13 @@
    if($_POST['oper'] == 'qry_dates')
    {
       $date = array();
-      $date["cyear"] = $_SESSION['cyear'] ;
-      $date["cmonth"] = $_SESSION['cmonth'] ;
-      $date["cday"] = $_SESSION['cday'] ;
+      $date["cyear"] = $year ;
+      $date["cmonth"] = $month ;
+      $date["cday"] = $day ;
 
-      $date["dyear"] = $_SESSION['dyear'] ;
-      $date["dmonth"] = $_SESSION['dmonth'] ;
-      $date["dday"] = $_SESSION['dday'] ;
+      $date["dyear"] = $year ;
+      $date["dmonth"] = $month ;
+      $date["dday"] = $day ;
 
       echo json_encode($date);
       exit;
@@ -338,14 +341,22 @@
 
    }
 
-   if($_POST['oper'] == "edit")
+   else if($_POST['oper'] == "edit_fill")
    {
+      $serialno = $_POST['serialno'];
+      $class_no = $_POST['class_no'];
+
+      $sql = "SELECT * FROM haveclass WHERE CLASS_SERIALNO = '$serialno' AND CLASS_NO = '$class_no' ";
+
+      $data = $db -> query_array($sql);
+
+      echo json_encode($data);
+      exit;
 
    }
 
-   if($_POST['oper'] == "new")
+   else if($_POST['oper'] == "new")
    {
-      $userid           =$_SESSION["empl_no"];
       $class_year    =$_POST['class_year'];
       $class_acadm=$_POST['class_acadm'];
 
@@ -377,6 +388,8 @@
       $eday   = $_POST['dday'];
 
       //-----------------------------------------------------------------
+      // $userid
+      // $selcode
 
 
       if ($class_section2 == '' || $class_room=='')
@@ -387,40 +400,40 @@
       else
       {  //資料齊全，可以處理
          //求本職單位，請假老師的單位
-         $sql="select crjb_depart from psfcrjb
-              where crjb_seq='1'
-              and   crjb_empl_no='$_SESSION[empl_no]'";
+         $sql="SELECT crjb_depart FROM psfcrjb WHERE crjb_seq='1' AND crjb_empl_no='$_SESSION[empl_no]'";
          $data = $db -> query_array($sql);
          $depart = $data["CRJB_DEPART"][0];
 
+         // echo json_encode($sql);
+         // exit;
 
          //由資料庫抓取
-           $SQLStr2="select  b.sub_name , b.sub_id
-                from    dean.s32_smscourse@schlink.us.oracle.com a ,
-                      dean.s90_subject@schlink.us.oracle.com   b ,
-                      dean.s32_teacher@schlink.us.oracle.com   c ,
-                      dean.s90_class@schlink.us.oracle.com     d ,
-                      dean.s10_employee@schlink.us.oracle.com  e
-               where  a.yms_year = c.yms_year
-               and    a.yms_smester = c.yms_smester
-               and    a.cls_id = c.cls_id
-               and    a.sub_id = c.sub_id
-               and    a.scr_dup = c.scr_dup
-               and    a.scr_selcode = c.scr_selcode
-               and    a.cls_id = d.cls_id
-               and    a.sub_id = b.sub_id
-               and    c.emp_id  = e.emp_id
-               and    a.yms_year='$class_year'
-               and    a.yms_smester='$class_acadm'
-               and    c.emp_id = '$_SESSION[empl_no]'
-               and    a.scr_selcode='$selcode'";
+         //目前無資料庫
+         // $SQLStr2 = "SELECT b.sub_name , b.sub_id FROM dean.s32_smscourse@schlink.us.oracle.com a ,dean.s90_subject@schlink.us.oracle.com b ,dean.s32_teacher@schlink.us.oracle.com c ,dean.s90_class@schlink.us.oracle.com d ,dean.s10_employee@schlink.us.oracle.com e WHERE a.yms_year = c.yms_year AND a.yms_smester = c.yms_smester AND a.cls_id = c.cls_id AND a.sub_id = c.sub_id AND a.scr_dup = c.scr_dup AND a.scr_selcode = c.scr_selcode AND a.cls_id = d.cls_id AND a.sub_id = b.sub_id AND c.emp_id  = e.emp_id AND a.yms_year='$class_year' AND a.yms_smester='$class_acadm' AND c.emp_id = '$_SESSION[empl_no]' AND a.scr_selcode='$selcode'";
 
-            $res2 =  $db -> query_array($SQLStr2);
-            if(count($res2['SUB_NAME']) > 0)
-            {
-               $class_subject    = $res2['SUB_NAME'];       //開課科目中文名稱
-               $class_id         = $res2['SUB_ID'];         //開課科目代碼  haveclass 中的  class_id
-            }
+         // $res2 =  $db -> query_array($SQLStr2);
+         // if(count($res2['SUB_NAME']) > 0)
+         // {
+         //    $class_subject    = $res2['SUB_NAME'];       //開課科目中文名稱
+         //    $class_id         = $res2['SUB_ID'];         //開課科目代碼  haveclass 中的  class_id
+         // }
+         // echo json_encode($SQLStr2);
+         // exit;
+         if($selcode == "001")
+         {
+            $class_subject = "線性代數";
+            $class_id = "CSIE2001";
+         }
+         else if($selcode == "002")
+         {
+            $class_subject = "電腦網路";
+            $class_id = "CSIE2002";
+         }
+         else if($selcode == "003")
+         {
+            $class_subject = "資料結構";
+            $class_id = "CSIE2003";
+         }
 
          //--------------------------------------------------------------------
          if ($byear < 100)
@@ -441,18 +454,17 @@
             $class_date = $class_date.$bday;
 
          /*$class_week    = substr($_SESSION["scr_period"],1,2);   //原上課時間是星期幾？*/
-         $class_section = substr($_SESSION["scr_period"],5,5);     //原上課節次，暫不比對教務處課表 */
+         $class_section = substr($_POST["scr_period"],5,5);     //原上課節次，暫不比對教務處課表 */
 
          //求$class_week 上課時間是星期幾？有的上課時間有二個時段   100.11.03
-         $sql="select decode(calendar_week,'1','日','2','一','3','二','4','三','5','四', '6','五','7','六','')  week
-              from   ps_calendar
-              where  calendar_yymm='$class_yymm' and   calendar_dd='$bday'";
+         $sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四', '6','五','7','六','') week FROM ps_calendar WHERE calendar_yymm='$class_yymm' AND calendar_dd='$bday'";
 
          $data =$db -> query_array($sql);
 
          if(count($data["WEEK"]) > 0)
             $class_week = $data["WEEK"][0];
-
+         // echo json_encode($sql);
+         // exit;
          //-------------------------------------------------------------------------
          if ($eyear < 100)
             $class_date2 = '0'.$eyear;
@@ -472,17 +484,17 @@
             $class_date2 = $class_date2.$eday;
 
          //求$class_week2 補課時間是星期幾？
-         $sql="select decode(calendar_week,'1','日','2','一','3','二','4','三','5','四', '6','五','7','六','')  week
-              from   ps_calendar
-              where  calendar_yymm='$class_yymm2' and   calendar_dd='$eday'";
+         $sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四', '6','五','7','六','') week FROM ps_calendar WHERE calendar_yymm='$class_yymm2' AND calendar_dd='$eday'";
          $data2 = $db -> query_array($sql);
 
          if (count($data2["WEEK"]) > 0)
             $class_week2 = $data2["WEEK"][0];
+         // echo json_encode($sql);
+         // exit;
 
          //新增
          //求此假單補課單號碼到那裡
-         $sql="select MAX(CLASS_NO) class_no from haveclass where class_serialno=$serialno ";
+         $sql="SELECT MAX(CLASS_NO) class_no FROM haveclass WHERE class_serialno = $serialno ";
          $new_data = $db -> query_array($sql);
 
          $class_no = 0;
@@ -493,10 +505,13 @@
          }
 
          // 儲入資料庫
-         $insert =
-         "insert into haveclass(CLASS_SERIALNO,CLASS_NO,CLASS_DEPART,CLASS_NAME, CLASS_CODE, CLASS_SUBJECT,CLASS_ID,CLASS_DATE, CLASS_WEEK , CLASS_SECTION,  CLASS_DATE2, CLASS_WEEK2 ,CLASS_SECTION2 ,CLASS_ROOM,CLASS_MEMO,CLASS_SELCODE,CLASS_YEAR,CLASS_ACADM)
-         values ('$serialno',$class_no,'$depart','$class_name','$class_code','$class_subject','$class_id',
-         '$class_date','$class_week','$class_section','$class_date2','$class_week2',  '$class_section2','$class_room','$class_memo', '$selcode','$class_year','$class_acadm')";
+         $insert = "insert into haveclass(CLASS_SERIALNO,CLASS_NO,CLASS_DEPART,CLASS_NAME, CLASS_CODE, CLASS_SUBJECT,CLASS_ID,CLASS_DATE, CLASS_WEEK , CLASS_SECTION,  CLASS_DATE2, CLASS_WEEK2 ,CLASS_SECTION2 ,CLASS_ROOM,CLASS_MEMO,CLASS_SELCODE,CLASS_YEAR,CLASS_ACADM) values ('$serialno',$class_no,'$depart','$class_name','$class_code','$class_subject','$class_id','$class_date','$class_week','$class_section','$class_date2','$class_week2',  '$class_section2','$class_room','$class_memo', '$selcode','$class_year','$class_acadm')";
+
+         // echo json_encode($insert);
+         // exit;
+
+         // echo json_encode("= ". $serialno . "= " . $class_no . "= " . $depart . "= " . $class_name . "= " . $class_code . "= " . $class_subject . "= " . $class_id . "= " . $class_date . "= " . $class_week . "= " . $class_section . "= " . $class_date2 . "= " . $class_week2 . "= " . $class_section2 . "= " . $class_room . "= " . $class_memo . "= " . $selcode . "= " . $class_year . "= " . $class_acadm);
+         // exit;
 
          if($result = $db -> query_trsac($insert))//失敗需rollback
          {
@@ -515,5 +530,130 @@
             }
          }
       } // 資料齊全 else
+   }
+
+   else if($_POST['oper'] == "update")
+   {
+      $serialno = $_POST['serial_no'];
+      $class_no = $_POST['class_no'];
+      $selcode = $_POST["class_subject"];
+
+      $byear  = $_POST['cyear'];
+      $bmonth = $_POST['cmonth'];
+      $bday   = $_POST['cday'];
+
+      $eyear  = $_POST['dyear'];
+      $emonth = $_POST['dmonth'];
+      $eday   = $_POST['dday'];
+
+      $selcode  = $_POST["class_subject"];             //選課代碼
+      $class_name = substr($_POST["class_name"],8);   //上課班別
+      $class_code = substr($_POST['class_name'],0,8);   //上課班別代碼
+
+      if($selcode == "001")
+      {
+         $class_subject = "線性代數";
+         $class_id = "CSIE2001";
+      }
+      else if($selcode == "002")
+      {
+         $class_subject = "電腦網路";
+         $class_id = "CSIE2002";
+      }
+      else if($selcode == "003")
+      {
+         $class_subject = "資料結構";
+         $class_id = "CSIE2003";
+      }
+
+
+      $sql="SELECT crjb_depart FROM psfcrjb WHERE crjb_seq='1' AND crjb_empl_no='$_SESSION[empl_no]'";
+      $data = $db -> query_array($sql);
+      $depart = $data["CRJB_DEPART"][0];
+
+      if ($_SESSION['this_serialno'] =='')
+      {
+           //新增時的序號產生方式
+         $this_serialno = $year.$month.$day.$_SESSION["empl_no"];
+         $_SESSION['this_serialno']=$this_serialno;
+      }
+      else
+          $this_serialno = $_SESSION['this_serialno'] ;
+
+      //--------------------------------------------------------------------
+      if ($byear < 100)
+         $class_date='0'.$byear;
+      else
+         $class_date=$byear;
+
+      if ($bmonth < 10)
+         $class_date = $class_date.'0'.$bmonth;
+      else
+         $class_date = $class_date.$bmonth;
+
+      $class_yymm = $class_date;
+
+      if ($bday < 10)
+         $class_date = $class_date.'0'.$bday;
+      else
+         $class_date = $class_date.$bday;
+
+      /*$class_week    = substr($_SESSION["scr_period"],1,2);   //原上課時間是星期幾？*/
+      $class_section = substr($_POST["scr_period"],5,5);     //原上課節次，暫不比對教務處課表 */
+
+      //求$class_week 上課時間是星期幾？有的上課時間有二個時段   100.11.03
+      $sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四', '6','五','7','六','') week FROM ps_calendar WHERE calendar_yymm='$class_yymm' AND calendar_dd='$bday'";
+
+      $data =$db -> query_array($sql);
+
+      if(count($data["WEEK"]) > 0)
+         $class_week = $data["WEEK"][0];
+      // echo json_encode($sql);
+      // exit;
+      //-------------------------------------------------------------------------
+      if ($eyear < 100)
+         $class_date2 = '0'.$eyear;
+      else
+         $class_date2 = $eyear;
+
+      if ($emonth < 10)
+         $class_date2 = $class_date2.'0'.$emonth;
+      else
+         $class_date2 = $class_date2.$emonth;
+
+      $class_yymm2 = $class_date2;
+
+      if ($eday < 10)
+         $class_date2 = $class_date2.'0'.$eday;
+      else
+         $class_date2 = $class_date2.$eday;
+
+      //求$class_week2 補課時間是星期幾？
+      $sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四', '6','五','7','六','') week FROM ps_calendar WHERE calendar_yymm='$class_yymm2' AND calendar_dd='$eday'";
+      $data2 = $db -> query_array($sql);
+
+      if (count($data2["WEEK"]) > 0)
+         $class_week2 = $data2["WEEK"][0];
+
+      $update = "UPDATE haveclass SET CLASS_SERIALNO ='$this_serialno', CLASS_NO = '$class_no', CLASS_DEPART = '$depart', CLASS_NAME = '$class_name', CLASS_CODE = '$class_code', CLASS_SUBJECT = '$class_subject', CLASS_ID = '$class_id', CLASS_DATE = '$class_date', CLASS_WEEK = '$class_week' , CLASS_SECTION = '$class_section', CLASS_DATE2 = '$class_date2', CLASS_WEEK2 ='$class_week2' ,CLASS_SECTION2 = '$_POST[class_section2]', CLASS_ROOM = '$_POST[class_room]', CLASS_MEMO = '$_POST[class_memo]', CLASS_SELCODE = '$selcode', CLASS_YEAR = '$_POST[class_year]', CLASS_ACADM = '$_POST[class_acadm]' WHERE CLASS_SERIALNO = '$serialno' AND CLASS_NO = '$class_no' ";
+
+      if($result = $db -> query_trsac($update))//失敗需rollback
+      {
+         if( !empty($result["message"]) )
+         {
+            // echo json_encode($update);
+            echo json_encode("更新資料庫失敗，請聯絡程式設計師 1523");
+            exit;
+         }
+         else
+         {
+            // unset($_SESSION['class_section2']);
+            // unset($_SESSION['class_room']);
+            $db -> end_trsac();
+            echo json_encode("更新資料成功!");
+            exit;
+         }
+      }
+
    }
 ?>
