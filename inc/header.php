@@ -16,12 +16,8 @@ $now = basename($_SERVER['REQUEST_URI']);
     <title>國立彰化師範大學 人事差假管理系統</title>
 
 
-    <link href="css/core.css" rel="stylesheet">
-
     <link href="css/vendor.css" rel="stylesheet">
 
-    <!-- bootstrap validator -->
-    <link href="bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css" rel="stylesheet">
 
 	<?php if( file_exists("css/".basename($_SERVER['PHP_SELF'], ".php").".css") ): ?>
     <link href="css/<?=basename($_SERVER['PHP_SELF'], ".php")?>.css" rel="stylesheet"/>

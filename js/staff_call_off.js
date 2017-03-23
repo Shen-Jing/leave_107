@@ -116,13 +116,18 @@ function CRUD(oper, serialno) {
                             // 查看詳細差假記錄（info button）
                             row = row + "<td><button type='button' class='btn-info' name='card' title='詳細記錄' onclick='view_call_off(\"" + JData.call_off.SERIALNO[i] + "\")'><i class='fa fa-info'></i> </button>";
                             // 取消
-                            row = row + "    <button type='button' class='btn-warning' name='check' title='取消假單' onclick='CRUD(4, " + JData.call_off.SERIALNO[i] + ")'><i class='fa fa-times'></i> </button>";
+                            row = row + "    <button type='button' class='btn-warning' name='check' title='取消(真的取消假單)' onclick='CRUD(4, " + JData.call_off.SERIALNO[i] + ")'><i class='fa fa-check'></i> </button>";
+                            // 不取消
+                            row = row + "    <button type='button' class='btn-danger' name='not-check' title='不取消(請假者回到請假狀態)' onclick='CRUD(5, " + JData.call_off.SERIALNO[i] + ")'><i class='fa fa-times'></i> </button>";
                             row = row + "</tr>";
                             $('#_content').append(row);
                         }
                     }
                 } else if (oper == 4) { //取消假單
                     toastr["success"](JData.submit_result + "本假單取消成功!");
+                    CRUD(0); //reload
+                } else if (oper == 5) { //取消假單
+                    toastr["success"](JData.submit_result + "本假單不取消成功!");
                     CRUD(0); //reload
                 }
             }

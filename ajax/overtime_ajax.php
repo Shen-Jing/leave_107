@@ -126,6 +126,26 @@ if( $_POST['oper'] == "etime")
 if( $_POST['oper'] == "timesum" )
 {
 
+	$signed_date = $_POST["signed_date"];
+	$begin_time = $_POST["signed_date"];
+	$end_time = $_POST["signed_date"];
+
+	$signed_date_sec = explode("/",$signed_date);
+	$begin_time_sec = explode("/",$begin_time);
+	$end_time_sec = explode("/",$end_time);
+
+	$byear = (int)($begin_time_sec[0])-1911;
+	$bmonth = (int)($begin_time_sec[1]);
+	$bday = (int)($begin_time_sec[2]);
+
+	$eyear = (int)($end_time_sec[0])-1911;
+	$emonth = (int)($end_time_sec[1]);
+	$eday = (int)($end_time_sec[2]);
+
+	$uyear = (int)($signed_date_sec[0])-1911;
+	$umonth = (int)($signed_date_sec[1]);
+	$uday = (int)($signed_date_sec[2]);
+
 	$btime = $_POST["btime"];
 	$etime = $_POST["etime"];
 	$reason = $_POST["reason"];
@@ -200,10 +220,10 @@ if( $_POST['oper'] == "timesum" )
 
 
       	if ( !empty($value["message"])  )
-		 	$data = array("資料重複申請或儲存有問題，請洽管理者。");
+		 	$data = "資料重複申請或儲存有問題，請洽管理者。";
 
 		else
-			$data = array("資料儲存完畢。");
+			$data = "資料儲存完畢。";
 
 
 	}

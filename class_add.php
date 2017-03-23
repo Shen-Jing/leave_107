@@ -74,50 +74,7 @@
                       <div class="row">
                           <div class="col-lg-12">
                               <!-- Modal -->
-                              <!--修改頁面1-->
-                              <div class="modal fade" id="ChangeModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog modal-lg">
-                                      <div class="modal-content">
-                                          <!-- Modal Header -->
-                                          <div class="modal-header">
-                                              <button type="button" class="close" data-dismiss="modal">
-                                                  <span aria-hidden="true">&times;</span>
-                                                  <span class="sr-only">Close</span>
-                                              </button>
-                                              <h4 class="modal-title" id="ModalLabel1">選擇時間</h4>
-                                          </div>
-                                          <!-- Modal Body -->
-                                          <div class="modal-body">
 
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        請選擇目前學年度:
-                                                        <select class="form-control" name="qry_class_year" id="qry_class_year" style='display: inline-block; width: auto;'></select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        學期:
-                                                        <select class="form-control" name="qry_acadm" id="qry_acadm" style='display: inline-block; width: auto;'></select>
-                                                    </div>
-                                                </div>
-                                                <div  id="class-modal">
-                                                </div>
-
-
-                                          </div>
-                                          <!-- Modal Footer -->
-                                          <div class="modal-footer">
-                                              <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                  關閉
-                                              </button>
-                                              <!-- <button id="btn-save" type="button" class="btn btn-primary">
-                                                  儲存
-                                              </button> -->
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
                               <!--修改頁面2-->
                               <div class="modal fade" id="ChangeModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                   <div class="modal-dialog modal-lg">
@@ -130,6 +87,29 @@
                                               </button>
                                               <h4 class="modal-title" id="ModalLabel2">資料填補</h4>
                                           </div>
+
+                                          <!-- Modal Body -->
+                                          <div class="modal-body">
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        請選擇目前學年度:
+                                                        <select class="form-control" name="qry_class_year" id="qry_class_year" style='display: inline-block; width: auto;'></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        學期:
+                                                        <select class="form-control" name="qry_acadm" id="qry_acadm" style='display: inline-block; width: auto;'></select>
+                                                    </div>
+                                                </div>
+                                                <div  id="class-modal">
+                                                </div>
+
+
+                                          </div>
+
+
                                           <!-- Modal Body -->
                                           <div class="modal-body">
                                             <div class="panel-body">
@@ -233,7 +213,14 @@
                                             						</td>
 
                                                         <td class="col-md-2 td1" align="center">補課節次</td>
-                                          							<td class="col-md-4" >第<input type="text" class="form-control" name="class_section2" id="class_section2" value="" size="25" maxlength="30" required>節</td>
+                                          							<td class="col-md-4" >
+                                                          <div class='form-group'>
+                                                            <div class='col-md-12'>
+                                            									第<select class='form-control' style='width:auto; display: inline-block;' name='class_section21' id='class_section21' onChange=''></select>節~<br>
+                                            									第<select class='form-control' style='width:auto; display: inline-block;' id='class_section22' name='class_section22' onChange=''></select>節
+                                            								</div>
+                                            							</div>
+                                                        </td>
                                             					</tr>
                                             					</thead>
 
@@ -253,9 +240,9 @@
                                             						</td>
                                             					</tr>
                                                       <tr>
-                                            						<td colspan="4" align="center">
-                                            							<button class="btn btn-primary" name="close" onclick='closeM()'>離開或被退重送</button>
-                                                          <button class="btn btn-primary" name="check" onclick='CheckData()'>本班資料儲存</button>
+                                            						<td colspan="4" align="center" id="action_btn">
+
+
                                             						</td>
                                             					</tr>
                                             					</thead>
@@ -269,9 +256,9 @@
                                             		</form>
                                             		</center>
                                                 </div>
+
                                                 </div>
-
-
+                                                <button class="btn btn-primary" name="check" onclick='NewData()'>新增資料</button>
                                           </div>
                                           <!-- Modal Footer -->
                                           <div class="modal-footer">

@@ -26,6 +26,43 @@
 
     else if($_POST['oper'] == "edit")
     {
+    	$senior = $_POST['SENIOR'];
+    	if(!is_numeric($senior))
+    	{
+    		echo json_encode('error');
+    		exit;
+    	}
+    	else if(strlen($senior) != 7 )
+    	{
+    		echo json_encode('error');
+    		exit;
+    	}
+    	else if(substr($senior,0,3) <= 0 || substr($senior,3,2) > 12)
+    	{
+    		echo json_encode('error');
+    		exit;
+    	}
+    	if(substr($senior,5,2) > 31)
+    	{
+    		echo json_encode('error');
+    		exit;
+    	}
+    	else if(substr($senior,5,2) > 30 && (substr($senior,3,2) != 01 && substr($senior,3,2) != 03  && substr($senior,3,2) != 05  && substr($senior,3,2) != 07  && substr($senior,3,2) != 08  && substr($senior,3,2) != 10  && substr($senior,3,2) != 12))
+    	{
+    		echo json_encode('error');
+    		exit;
+    	}
+    	else if(substr($senior,5,2) > 29 && substr($senior,3,2) == 02)
+    	{
+    		echo json_encode('error');
+    	    exit;
+    	}
+    	else if(substr($senior,5,2) == 29 && substr($senior,3,2) == 02 && ((substr($senior,0,3)+1911) % 4) != 0)
+    	{
+    		echo json_encode('error');
+    	    exit;
+    	}
+
     	$edit_empl_no = $_POST['EMPL_NO'];
     	$str_sec = explode(" ",$edit_empl_no);
     	$sql ="UPDATE psfempl SET  empl_ser_date_beg = '$_POST[SENIOR]',retire_month = '$sysdate',empl_id_error ='1' WHERE  empl_no ='$str_sec[0]' ";

@@ -30,7 +30,7 @@ $( // 表示網頁完成後才會載入
                     $('#qry_month').append(row);
                 }
 
-                var row0 = "<option selected disabled class='text-hide'>請選擇單位</option>";
+                var row0 = "<option selected value='請選擇單位'>請選擇單位</option>";
                 $('#qry_dpt').append(row0);
                 for (var i = 0 ; i < JData["dpt"]["DEPT_FULL_NAME"].length ; i++) {
                     var row = "<option value=" + JData["dpt"]["DEPT_NO"][i] + ">" + JData["dpt"]["DEPT_FULL_NAME"][i] + "</option>";
