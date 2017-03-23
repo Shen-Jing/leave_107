@@ -240,9 +240,9 @@
                                             						</td>
                                             					</tr>
                                                       <tr>
-                                            						<td colspan="4" align="center">
-                                            							<button class="btn btn-primary" name="close" onclick='closeM()'>離開或被退重送</button>
-                                                          <button class="btn btn-primary" name="check" onclick='CheckData(9487)'>本班資料儲存</button>
+                                            						<td colspan="4" align="center" id="action_btn">
+
+
                                             						</td>
                                             					</tr>
                                             					</thead>
@@ -256,9 +256,9 @@
                                             		</form>
                                             		</center>
                                                 </div>
+
                                                 </div>
-
-
+                                                <button class="btn btn-primary" name="check" onclick='NewData()'>新增資料</button>
                                           </div>
                                           <!-- Modal Footer -->
                                           <div class="modal-footer">

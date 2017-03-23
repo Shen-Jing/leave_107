@@ -33,6 +33,25 @@ $sql = "select empl_no
                    exit;
 
                  }
+
+                  if($_POST['oper'] == "new_data_class")
+                  {
+                    $classno=0;
+                    $serialno=$_POST['serialno'];
+
+                    $classno=0;
+                    $SQLStr="select MAX(CLASS_NO) class_no from haveclass where class_serialno='$serialno' ";
+                    $row = $db -> query_array($SQLStr);
+                    $classno=$row['CLASS_NO'][0];
+                    $classno++;
+
+                    /*$data = array('classno' => $classno);
+                    echo json_encode($data);
+                    exit;*/
+                    $data = array('classno' => $classno);
+                    echo json_encode($data);
+                    exit;
+                  }
                  if($_POST['oper'] == "edit_class")
                  {
                    $serialno=$_POST[serialnoVar];
@@ -118,18 +137,18 @@ $sql = "select empl_no
                  if($_POST['oper']=="send")
                  {
 
-                   $serialno=$_POST['serailno'];
+                   $serialno=$_POST['serialno'];
                    $class_no=$_POST['class_no'];
                    /*$sql="select crjb_depart from psfcrjb
 			                   where crjb_seq='1'
 			                   and   crjb_empl_no='$empl_no'";
                    $depart=$db->query($sql);*/
-                   $depart=0;
+                   //$depart=0;
                    $class_subject=$_POST['classsubject'];
                    $byear=$_POST['byear'];
                    $bmonth=$_POST['bmonth'];
                    $bday=$_POST['bday'];
-                   /*if ($byear<100)
+                   if ($byear<100)
 	                   $class_date='0'.$byear;
 	                 else
 	                   $class_date=$byear;
@@ -145,11 +164,11 @@ $sql = "select empl_no
 	                if ($bday <10)
 	                   $class_date=$class_date.'0'.$bday;
 	                else
-	                   $class_date=$class_date.$bday;*/
-                  /*$sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四',	'6','五','7','六','')  week
+	                   $class_date=$class_date.$bday;
+                  $sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四',	'6','五','7','六','')  week
 		                   FROM   ps_calendar
 		                   WHERE  calendar_yymm='$class_yymm' AND   calendar_dd='$bday'";
-                   $class_week=$db->query($sql);*/
+                   $class_week=$db->query($sql);
                    //$class_week=0;
 
 
@@ -177,7 +196,9 @@ $sql = "select empl_no
                    $class_week2=$db->query($sql);*/
                    $class_week2=87;
 
-                   $class_section2=$_POST['classsection2'];
+                   $class_section21=$_POST['classsection21'];
+                   $class_section22=$_POST['classsection22'];
+                   $class_section2=$class_section21.'-'.$class_section22;
                    $class_room=$_POST['class_room'];
                    $class_memo=$_POST['class_memo'];
                    $class_year=$_POST['class_year'];
@@ -187,10 +208,18 @@ $sql = "select empl_no
 	                     VALUES ('9481',$class_no,'','','','$class_subject','',
 				               '$class_date','$class_week','$class_section','$class_date2','$class_week2',  '$class_section2','$class_room','$class_memo', '','$class_year','$class_acadm')";
                        $db->query($insert);*/
+                       if($_POST['State']==4)//4為修改 5為新增
+                       {//修改的方式為先刪除再加入...What?
+                         $sql="DELETE from haveclass
+			                         WHERE class_serialno='$serialno'
+			                         AND   class_no='$class_no'";
+                         $db->query($sql);
+                       }
                        $insert =
-     	                     "INSERT INTO HAVECLASS(CLASS_SERIALNO,CLASS_SUBJECT,CLASS_SECTION2)
-     	                     VALUES ('9487','$class_subject','$class_section2')";
+                           "INSERT INTO HAVECLASS(CLASS_SERIALNO,CLASS_NO,CLASS_SUBJECT,CLASS_DATE,CLASS_DATE2,CLASS_SECTION2,CLASS_ROOM,CLASS_MEMO, CLASS_YEAR,CLASS_ACADM)
+                           VALUES ('$serialno','$class_no','$class_subject','$class_date','$class_date2',  '$class_section2','$class_room','$class_memo','$class_year','$class_acadm')";
                             $db->query($insert);
+
                       //下面這是原本的
                       /* $insert =
     	                     "insert into haveclass(CLASS_SERIALNO,CLASS_NO,CLASS_DEPART,CLASS_NAME, CLASS_CODE, CLASS_SUBJECT,CLASS_ID,CLASS_DATE, CLASS_WEEK , CLASS_SECTION,  CLASS_DATE2, CLASS_WEEK2 ,CLASS_SECTION2 ,CLASS_ROOM ,CLASS_MEMO, CLASS_SELCODE, CLASS_YEAR,CLASS_ACADM)
@@ -200,12 +229,22 @@ $sql = "select empl_no
 
                  if($_POST['oper']==1)//修改畫面
                  {
+                   $serialno=$_POST['serialnoVar'];
                    $SQLStr ="SELECT * FROM HAVECLASS
-                 			    	WHERE class_serialno='9487'";
+                 			    	WHERE class_serialno='$serialno'";
                    $row = $db -> query_array($SQLStr);
                    echo json_encode($row);
                    exit;
 
+                 }
+                 if($_POST['oper']=="Delete_Data")//刪除資料
+                 {
+                   $serialno=$_POST['serialno'];
+                   $class_no=$_POST['class_no'];
+                   $sql="DELETE from haveclass
+                         WHERE class_serialno='$serialno'
+                         AND   class_no='$class_no'";
+                   $db->query($sql);
                  }
                  if($_POST['oper']==0)
                  {
@@ -238,6 +277,7 @@ $sql = "select empl_no
                       exit;
                     }
                  }
+
 
 
 
