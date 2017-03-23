@@ -130,7 +130,38 @@ $(function(){
           $('.root').append(text);
       }
     });
+    if ($('#selected').val() !== '0')
+    {
+      $.ajax({
+        url: 'ajax/file_copy_ajax.php',
+        type: 'POST',
+        data: {o_url: $('#selected').val(), n_url: $('#add-url').val()},
+        success: function(result){
+          console.log(result);
+        },
+        error: function(jqXHR, textStatus, errorThrown)
+        {
+          console.log(JSON.stringify(jqXHR));
+          console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+        }
+      });
+    }
     $("#modal-add").modal("hide");
+  });
+
+  $('#apply-btn').click(function(event) {
+    $("#modal-add").modal("hide");
+    $("#modal-apply").modal("show");
+  });
+
+  $('#back-btn').click(function(event) {
+    $("#modal-apply").modal("hide");
+    $("#sel-text").html($("#selected").val());
+    $("#modal-add").modal("show");
+  });
+
+  $('#reset-btn').click(function(event) {
+    $("#selected").val(0);
   });
 
   $('#edit-btn').click(function(event) {
@@ -208,7 +239,16 @@ $(function(){
       }
     });
   });
-  $('li').has('ol').click(function() {
-    $(this).children('ol').slideToggle();
+  $('.right').children('i').click(function() {
+    $(this).parent().siblings('ol').slideToggle();
+    if ($(this).hasClass('fa-caret-square-o-up'))
+    {
+      $(this).removeClass('fa-caret-square-o-up');
+      $(this).addClass('fa-caret-square-o-down');
+    }
+    else {
+      $(this).removeClass('fa-caret-square-o-down');
+      $(this).addClass('fa-caret-square-o-up');
+    }
   });
 });

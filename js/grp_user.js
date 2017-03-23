@@ -17,23 +17,28 @@ $(function(){
       _super($item, container);
     },
     onDrop: function (cEl, container, _super) {
-      var user = cEl.attr('id');
-      var grp = cEl.parent().parent().attr('id');
-      $.ajax({
-        url: 'ajax/grp_user_insert_ajax.php',
-        type: 'POST',
-        data: {grp: grp, user: user},
-        success: function(result){
-          toastr["success"]("成功~~");
-          console.log(result);
-        },
-        error: function(jqXHR, textStatus, errorThrown)
-        {
-          toastr["error"]("失敗 QAQ");
-          console.log(JSON.stringify(jqXHR));
-          console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
-        }
-      });
+      if (cEl.children('ol').length === 0)
+      {
+        var user = cEl.attr('id');
+        var grp = cEl.parent().parent().attr('id');
+        $.ajax({
+          url: 'ajax/grp_user_insert_ajax.php',
+          type: 'POST',
+          data: {grp: grp, user: user},
+          success: function(result){
+            toastr["success"]("成功~~");
+            console.log(result);
+          },
+          error: function(jqXHR, textStatus, errorThrown)
+          {
+            toastr["error"]("失敗 QAQ");
+            console.log(JSON.stringify(jqXHR));
+            console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+          }
+        });
+      }
+      else
+        usersInsert(cEl.children('ol').children('li'), cEl.parent().parent().attr('id'));
       _super(cEl, container);
     }
   });
@@ -78,7 +83,16 @@ $(function(){
         var id = $('#' + grpid).children('ol').children().eq(i).attr('id');
         $('#right > ol #' + id).addClass('disable');
       }
-      $('#right > ol > li').addClass('disable');
+    }
+  });
+  $('#empl').change(function() {
+    var arr = $(this).val();
+    $('.user li').hide();
+    for (var i = 0; i < arr.length; i++)
+    {
+      $('.user li[name^=' + arr[i] + ']').parent().parent().parent().parent().show();
+      $('.user li[name^=' + arr[i] + ']').parent().parent().show();
+      $('.user li[name^=' + arr[i] + ']').show();
     }
   });
   $('#filter').on('input', function() {
@@ -86,13 +100,48 @@ $(function(){
     if (input != '')
     {
       $('.user li').hide();
-      $('.user li[id^=' + input + ']').parent().parent().show();
-      $('.user li[id^=' + input + ']').show();
+      $('.user li[id*=' + input + ']').parent().parent().parent().parent().show();
+      $('.user li[id*=' + input + ']').parent().parent().show();
+      $('.user li[id*=' + input + ']').show();
+      $('.user li[class*=' + input + ']').parent().parent().parent().parent().show();
+      $('.user li[class*=' + input + ']').parent().parent().show();
+      $('.user li[class*=' + input + ']').show();
     }
     else
       $('.user li').show();
   });
-  $('li').has('ol').click(function() {
-    $(this).children('ol').slideToggle();
+  $('li').has('ol').children('i').click(function() {
+    $(this).siblings('ol').slideToggle();
+    if ($(this).hasClass('fa-caret-square-o-up'))
+    {
+      $(this).removeClass('fa-caret-square-o-up');
+      $(this).addClass('fa-caret-square-o-down');
+    }
+    else {
+      $(this).removeClass('fa-caret-square-o-down');
+      $(this).addClass('fa-caret-square-o-up');
+    }
   });
+  function usersInsert(users, grp)
+  {
+    for (var i = 0; i < users.length; i++)
+      if (users.eq(i).has('ol').length === 1)
+        usersInsert(users.eq(i).children('ol').children('li'), grp);
+      else if (!users.eq(i).hasClass('disable'))
+        $.ajax({
+          url: 'ajax/grp_user_insert_ajax.php',
+          type: 'POST',
+          data: {grp: grp, user: users.eq(i).attr('id')},
+          success: function(result){
+            toastr["success"]("成功~~");
+            console.log(result);
+          },
+          error: function(jqXHR, textStatus, errorThrown)
+          {
+            toastr["error"]("失敗 QAQ");
+            console.log(JSON.stringify(jqXHR));
+            console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+          }
+        });
+  }
 });

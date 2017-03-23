@@ -91,12 +91,24 @@ $(function(){
     if (input != '')
     {
       $('.pgm li').hide();
-      $('.pgm li[id^=' + input + ']').show();
+      $('.pgm li[id*=' + input + ']').parent().parent().show();
+      $('.pgm li[id*=' + input + ']').show();
+      $('.pgm li[class*=' + input + ']').parent().parent().show();
+      $('.pgm li[class*=' + input + ']').show();
     }
     else
       $('.pgm li').show();
   });
-  $('li').has('ol').click(function() {
-    $(this).children('ol').slideToggle();
+  $('li').has('ol').children('i').click(function() {
+    $(this).siblings('ol').slideToggle();
+    if ($(this).hasClass('fa-caret-square-o-up'))
+    {
+      $(this).removeClass('fa-caret-square-o-up');
+      $(this).addClass('fa-caret-square-o-down');
+    }
+    else {
+      $(this).removeClass('fa-caret-square-o-down');
+      $(this).addClass('fa-caret-square-o-up');
+    }
   });
 });

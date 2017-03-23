@@ -40,8 +40,8 @@ $p = $db -> query_array($sql);
         for ($i=0, $j=0; $i < sizeof($g['GRPID']); $i++) {
           $grpid = $g['GRPID'][$i];
           $grpname = $g['GRPNAME'][$i];
-          echo "<li id='$grpid' class='grp-li' style='display:none;'>$grpname
-          <ol class='grp'>";
+          echo "<li id='$grpid' class='grp-li' style='display:none;'>$grpname <i class='fa fa-caret-square-o-up'></i>
+          <ol class='grp' style='display: none'>";
           for (; $j < sizeof($gp['GRPID']); $j++)
           {
             if ($grpid != $gp['GRPID'][$j])
@@ -60,7 +60,7 @@ $p = $db -> query_array($sql);
       </ol>
     </div>
     <div id="right">
-      篩選器： <input id="filter" class="form-control" type="text" value="">
+      <input id="filter" class="form-control" type="text" value="" placeholder="這是篩選器，請輸入欲篩選的內容">
       <br/>
       <ol class="root pgm vertical"><!-- content -->
         <?
@@ -82,10 +82,10 @@ $p = $db -> query_array($sql);
               echo "</ol></li>\r\n";
           }
 
-          echo "<li id='$pgmid' class='disable'>$pgmid - $pgmname";
+          echo "<li id='$pgmid' class='$pgmname disable'>$pgmid - $pgmname";
 
           if ($pgmurl == "")
-            echo "<ol>\r\n";
+            echo " <i class='fa fa-caret-square-o-up'></i><ol style='display: none'>\r\n";
           else
             echo "</li>\r\n";
 

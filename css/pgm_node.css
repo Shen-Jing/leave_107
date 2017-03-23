@@ -41,6 +41,10 @@ li {
   z-index: 9999;
 }
 
+.root .right i {
+  cursor: pointer;
+}
+
 body.dragging, body.dragging * {
   cursor: move !important;
 }

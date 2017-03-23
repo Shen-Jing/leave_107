@@ -61,13 +61,23 @@ ol.root li.placeholder:before {
 .pgm li {
   cursor: move;
 }
+.root li i {
+  cursor: pointer;
+  float: right;
+}
 #left {
   float: left;
   width: 48%;
 }
+#left > ol {
+  height: 87vh;
+  overflow: auto;
+}
 #right {
   float: right;
   width: 48%;
+}
+#right > ol {
   height: 87vh;
   overflow: auto;
 }
