@@ -267,6 +267,19 @@ class ORACLE{
 		return iconv("BIG5", "UTF-8", $ret);
 	}
 	
+	function fetch_row_assoc($Qstr){
+		$ret = oci_fetch_assoc( $this->query($Qstr) );
+		
+		array_walk(
+			$ret,
+			function(&$val){
+				$val = iconv("BIG5", "UTF-8", $val);
+			}
+		);
+		
+		return $ret;
+	}
+	
 	########################################
 	# 2016.11.17 Rewrite and test finished #
 	########################################

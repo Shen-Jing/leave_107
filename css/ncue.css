@@ -1,4 +1,4 @@
-body, select, input, h3, h4, h5 {
+﻿body, select, input, h3, h4, h5 {
     font-family: "Helvetica Neue", Helvetica, Arial, "微軟正黑體", sans - serif !important;
 }
 
@@ -62,4 +62,28 @@ a.dt-button.blue {
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
             box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+.NewPage-IFrame {
+    display: block;
+    width: 100vw;
+    height: 80vh;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    box-sizing: border-box;
+}
+
+.modal-dialog.fullscr-iframe {
+  width: 80%;
+  height: 80%;
+  padding: 0;
+}
+.modal-content.fullscr-iframe {
+  max-height: inherit;
+  border-radius: 0;
+}
+.modal-body.fullscr-iframe {
+  max-height: inherit;
 }
