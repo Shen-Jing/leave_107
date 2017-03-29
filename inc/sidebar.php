@@ -41,7 +41,7 @@ $d = $db -> query_array($sql);
                             if (strlen($pgmid) == 3)
                               echo "<ul class='nav nav-third-level'>\r\n";
                             else
-                              echo "<ul class='nav nav-second-level'>\r\n";
+                              echo "<ul class='nav nav-second-level collapse in'>\r\n";
                           }else
                             echo "<a href='$pgmurl'$new><i class='fa $folder_img fa-fw'></i>$pgmname</a>\r\n</li>\r\n";
 
