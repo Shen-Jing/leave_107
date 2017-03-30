@@ -1,0 +1,65 @@
+body, select, input, h3, h4, h5 {
+    font-family: "Helvetica Neue", Helvetica, Arial, "微軟正黑體", sans - serif !important;
+}
+
+body, select, input {
+    font-size: 15px !important;
+}
+
+body {
+    height: 1000px;
+}
+
+.modal-header, .modal-header>h4, .close {
+    background-color: #5cb85c;
+    color: white !important;
+    text-align: center;
+    font-size: 30px;
+}
+
+.modal-footer {
+    background-color: #f9f9f9;
+}
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+.td_head {
+    background-color: #f9f9f9;
+    text-align: center;
+    font-weight: bold;
+    width: 100px;
+    height: 55px;
+}
+
+.form-horizontal .form-group {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+a.dt-button.blue {
+    background-color: #0000FF;
+}
+
+.td1 {
+    font-weight: bold;
+}
+
+/* border color of valid field(bootstrapvalidator) */
+.has-success input{
+    border-color: rgb(204, 204, 204);
+}
+/* 當success時，去除select的綠線，與預設相同 */
+.has-success .form-control{
+  color: #555;
+  border: 1px solid #ccc;
+}
+/* border color of valid field(when focus) */
+.has-success .form-control:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
