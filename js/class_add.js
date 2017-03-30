@@ -1,4 +1,5 @@
 $(
+
 function year_control()
   {
 
@@ -34,7 +35,7 @@ function year_control()
                     row = "<option value=" +i+ ">" + i + " </option>";
                 $ ('#qry_month').append(row);
             }
-
+            CRUD(0);//首次進入頁面query
           },
           error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);
           alert("error!!");}
@@ -271,6 +272,41 @@ function EditDataFunc(serialno,classno,state)
   $ ('#class_section22').empty();
   $('#class_room').val('');
   $('#class_memo').val('');
+  var original_options = {
+      defaultDate: new Date(),
+      format: 'YYYY/MM/DD',
+      ignoreReadonly: true,
+      tooltips: {
+          clear: "清除所選",
+          close: "關閉日曆",
+          decrementHour: "減一小時",
+          decrementMinute: "Decrement Minute",
+          decrementSecond: "Decrement Second",
+          incrementHour: "加一小時",
+          incrementMinute: "Increment Minute",
+          incrementSecond: "Increment Second",
+          nextCentury: "下個世紀",
+          nextDecade: "後十年",
+          nextMonth: "下個月",
+          nextYear: "下一年",
+          pickHour: "Pick Hour",
+          pickMinute: "Pick Minute",
+          pickSecond: "Pick Second",
+          prevCentury: "上個世紀",
+          prevDecade: "前十年",
+          prevMonth: "上個月",
+          prevYear: "前一年",
+          selectDecade: "選擇哪十年",
+          selectMonth: "選擇月份",
+          selectTime: "選擇時間",
+          selectYear: "選擇年份",
+          today: "今日日期",
+      },
+      locale: 'zh-tw',
+  }
+  $('#odate').datetimepicker(original_options);
+  $('#ndate').datetimepicker(original_options);
+
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: 'edit_class' ,serialnoVar: serialno,class_year: cy, class_acadm: ca,class_no: classno},
@@ -388,13 +424,15 @@ function EditDataFunc(serialno,classno,state)
 
 function Send(serailnoval,state)
 {
-  var oyear=$ ('#ocyear').val();
-  var omonth=$ ('#ocmonth').val();
-  var oday=$ ('#ocday').val();
-
-  var cyear=$ ('#ccyear').val();
-  var cmonth=$ ('#ccmonth').val();
-  var cday=$ ('#ccday').val();
+  var Odate=new Date($('#odate').val());
+  var oyear=Odate.getFullYear()-1911;
+  var omonth=Odate.getMonth()+1;
+  var oday=Odate.getDate();
+  //alert(oyear+" "+omonth+" "+oday);
+  var Ndate=new Date($('#ndate').val());
+  var cyear=Ndate.getFullYear()-1911;
+  var cmonth=Ndate.getMonth()+1;
+  var cday=Ndate.getDate();
 
   var class_subject=$('#subject-name').val();
   var class_section21=$ ('#class_section21').val();
@@ -423,13 +461,15 @@ function Send(serailnoval,state)
 }
 function CheckData(serailnoval,state)
 {
-  var oyear=$ ('#ocyear').val();
-  var omonth=$ ('#ocmonth').val();
-  var oday=$ ('#ocday').val();
-
-  var cyear=$ ('#ccyear').val();
-  var cmonth=$ ('#ccmonth').val();
-  var cday=$ ('#ccday').val();
+  var Odate=new Date($('#odate').val());
+  var oyear=Odate.getFullYear();
+  var omonth=Odate.getMonth()+1;
+  var oday=Odate.getDate();
+  //alert(oyear+" "+omonth+" "+oday);
+  var Ndate=new Date($('#ndate').val());
+  var cyear=Ndate.getFullYear();
+  var cmonth=Ndate.getMonth()+1;
+  var cday=Ndate.getDate();
 
   var class_subject=$('#subject-name').val();
   var class_section2=$ ('#class_section21').val();
@@ -441,26 +481,49 @@ function CheckData(serailnoval,state)
   var class_year=$ ('#qry_class_year').val();
   var class_acadm=$ ('#qry_acadm').val();
 
-  $.ajax({
-      url: 'ajax/class_add_ajax.php',
-      data: { oper: 'ch' },
-      type: 'POST',
-      dataType: "json",
-      success: function() {
-        if(class_section2=="")
-        {
-          toastr["error"]("補課節次未填寫!");
-        }else if(class_room=="")
-          toastr["error"]("補課教室未填寫!");
-        else
-        {
-
-          Send(serailnoval,state);
+  /*$('#ChangeModal2').bootstrapValidator({
+    live: 'submitted',
+      fields: {
+          classroom: {
+              validators: {
+                  notEmpty: {
+                      message: '請填寫補課教室'
+                  }
+              }
+          }
         }
+      })
+      .on('error.field.bv', function(e, data) {
+          data.bv.disableSubmitButtons(false);
+      })
+      // Triggered when any field is valid
+      .on('success.field.bv', function(e, data) {
+          data.bv.disableSubmitButtons(false);
+      })
+      .on('success.form.bv', function(e) {
 
-      },
-      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-    });
+      });*/
+      $.ajax({
+          url: 'ajax/class_add_ajax.php',
+          data: { oper: 'ch' },
+          type: 'POST',
+          dataType: "json",
+          success: function() {
+            if(class_section2=="")
+            {
+              toastr["error"]("補課節次未填寫!");
+            }else if(class_room=="")
+              toastr["error"]("補課教室未填寫!");
+            else
+            {
+
+              Send(serailnoval,state);
+            }
+
+          },
+          error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+        });
+
 }
 function closeM()
 {

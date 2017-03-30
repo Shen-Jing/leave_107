@@ -161,15 +161,18 @@ $sql = "select empl_no
 
                   $class_yymm=$class_date;
 
-	                if ($bday <10)
-	                   $class_date=$class_date.'0'.$bday;
-	                else
-	                   $class_date=$class_date.$bday;
+
                   $sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四',	'6','五','7','六','')  week
 		                   FROM   ps_calendar
 		                   WHERE  calendar_yymm='$class_yymm' AND   calendar_dd='$bday'";
-                   $class_week=$db->query($sql);
+                       //$sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四', '6','五','7','六','') week FROM ps_calendar WHERE calendar_yymm='$class_yymm' AND calendar_dd='$bday'";
+                  $data2=$db->query_array($sql);
+                   $class_week=$data2["WEEK"][0];
                    //$class_week=0;
+                   if ($bday <10)
+ 	                   $class_date=$class_date.'0'.$bday;
+ 	                else
+ 	                   $class_date=$class_date.$bday;
 
 
                    $eyear=$_POST['eyear'];
@@ -190,11 +193,13 @@ $sql = "select empl_no
 	                  $class_date2=$class_date2.'0'.$eday;
 	                 else
 	                  $class_date2=$class_date2.$eday;
-                  /*$sql="select decode(calendar_week,'1','日','2','一','3','二','4','三','5','四',	'6','五','7','六','')  week
-		                   from   ps_calendar
-		                   where  calendar_yymm='$class_yymm2' and   calendar_dd='$eday'";
-                   $class_week2=$db->query($sql);*/
-                   $class_week2=87;
+                  $sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四',	'6','五','7','六','')  week
+		                   FROM   ps_calendar
+		                   WHERE  calendar_yymm='$class_yymm2' AND   calendar_dd='$eday'";
+
+                   $data2=$db->query_array($sql);
+                    $class_week2=$data2["WEEK"][0];
+
 
                    $class_section21=$_POST['classsection21'];
                    $class_section22=$_POST['classsection22'];
@@ -216,8 +221,8 @@ $sql = "select empl_no
                          $db->query($sql);
                        }
                        $insert =
-                           "INSERT INTO HAVECLASS(CLASS_SERIALNO,CLASS_NO,CLASS_SUBJECT,CLASS_DATE,CLASS_DATE2,CLASS_SECTION2,CLASS_ROOM,CLASS_MEMO, CLASS_YEAR,CLASS_ACADM)
-                           VALUES ('$serialno','$class_no','$class_subject','$class_date','$class_date2',  '$class_section2','$class_room','$class_memo','$class_year','$class_acadm')";
+                           "INSERT INTO HAVECLASS(CLASS_SERIALNO,CLASS_NO,CLASS_SUBJECT,CLASS_DATE, CLASS_WEEK,CLASS_DATE2, CLASS_WEEK2,CLASS_SECTION2,CLASS_ROOM,CLASS_MEMO, CLASS_YEAR,CLASS_ACADM)
+                           VALUES ('$serialno','$class_no','$class_subject','$class_date','$class_week','$class_date2','$class_week2',  '$class_section2','$class_room','$class_memo','$class_year','$class_acadm')";
                             $db->query($insert);
 
                       //下面這是原本的
