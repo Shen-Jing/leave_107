@@ -5,8 +5,7 @@ $( // 表示網頁完成後才會載入
         $("body").tooltip({
             selector: "[title]"
         });
-
-        var start_options = {
+        var signed_start_options = {
             ignoreReadonly: true,
             defaultDate: new Date(),
             format: 'YYYY/MM/DD',
@@ -38,36 +37,54 @@ $( // 表示網頁完成後才會載入
             },
             locale: 'zh-tw',
         }
+        var start_options = {
+            ignoreReadonly: true,
+            defaultDate: moment().add(-1, 'd').toDate(),
+            maxDate: moment().add(-1, 'd').toDate(),
+            format: 'YYYY/MM/DD',
+            tooltips: {
+                clear: "清除所選",
+                close: "關閉日曆",
+                decrementHour: "減一小時",
+                decrementMinute: "Decrement Minute",
+                decrementSecond: "Decrement Second",
+                incrementHour: "加一小時",
+                incrementMinute: "Increment Minute",
+                incrementSecond: "Increment Second",
+                nextCentury: "下個世紀",
+                nextDecade: "後十年",
+                nextMonth: "下個月",
+                nextYear: "下一年",
+                pickHour: "Pick Hour",
+                pickMinute: "Pick Minute",
+                pickSecond: "Pick Second",
+                prevCentury: "上個世紀",
+                prevDecade: "前十年",
+                prevMonth: "上個月",
+                prevYear: "前一年",
+                selectDecade: "選擇哪十年",
+                selectMonth: "選擇月份",
+                selectTime: "選擇時間",
+                selectYear: "選擇年份",
+                today: "今日日期",
+            },
+            locale: 'zh-tw',
+        }
         var end_options = start_options;
         end_options.useCurrent = false;
-        // clock_options.format = 'YYYY/MM/DD HH時';
+
 
         // 請假開始日期、結束日期
 
         $('#begin_time').datetimepicker(start_options);
-        $('#signed_date').datetimepicker(start_options);
+        $('#signed_date').datetimepicker(signed_start_options);
         $('#end_time').datetimepicker(end_options);
         $("#begin_time").on("dp.change", function (e) {
-            // end date的最小為start date所選
-            $('#end_time').data("DateTimePicker").minDate(e.date);
+            // end date的最大為start date所選
+            $('#end_time').data("DateTimePicker").maxDate(e.date);
             // 將end date的initial date同步為start date所選
             $('#end_time').data("DateTimePicker").date(e.date);
         });
-
-        // $('form[data-toggle="validator"]').validator({
-        //     custom: {
-        //         signed: function($el){
-        //             var date = $("#signed_date").val();
-        //             alert(date);
-        //             var reg = new RegExp("^([0-9]{4})[./]{1}([0-9]{1,2})[./]{1}([0-9]{1,2})$");
-        //             var infoValidation = true;
-        //             if (reg.test(date))
-        //             {
-        //                 alert("format valid!");
-        //             }
-        //         }
-        //     }
-        // });
 
 
         $.ajax({
@@ -94,10 +111,10 @@ $( // 表示網頁完成後才會載入
             success: function(JData) {
                 var row0="<option value=''>請選擇</option><option value='0800'>08:00</option>";
 
-                for(var i=0 ; i < JData.DO_TIME2.length ; i++)
+                for(var i=0 ; i < JData[1].DO_TIME2.length ; i++)
                 {
-                    var do_time2 = JData.DO_TIME2[i];
-                    var do_time = JData.DO_TIME[i];
+                    var do_time2 = JData[1].DO_TIME2[i];
+                    var do_time = JData[1].DO_TIME[i];
 
                     row0 = row0 + "<option value=" + do_time + ">" + do_time2 + "</option>";
                 }
@@ -107,19 +124,8 @@ $( // 表示網頁完成後才會載入
 
                 $('#btime').append(row0);
 
-            },
-            error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-        });
-
-        $.ajax({
-            url: 'ajax/overtime_ajax.php',
-            data: { oper: 'btime_cn' },
-            type: 'POST',
-            dataType: "json",
-            success: function(JData) {
-
                 var row = "";
-                var cn = JData.COUNT;
+                var cn = JData[2].COUNT;
 
                 for (var i = 1 ; i <= 30 ; i++)
                 {
@@ -141,6 +147,7 @@ $( // 表示網頁完成後才會載入
             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
         });
 
+
         $.ajax({
             url: 'ajax/overtime_ajax.php',
             data: { oper: 'etime' },
@@ -160,17 +167,14 @@ $( // 表示網頁完成後才會載入
                 $('#etime').append(row0);
 
             },
-            error: function(xhr, ajaxOptions, thrownError) {/*console.log(xhr.responseText);alert(xhr.responseText);*/}
+            error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
         });
 
         //bootstrapValidator
         $("#holiday").bootstrapValidator({
-            // submitButtons: 'button[type="button"]',
-            // excluded: [':not(:visible)'],
             live: 'submitted',
             fields: {
                 signed_date: {
-                    
                     validators: {
                         notEmpty: {
                             message: '加班簽呈日期不可空白'
@@ -182,7 +186,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 btime: {
-                    
                     validators: {
                         notEmpty: {
                             message: '請選擇開始加班刷卡時間'
@@ -190,7 +193,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 etime: {
-                    
                     validators: {
                         notEmpty: {
                             message: '請選擇結束加班刷卡時間'
@@ -198,7 +200,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 begin_time: {
-                    
                     validators: {
                         notEmpty: {
                             message: '請假日期不可空白'
@@ -210,7 +211,6 @@ $( // 表示網頁完成後才會載入
                     }
                 },
                 end_time: {
-                    
                     validators: {
                         notEmpty: {
                             message: '請假日期不可空白'

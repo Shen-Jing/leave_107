@@ -25,7 +25,6 @@
 			<div class="panel-body panel-height">
 				<form data-toggle="validator" class="form-horizontal" role="form" name="holiday" id="holiday" action="<?=$_SERVER['PHP_SELF'] ?>" method="post"   ENCTYPE="multipart/form-data">
 				<table class="table table-bordered" id="table1">
-					<!-- <thead> -->
 						<tr>
 							<div class="row">
 								<td class="col-xs-2 col-md-1 td1" align="center">員工編號</td>
@@ -43,47 +42,39 @@
 								<td class="col-xs-2 col-md-2" id="tname"></td>
 							</div>
 						</tr>
-					<!-- </thead> -->
 
-					<!-- <thead> -->
 					<tr>
 						<div class="row">
 							<td class="col-md-1 td1" align="center">加班原因</td>
 							<td class="col-md-1" colspan=3>
-								<div class='form-group has-feedback'>
+								<div class='form-group'>
 									<div class="row">
-										<div class="col-xs-7 col-md-3">
-											<span>加班簽呈日期：</span>
-										</div>
-									</div>
-									<div class="row">
-										<div class='col-xs-8'>
-											<input type='text' class="form-control" id='signed_date' name="signed_date" readonly="true">
-											<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-12">
-											<font size='2' color='darkred'>(學校統一加班無提簽日期者，請以加班日期代替) </font>
+										<div class="col-md-12">
+											<div class="col-xs-3 col-md-2">
+												<span>加班簽呈日期：</span>
+											</div>
+											<div class="col-xs-8 col-md-2">
+												<input type='text' class="form-control" id='signed_date' name="signed_date" readonly="true">
+											</div>
+											<div class="col-xs-5 col-md-5">
+												<font size='2' color='darkred'>(學校統一加班無提簽日期者，請以加班日期代替) </font>
+											</div>
 										</div>
 									</div>
 								</div>
 
 								<div class='form-group has-feedback'>
 									<div class="row">
-										<div class='col-xs-7 col-md-3'>
-											<span>加班簽呈文號：</span>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-8">
-											<input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" >
-											<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-12">
-											<font size='2' color='darkred' > (學校統一加班無提簽文號者，請說明加班原因)</font>
+										<div class="col-md-12">
+											<div class="col-xs-3 col-md-2">
+												<span>加班簽呈文號：</span>
+											</div>
+											<div class="col-xs-8 col-md-2">
+												<input type="text" class="form-control" name="reason" id="reason" value="" size="25" maxlength="30" >
+											</div>
+											<div class="col-xs-5 col-md-5">
+												<font size='2' color='darkred' > (學校統一加班無提簽文號者，請說明加班原因)</font>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -95,38 +86,30 @@
 
 						</div>
 					</tr>
-					<!-- </thead> -->
 
-					<!-- <thead> -->
 					<tr>
 						<td class="col-md-1 td1" align="center">加班日期</td>
 						<td colspan="3" style="position: relative">
-							<div class='form-group has-feedback'>
+							<div class="form-group">
 								<div class="row">
-									<div class="col-xs-8">
-										<input type='text' class="form-control" id='begin_time' name="begin_time" readonly="true">
-										<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-1">
-									<span>到</span>
-								</div>
-							</div>
-							<div class='form-group has-feedback'>
-								<div class="row">
-									<div class="col-xs-8">
-										<input type='text' class="form-control" id='end_time' name="end_time" readonly="true">
-										<!--span class="glyphicon form-control-feedback" aria-hidden="true"></span-->
+									<div class="col-md-12">
+										<div class="col-md-3">
+											<font>從</font>
+											<input type='text' class="form-control" id='begin_time' name="begin_time" readonly="true" style='width:auto; display: inline-block;'>
+										</div>
+										<!-- <div class="col-md-1">
+											<font>到</font>
+										</div> -->
+										<div class="col-md-3">
+											<font>到</font>
+											<input type='text' class="form-control" id='end_time' name="end_time" readonly="true" style='width:auto; display: inline-block;'>
+										</div>
 									</div>
 								</div>
 							</div>
 						</td>
 					</tr>
-					<!-- </thead> -->
 
-					<!-- <thead> -->
 					<tr>
 						<td class="col-md-1 td1" align="center">加班刷卡時間</td>
 						<td class="col-md-3">
@@ -135,10 +118,11 @@
 									<div class='col-md-5'>
 										<font color='darkred' size='2'>開始加班刷卡資料</font>
 										<select class='form-control' style='width:auto; display: inline-block;' id="btime" name='btime'></select>
-										<br>
-										<font color='red' size='2'>1.例假日請選實際刷進時間。
-									                             <br>2.上班日請選「得下班時間」
-																 <br>例如：8:11上班則選17:11</font>
+									</div>
+									<div class="col-md-5">
+										<font color='red' size='2'>1.例假日請選實際刷進時間。<br>
+									                             2.上班日請選「得下班時間」<br>
+																 例如：8:11上班則選17:11</font>
 									</div>
 								</div>
 							</div>
@@ -150,7 +134,8 @@
 									<div class='col-md-5'>
 										<font color='darkred' size='2'>結束加班刷卡資料</font>
 										<select class='form-control' style='width:auto; display: inline-block;' id='etime' name='etime' ></select>
-										<br>
+									</div>
+									<div class="col-md-5">
 										<font color='red' size='2'>1.請選實際刷退時間<br>
 																	2.畢業典禮「等」不必刷退請選17:00</font>
 									</div>

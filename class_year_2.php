@@ -64,6 +64,7 @@
                                 國立彰化師範大學調補課申請單填寫作業(<font color="red">請每班各填寫一份，僅限於進修部課程</font>)
                         </div>
                         <div class="panel-body panel-height">
+                        <form class="form-horizontal" role="form" name="no_holiday" id="no_holiday" action="" method="post">
                             <table class="table table-bordered" >
                             <thead>
                             <tr>
@@ -83,9 +84,7 @@
                                 <td class="col-md-4">
                                     <div class='form-group'>
                                         <div class='col-md-12'>
-                                            <select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='cyear' name='cyear' onChange=''></select>年
-                                            <select class='form-control' style='width:auto; display: inline-block;' id='cmonth' name='cmonth' onChange=''></select>月
-                                            <select class='form-control' style='width:auto; display: inline-block;' id='cday' name='cday' onChange=''></select>日
+                                            <input type='text' class="form-control" id='origin_time' name="origin_time" readonly="true">
                                         </div>
                                     </div>
                                 </td>
@@ -101,22 +100,29 @@
                                 <td class="col-md-4">
                                     <div class='form-group'>
                                         <div class='col-md-12'>
-                                            <select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='dyear' name='dyear' onChange=''></select>年
-                                            <select class='form-control' style='width:auto; display: inline-block;' name='dmonth' id='dmonth' onChange=''></select>月
-                                            <select class='form-control' style='width:auto; display: inline-block;' id='dday' name='dday' onChange=''></select>日
+                                            <input type='text' class="form-control" id='change_time' name="change_time" readonly="true">
                                         </div>
                                     </div>
                                 </td>
 
                                 <td class="col-md-2 td1" align="center">補課節次</td>
-                                <td class="col-md-4" >第<input type="text" class="form-control" name="class_section2" id="class_section2" value="" size="25" maxlength="30" required>節(例01-03)</td>
+                                <td class="col-md-4" >
+                                <div class='form-group'>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            第<select class='form-control' style='width:auto; display: inline-block;' name='class_section2_1' id='class_section2_1' onChange=''></select>節~
+                                            第<select class='form-control' style='width:auto; display: inline-block;' id='class_section2_2' name='class_section2_2' onChange=''></select>節
+                                        </div>
+                                    </div>
+                                </div>
+                                </td>
                             </tr>
                             </thead>
 
                             <thead>
                             <tr>
                                 <td class="td1" align="center">補課教室</td>
-                                <td colspan="3"><input type="text" class="form-control" name="class_room" id="class_room" value="" size="25" maxlength="30" required><font size="4">
+                                <td colspan="3"><input type="text" class="form-control" name="class_room" id="class_room" value="" size="25" maxlength="30"><font size="4">
                                 </td>
                             </tr>
                             </thead>
@@ -131,12 +137,13 @@
                             </tr>
                             <tr>
                                 <td colspan="4" align="center">
-                                    <button class="btn btn-primary" name="close" onclick='closeM()'>存入簽核檔並離開或被退重送</button>
-                                    <button class="btn btn-primary" name="check" onclick='Insert()'>本班資料儲存</button>
+                                    <!-- <button type="submit" class="btn btn-primary" name="action" value="signed">存入簽核檔並離開或被退重送</button> -->
+                                    <button type="submit" class="btn btn-primary" name="action" value="store">本班資料儲存</button>
                                 </td>
                             </tr>
                             </thead>
                             </table>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -170,6 +177,7 @@
                                             國立彰化師範大學調補課申請單填寫作業(<font color="red">請每班各填寫一份，僅限於進修部課程</font>)
                                     </div>
                                     <div class="panel-body panel-height">
+                                    <form class="form-horizontal" role="form" name="update_form" id="update_form" action="" method="post">
                                         <table class="table table-bordered" >
                                         <thead>
                                         <tr>
@@ -189,9 +197,7 @@
                                             <td class="col-md-4">
                                                 <div class='form-group'>
                                                     <div class='col-md-12'>
-                                                        <select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='edit_cyear' name='edit_cyear' onChange=''></select>年
-                                                        <select class='form-control' style='width:auto; display: inline-block;' id='edit_cmonth' name='edit_cmonth' onChange=''></select>月
-                                                        <select class='form-control' style='width:auto; display: inline-block;' id='edit_cday' name='edit_cday' onChange=''></select>日
+                                                        <input type='text' class="form-control" id='edit_origin_time' name="edit_origin_time" readonly="true">
                                                     </div>
                                                 </div>
                                             </td>
@@ -207,22 +213,21 @@
                                             <td class="col-md-4">
                                                 <div class='form-group'>
                                                     <div class='col-md-12'>
-                                                        <select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='edit_dyear' name='edit_dyear' onChange=''></select>年
-                                                        <select class='form-control' style='width:auto; display: inline-block;' name='edit_dmonth' id='edit_dmonth' onChange=''></select>月
-                                                        <select class='form-control' style='width:auto; display: inline-block;' id='edit_dday' name='edit_dday' onChange=''></select>日
+                                                        <input type='text' class="form-control" id='edit_change_time' name="edit_change_time" readonly="true">
                                                     </div>
                                                 </div>
                                             </td>
 
                                             <td class="col-md-2 td1" align="center">補課節次</td>
-                                            <td class="col-md-4" >第<input type="text" class="form-control" name="edit_class_section2" id="edit_class_section2" value="" size="25" maxlength="30" required>節(例01-03)</td>
+                                            <td class="col-md-4" >第<select class='form-control' style='width:auto; display: inline-block;' name='edit_class_section2_1' id='edit_class_section2_1' onChange=''></select>節~第<select class='form-control' style='width:auto; display: inline-block;' id='edit_class_section2_2' name='edit_class_section2_2' onChange=''></select>節
+                                            </td>
                                         </tr>
                                         </thead>
 
                                         <thead>
                                         <tr>
                                             <td class="td1" align="center">補課教室</td>
-                                            <td colspan="3"><input type="text" class="form-control" name="edit_class_room" id="edit_class_room" value="" size="25" maxlength="30" required><font size="4">
+                                            <td colspan="3"><input type="text" class="form-control" name="edit_class_room" id="edit_class_room" value="" size="25" maxlength="30"><font size="4">
                                             </td>
                                         </tr>
                                         </thead>
@@ -241,6 +246,7 @@
                                         </tr>
                                         </thead>
                                         </table>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

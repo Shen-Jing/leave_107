@@ -85,14 +85,8 @@ if( $_POST['oper'] == "btime" )
 	                   where  empl_no='$empl_no'
 	                   and    do_dat='$over_date'
 	                   order  by do_time";
-	$data = $db -> query_array($sql);
+	$data1 = $db -> query_array($sql);
 
-	echo json_encode($data);
-	exit;
-
-}
-if( $_POST['oper'] == "btime_cn" )
-{
 	//----------------------------------------------
 	//   1000629 add  判斷是否為寒暑假期間
 	//----------------------------------------------
@@ -103,10 +97,15 @@ if( $_POST['oper'] == "btime_cn" )
 
 	$data2 = $db -> query_array($SQLStr2);
 
-	echo json_encode($data2);
+	$data = array();
+	$data[1] = $data1;
+	$data[2] = $data2;
+
+	echo json_encode($data);
 	exit;
 
 }
+
 if( $_POST['oper'] == "etime")
 {
 	//-------------------

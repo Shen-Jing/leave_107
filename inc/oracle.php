@@ -191,11 +191,11 @@ class ORACLE{
 	function query_first_row($Qstr){
 		return $this->fetch_row($this->query($Qstr));
 	}
-	
+
 	#####################################
 	# 2016.11.05 Write and test finishd #
 	#####################################
-	
+
 	/*
 	*	this function "query_array" has been rewrited
 	*	which can optionally returns JSON type array used for dataTable, jqGrid, ...etc.
@@ -207,16 +207,16 @@ class ORACLE{
 	*	usage:
 	*	Default. Column Mode:
 	*	$data = $db -> query_array($sql);
-	*	
+	*
 	*	For dataTable, jqGrid. Row Mode:
 	*	$aaData['rows'] = $db -> query_array($sql, true);
 	*/
 	function query_array($Qstr, $isRowMode = false){
 		$resource = $this->query($Qstr);
-		
+
 		if(!$isRowMode)
 			return $this->fetch_array($resource);
-		
+
 		$this->rows = oci_fetch_all($resource, $this->results,
 									0, -1, //skip, maxrows(-1 = all rows)
 									OCI_ASSOC + OCI_FETCHSTATEMENT_BY_ROW);
@@ -229,10 +229,10 @@ class ORACLE{
 				}
 			);
 		}
-		
+
 		return $this->results;
 	}
-	
+
 	function set_rowid(&$rsc, $col_id_name = ""){
 		if($col_id_name === ""){
 			for($i = 0 ; $i < sizeof($rsc) ; $i++){
@@ -248,7 +248,7 @@ class ORACLE{
 		}
 	}
 
-	
+
 	/*
 	*	this function "fetch_cell" is used to fetch a datum.
 	*
@@ -266,24 +266,24 @@ class ORACLE{
 								: oci_fetch_assoc($this->query($Qstr))[strtoupper($colName)];
 		return iconv("BIG5", "UTF-8", $ret);
 	}
-	
+
 	function fetch_row_assoc($Qstr){
 		$ret = oci_fetch_assoc( $this->query($Qstr) );
-		
+
 		array_walk(
 			$ret,
 			function(&$val){
 				$val = iconv("BIG5", "UTF-8", $val);
 			}
 		);
-		
+
 		return $ret;
 	}
-	
+
 	########################################
 	# 2016.11.17 Rewrite and test finished #
 	########################################
-	
+
 	/*
 	*	this function "query_by_param", a Parameterized Query version, is derivatived from "query".
 	*	it's designed to avoid SQL Injection
@@ -306,12 +306,12 @@ class ORACLE{
 	function query_by_param($Qstr, $data){
 		if ($Qstr) {
 			$this -> str = $Qstr;
-			
+
 			$stmt=oci_parse($this->rp, $Qstr); // parse sql to oracle statement
-			
+
 			foreach($data as $key => $val){
 				oci_bind_by_name(
-					$stmt, 
+					$stmt,
 					$key[0] === ":" ? $key : ":".$key, // parameter
 					mb_convert_encoding($val, "UTF-8", "BIG5")); //value
 			}
