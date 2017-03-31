@@ -1,4 +1,6 @@
 <?php
+// ignore Deprecated message: Function set_magic_quotes_runtime() is deprecated
+error_reporting(E_ALL ^ E_DEPRECATED);
 require('fpdf.php');
 
 

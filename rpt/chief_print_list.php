@@ -1,21 +1,11 @@
 <?php
-  //include_once("../inc/check.php");
   session_start();
   include_once("../inc/connect.php");
   // 舊頁面似乎沒使用到裏頭的ntos func
   // include("date_func.php");
   define('FPDF_FONTPATH',"./font");
   require('chinese-unicode.php');
-  class myPDF extends PDF_Unicode
-  {
-  	//Page header
-  	function Header()
-  	{
-  		global $title ;
-  		// $this -> SetFont('font1', 'B', 12);
-  		// $this -> Cell(0, 8, $title, "BT", 1, 'L');
-  	}
-  }
+
   $serialno = $_GET['serialno'];
 
   $today = getdate();
@@ -438,17 +428,19 @@
   }
   // echo "<script>alert('請先取消頁首頁尾設定，取消方式： 點選瀏覽器視窗「檔案」-->「設定列印格式」或者是「版面設定」-->「頁首和頁尾」-->「清空頁首及頁尾或是頁腳的內容。」'); </script>";
   $str_today = $year . "/" . $mon . "/" . $mday;
-  $pdf = new myPDF();
+  $pdf = new PDF_Unicode();
   $pdf->AddPage();  //新的一頁
-  // $pdf->SetMargins(10, 5);  //設定邊界(需在第一頁建立以前)
-  //$pdf->AddUniCNShwFont('font1');
   $pdf->AddUniCNShwFont('font1','DFKaiShu-SB-Estd-BF');
-  $pdf->SetFont('font1');
-  $width = 32;
-  $height = 7;
 
+  $width = 32;
+  $total_width = 198;
+  $height = 14;
+
+  $pdf->SetFont('font1', 'B', 18);
   $pdf->Cell(0, $height, "國立彰化師範大學公差假核准證明", 0, 0, "C");
+  $pdf->SetFont('font1', 'B', 11);
   $pdf->Cell(0, $height, "申請日期：" . $str_today, 0, 1, "R");
+  $pdf->SetFont('font1', '', 14);
   $pdf->Cell($width, $height, "項目別", 1, 0, "C");
   $pdf->Cell($width / 2, $height, "姓名", 1, 0, "C");
   $pdf->Cell($width * 2, $height, "所屬單位", 1, 0, "C");
@@ -463,33 +455,34 @@
   $pdf->Cell($width, $height * 2, $grade_name, 1, 0, "C");
   $pdf->MultiCell($width - 10, $height, $appdate . "\n線上申請", 1, 1, "C");
 
-  $pdf->Cell($width, 7, "職務代理人", 1, 0, "C");
-  $pdf->Cell($width / 2, 7, $agent_name, 1, 0, "C");
-  $pdf->Cell($width * 2, 7, $agent_dept_name, 1, 0, "C");
-  $pdf->Cell($width, 7, $agent_title, 1, 0, "C");
-  $pdf->Cell($width, 7, "", 1, 0, "C");
-  $pdf->Cell($width - 10, 7, $agentsignd . $agent_text, 1, 1, "C");
+  $pdf->Cell($width, $height, "職務代理人", 1, 0, "C");
+  $pdf->Cell($width / 2, $height, $agent_name, 1, 0, "C");
+  $pdf->Cell($width * 2, $height, $agent_dept_name, 1, 0, "C");
+  $pdf->Cell($width, $height, $agent_title, 1, 0, "C");
+  $pdf->Cell($width, $height, "", 1, 0, "C");
+  $pdf->Cell($width - 10, $height, $agentsignd . $agent_text, 1, 1, "C");
 
-  $pdf->Cell($width, 7, "請假別/地點", 1, 0, "C");
-  $pdf->Cell(166, 7, $item . $eplace, 1, 1, "C");
+  $width = $pdf->GetStringWidth("事由及會議起訖時間");
+  $pdf->Cell($width, $height, "請假別/地點", 1, 0, "C");
+  $pdf->Cell($total_width - $width, $height, $item . $eplace, 1, 1, "C");
 
-  $pdf->Cell($width, 7, "請假期間", 1, 0, "C");
+  $pdf->Cell($width, $height, "請假期間", 1, 0, "C");
   $str_cell = $byear . "年" . $bmonth . "月" . $bday . "日" . $btime . "時 至 " .
               $eyear . "年" . $emonth . "月" . $eday . "日" . $etime . "時";
-  $pdf->Cell(166, 7, $str_cell, 1, 1, "C");
+  $pdf->Cell($total_width - $width, $height, $str_cell, 1, 1, "C");
 
   if( ($vtype == '01' || $vtype == '02' || $vtype) == '03' && $abroad == '1'){
     $pdf->Cell($width, $height, "出入境期間", 1, 0, "C");
     $str_cell = $exit_year . "年" . $exit_month . "月" . $exit_day . "日 至 " .
                 $back_year . "年" . $back_month . "" . $back_day . "日";
-    $pdf->Cell(166, 7, $str_cell, 1, 1, "C");
+    $pdf->Cell($total_width - $width, $height, $str_cell, 1, 1, "C");
   }
   if( ($vtype == '01' || $vtype == '02' || $vtype) == '03' && $abroad == '0'){
     $pdf->Cell($width, $height, "事由及會議起訖時間", 1, 0, "C");
     if ($mdatee !=''){
       $str_cell = $meetb_y . "年" . $meetb_m . "月" . $meetb_d . "日" . $mtimeb . "時 至 " .
                   $meete_y . "年" . $meete_m . "月" . $meete_d . "日" . $mtimee . "時";
-      $pdf->Cell(166, $height, $str_cell, 1, 1, "C");
+      $pdf->Cell($total_width - $width, $height, $str_cell, 1, 1, "C");
     }
     elseif ($mtimee != ''){
       $str_cell =  $mtimeb . "時 至" . $mtimee . "時";
@@ -497,12 +490,12 @@
     }
   }
 
-  $pdf->Cell($width, 7, "奉派文號或提簽日期", 1, 0, "C");
-  $pdf->Cell(166, 7, $permit, 1, 1, "C");
+  $pdf->Cell($width, $height, "奉派文號或提簽日期", 1, 0, "C");
+  $pdf->Cell($total_width - $width, $height, $permit, 1, 1, "C");
 
-  $pdf->Cell($width, 7, "經費來源", 1, 0, "C");
-  $pdf->Cell(110, 7, $budget, 1, 0, "C");
-  $pdf->Cell(56, 7, "系辦註記：" . $sign_date, 1, 1, "C");
+  $pdf->Cell($width, $height, "經費來源", 1, 0, "C");
+  $pdf->Cell(110, $height, $budget, 1, 0, "C");
+  $pdf->Cell($total_width - $width - 110, $height, "系辦註記：" . $sign_date, 1, 1, "C");
 
   $x = $pdf->GetX();
   $y = $pdf->GetY();
