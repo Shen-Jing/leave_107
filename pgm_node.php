@@ -69,10 +69,18 @@ $d = $db -> query_array($sql);
             程式圖示：
             <input id="add-img" class="form-control"></input><br>
             模版套用：
+            <select id="selected">
+              <option selected disabled class="text-hide" value="0">請選擇模版</option>
+              <?
+              for ($i=0; $i < sizeof($d['PGMNAME']); $i++)
+                //if ($d['PGMURL'][$i] != "")
+                if (substr($d['PGMURL'][$i], -4) == '.php')
+                  echo "<option value='".$d['PGMURL'][$i]."'>".$d['PGMURL'][$i].":".$d['PGMID'][$i]." - ".$d['PGMNAME'][$i]."</option>";
+              ?>
+            </select>
             <button id="apply-btn" type="button" class="btn btn-success">
-                選擇模版
+                模版預覽
             </button>
-            <span id="sel-text"></span>
           </div>
           <!-- Modal Footer -->
           <div class="modal-footer">
@@ -100,23 +108,14 @@ $d = $db -> query_array($sql);
           </div>
           <!-- Modal Body -->
           <div class="modal-body">
-            <select id="selected" class="form-control">
-              <option selected disabled class="text-hide" value="0">請選擇模版</option>
-              <?
-              for ($i=0; $i < sizeof($d['PGMNAME']); $i++)
-                //if ($d['PGMURL'][$i] != "")
-                if (substr($d['PGMURL'][$i], -4) == '.php')
-                  echo "<option value='".$d['PGMURL'][$i]."'>".$d['PGMURL'][$i].":".$d['PGMID'][$i]." - ".$d['PGMNAME'][$i]."</option>";
-              ?>
-            </select>
+            <iframe id="iframe" src="">
+              <p>Your browser does not support iframes.</p>
+            </iframe>
           </div>
           <!-- Modal Footer -->
           <div class="modal-footer">
-              <button id="reset-btn" type="button" class="btn btn-default">
-                  清空
-              </button>
-              <button id="back-btn" type="button" class="btn btn-success">
-                  套用
+              <button id="back-btn" type="button" class="btn">
+                  返回
               </button>
           </div>
       </div>

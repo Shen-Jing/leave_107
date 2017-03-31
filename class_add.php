@@ -76,7 +76,8 @@
                               <!-- Modal -->
 
                               <!--修改頁面2-->
-                              <div class="modal fade" id="ChangeModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                              <div class="modal fade" name="ChangeModal2" id="ChangeModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
                                   <div class="modal-dialog modal-lg">
                                       <div class="modal-content">
                                           <!-- Modal Header -->
@@ -187,9 +188,10 @@
                                             						<td class="col-md-4">
                                             							<div class='form-group'>
                                                             <div class='col-md-12'>
-                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='ocyear' name='ocyear' onChange=''></select>年
+                                            									<!--<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='ocyear' name='ocyear' onChange=''></select>年
                                             									<select class='form-control' style='width:auto; display: inline-block;' id='ocmonth' name='ocmonth' onChange=''></select>月
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ocday' name='ocday' onChange=''></select>日
+                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ocday' name='ocday' onChange=''></select>日-->
+                                                              <input type='text' class="form-control" id='odate' name="original_date">
                                             								</div>
                                             							</div>
                                             						</td>
@@ -205,9 +207,10 @@
                                             						<td class="col-md-4">
                                             							<div class='form-group'>
                                                             <div class='col-md-12'>
-                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='ccyear' name='ccyear' onChange=''></select>年
+                                            									<!--<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='ccyear' name='ccyear' onChange=''></select>年
                                             									<select class='form-control' style='width:auto; display: inline-block;' name='ccmonth' id='ccmonth' onChange=''></select>月
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ccday' name='ccday' onChange=''></select>日
+                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ccday' name='ccday' onChange=''></select>日-->
+                                                              <input type='text' class="form-control" id='ndate' name="new_date">
                                             								</div>
                                             							</div>
                                             						</td>
@@ -253,12 +256,11 @@
 
                                             				</table>
                                             			</div>
-                                            		</form>
-                                            		</center>
+
                                                 </div>
 
                                                 </div>
-                                                <button class="btn btn-primary" name="check" onclick='NewData()'>新增資料</button>
+                                                <button type="submit" class="btn btn-primary" name="check" onclick='NewData()'>新增資料</button>
                                           </div>
                                           <!-- Modal Footer -->
                                           <div class="modal-footer">
@@ -271,6 +273,7 @@
                                           </div>
                                       </div>
                                   </div>
+                                
                               </div>
                           </div>
                       </div>

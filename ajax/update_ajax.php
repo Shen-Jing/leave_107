@@ -68,12 +68,8 @@ $sql = "select lpad(to_char(sysdate,'yyyymmdd')-'19110000',7,'0') ndate from dua
 $sys_date = $db -> fetch_cell($sql);
 
 
-if( $_POST["oper"] == "edit" )
-{
-	
-}
 // 取消
-else if ( $_POST["oper"] == "cancel" )
+if ( $_POST["oper"] == "cancel" )
 {
 	// 未完成取消
 	if( $_POST["flag"] == "0" ) {

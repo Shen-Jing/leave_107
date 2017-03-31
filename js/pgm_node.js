@@ -156,12 +156,11 @@ $(function(){
 
   $('#back-btn').click(function(event) {
     $("#modal-apply").modal("hide");
-    $("#sel-text").html($("#selected").val());
     $("#modal-add").modal("show");
   });
 
-  $('#reset-btn').click(function(event) {
-    $("#selected").val(0);
+  $('#selected').change(function(event) {
+    $('#iframe').attr('src', $('#selected').val());
   });
 
   $('#edit-btn').click(function(event) {
