@@ -86,29 +86,10 @@ $(function(){
     }
   });
   $('#empl').change(function() {
-    var arr = $(this).val();
-    $('.user li').hide();
-    for (var i = 0; i < arr.length; i++)
-    {
-      $('.user li[name^=' + arr[i] + ']').parent().parent().parent().parent().show();
-      $('.user li[name^=' + arr[i] + ']').parent().parent().show();
-      $('.user li[name^=' + arr[i] + ']').show();
-    }
+    filter();
   });
   $('#filter').on('input', function() {
-    var input = $(this).val();
-    if (input != '')
-    {
-      $('.user li').hide();
-      $('.user li[id*=' + input + ']').parent().parent().parent().parent().show();
-      $('.user li[id*=' + input + ']').parent().parent().show();
-      $('.user li[id*=' + input + ']').show();
-      $('.user li[class*=' + input + ']').parent().parent().parent().parent().show();
-      $('.user li[class*=' + input + ']').parent().parent().show();
-      $('.user li[class*=' + input + ']').show();
-    }
-    else
-      $('.user li').show();
+    filter();
   });
   $('li').has('ol').children('i').click(function() {
     $(this).siblings('ol').slideToggle();
@@ -143,5 +124,40 @@ $(function(){
             console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
           }
         });
+  }
+  function filter()
+  {
+    var input = $('#filter').val();
+    var arr = $('#empl').val();
+
+    $('.user li').hide();
+    if (input != '' & arr.length != 0)
+      for (var i = 0; i < arr.length; i++)
+      {
+        $('.user li[id*=' + input + '][name^=' + arr[i] + ']').parent().parent().parent().parent().show();
+        $('.user li[id*=' + input + '][name^=' + arr[i] + ']').parent().parent().show();
+        $('.user li[id*=' + input + '][name^=' + arr[i] + ']').show();
+        $('.user li[class*=' + input + '][name^=' + arr[i] + ']').parent().parent().parent().parent().show();
+        $('.user li[class*=' + input + '][name^=' + arr[i] + ']').parent().parent().show();
+        $('.user li[class*=' + input + '][name^=' + arr[i] + ']').show();
+      }
+    else if (arr.length != 0)
+      for (var i = 0; i < arr.length; i++)
+      {
+        $('.user li[name^=' + arr[i] + ']').parent().parent().parent().parent().show();
+        $('.user li[name^=' + arr[i] + ']').parent().parent().show();
+        $('.user li[name^=' + arr[i] + ']').show();
+      }
+    else if (input != '')
+    {
+      $('.user li[id*=' + input + ']').parent().parent().parent().parent().show();
+      $('.user li[id*=' + input + ']').parent().parent().show();
+      $('.user li[id*=' + input + ']').show();
+      $('.user li[class*=' + input + ']').parent().parent().parent().parent().show();
+      $('.user li[class*=' + input + ']').parent().parent().show();
+      $('.user li[class*=' + input + ']').show();
+    }
+    else
+      $('.user li').show();
   }
 });

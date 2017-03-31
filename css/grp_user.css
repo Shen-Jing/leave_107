@@ -78,7 +78,7 @@ ol.root li.placeholder:before {
   width: 48%;
 }
 #right > ol {
-  height: 87vh;
+  height: 68vh;
   overflow: auto;
 }
 .tree > li {

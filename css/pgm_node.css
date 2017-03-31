@@ -63,3 +63,14 @@ ol.root li.placeholder:before {
   position: absolute;
   /** Define arrowhead **/
 }
+
+#iframe {
+  height: 75vh;
+  width: 100%;
+
+  transform: scale(0.9);
+  -ms-transform: scale(0.9); //ie
+  -moz-transform: scale(0.9); //firefox
+  -o-transform: scale(0.9); //opera
+  -webkit-transform: scale(0.9); //chrome
+}

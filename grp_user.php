@@ -68,18 +68,14 @@ $u = $db -> query_array($sql);
       <input id="filter" class="form-control" type="text" value="" placeholder="這是篩選器，請輸入欲篩選的內容">
       <br/>
       <select multiple class="form-control" id="empl">
-        <option value='0'>0</option>
-        <option value='3'>3</option>
-        <option value='4'>4</option>
-        <option value='5'>5</option>
-        <option value='6'>6</option>
-        <option value='7'>7</option>
-        <option value='8'>8</option>
-        <option value='9'>9</option>
-        <option value='A'>A</option>
-        <option value='J'>J</option>
-        <option value='N'>N</option>
-        <option value='T'>T</option>
+        <option value='0'>專任教職員</option>
+        <option value='3'>約用助理</option>
+        <option value='4'>專案教師</option>
+        <option value='5'>專案助理</option>
+        <option value='6'>教師</option>
+        <option value='7'>約用行政助理</option>
+        <option value='8'>工友</option>
+        <option value='9'>兼任教師</option>
       </select>
       <br/>
       <ol class="root user vertical"><!-- content -->
