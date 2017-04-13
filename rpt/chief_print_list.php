@@ -433,6 +433,7 @@
   $pdf->AddUniCNShwFont('font1','DFKaiShu-SB-Estd-BF');
 
   $width = 32;
+  $adjust = 4;
   $total_width = 198;
   $height = 14;
 
@@ -441,35 +442,35 @@
   $pdf->SetFont('font1', 'B', 11);
   $pdf->Cell(0, $height, "申請日期：" . $str_today, 0, 1, "R");
   $pdf->SetFont('font1', '', 14);
-  $pdf->Cell($width, $height, "項目別", 1, 0, "C");
+  $pdf->Cell($width - $adjust, $height, "項目別", 1, 0, "C");
   $pdf->Cell($width / 2, $height, "姓名", 1, 0, "C");
-  $pdf->Cell($width * 2, $height, "所屬單位", 1, 0, "C");
+  $pdf->Cell($width * 2 - $adjust, $height, "所屬單位", 1, 0, "C");
   $pdf->Cell($width, $height, "職稱", 1, 0, "C");
   $pdf->Cell($width, $height, "職等", 1, 0, "C");
   $pdf->Cell($width - 10, $height, "蓋章", 1, 1, "C");
 
-  $pdf->Cell($width, $height * 2, "請假人", 1, 0, "C");
+  $pdf->Cell($width - $adjust, $height * 2, "請假人", 1, 0, "C");
   $pdf->Cell($width / 2, $height * 2, $name, 1, 0, "C");
-  $pdf->Cell($width * 2, $height * 2, $dept_name, 1, 0, "C");
+  $pdf->Cell($width * 2 - $adjust, $height * 2, $dept_name, 1, 0, "C");
   $pdf->Cell($width, $height * 2, $title_name, 1, 0, "C");
   $pdf->Cell($width, $height * 2, $grade_name, 1, 0, "C");
   $pdf->MultiCell($width - 10, $height, $appdate . "\n線上申請", 1, 1, "C");
 
-  $pdf->Cell($width, $height, "職務代理人", 1, 0, "C");
+  $pdf->Cell($width - $adjust, $height, "職務代理人", 1, 0, "C");
   $pdf->Cell($width / 2, $height, $agent_name, 1, 0, "C");
-  $pdf->Cell($width * 2, $height, $agent_dept_name, 1, 0, "C");
+  $pdf->Cell($width * 2 - $adjust, $height, $agent_dept_name, 1, 0, "C");
   $pdf->Cell($width, $height, $agent_title, 1, 0, "C");
   $pdf->Cell($width, $height, "", 1, 0, "C");
   $pdf->Cell($width - 10, $height, $agentsignd . $agent_text, 1, 1, "C");
 
   $width = $pdf->GetStringWidth("事由及會議起訖時間");
   $pdf->Cell($width, $height, "請假別/地點", 1, 0, "C");
-  $pdf->Cell($total_width - $width, $height, $item . $eplace, 1, 1, "C");
+  $pdf->Cell($total_width - $width - 2 * $adjust, $height, $item . $eplace, 1, 1, "C");
 
   $pdf->Cell($width, $height, "請假期間", 1, 0, "C");
   $str_cell = $byear . "年" . $bmonth . "月" . $bday . "日" . $btime . "時 至 " .
               $eyear . "年" . $emonth . "月" . $eday . "日" . $etime . "時";
-  $pdf->Cell($total_width - $width, $height, $str_cell, 1, 1, "C");
+  $pdf->Cell($total_width - $width - 2 * $adjust, $height, $str_cell, 1, 1, "C");
 
   if( ($vtype == '01' || $vtype == '02' || $vtype) == '03' && $abroad == '1'){
     $pdf->Cell($width, $height, "出入境期間", 1, 0, "C");
@@ -482,7 +483,7 @@
     if ($mdatee !=''){
       $str_cell = $meetb_y . "年" . $meetb_m . "月" . $meetb_d . "日" . $mtimeb . "時 至 " .
                   $meete_y . "年" . $meete_m . "月" . $meete_d . "日" . $mtimee . "時";
-      $pdf->Cell($total_width - $width, $height, $str_cell, 1, 1, "C");
+      $pdf->Cell($total_width - $width - 2 * $adjust, $height, $str_cell, 1, 1, "C");
     }
     elseif ($mtimee != ''){
       $str_cell =  $mtimeb . "時 至" . $mtimee . "時";
@@ -491,11 +492,11 @@
   }
 
   $pdf->Cell($width, $height, "奉派文號或提簽日期", 1, 0, "C");
-  $pdf->Cell($total_width - $width, $height, $permit, 1, 1, "C");
+  $pdf->Cell($total_width - $width - 2 * $adjust, $height, $permit, 1, 1, "C");
 
   $pdf->Cell($width, $height, "經費來源", 1, 0, "C");
   $pdf->Cell(110, $height, $budget, 1, 0, "C");
-  $pdf->Cell($total_width - $width - 110, $height, "系辦註記：" . $sign_date, 1, 1, "C");
+  $pdf->Cell($total_width - $width - 110 - 2 * $adjust, $height, "系辦註記：" . $sign_date, 1, 1, "C");
 
   $x = $pdf->GetX();
   $y = $pdf->GetY();
@@ -505,7 +506,7 @@
   $y = $pdf->GetY();
   $pdf->MultiCell(66, $height, "人事室\n簽核日期及簽核者", 1, "C");
   $pdf->SetXY($x + 66, $y);
-  $pdf->MultiCell(66, $height * 2, "校長", 1, "C");
+  $pdf->MultiCell(66 - 2 * $adjust, $height * 2, "校長", 1, "C");
 
   $x = $pdf->GetX();
   $y = $pdf->GetY();
@@ -535,7 +536,7 @@
   $pdf->SetXY($x + 66, $y);
   $x = $pdf->GetX();
   $y = $pdf->GetY();
-  $pdf->MultiCell(66, $height * 6, $chief, 1, "C");
+  $pdf->MultiCell(66 - 2 * $adjust, $height * 6, $chief, 1, "C");
   $pdf->SetXY($x + 66, $y);
 
   $pdf->Ln();
