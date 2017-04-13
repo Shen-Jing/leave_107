@@ -177,7 +177,7 @@ function NextClick(serialno)
   $("#ChangeModal2 .modal-title").html("資料填補");
   $("#ChangeModal2").modal("show"); //弹出框show
   $("#data_modify").hide();
-//alert(serialno);
+alert(serialno);
 queryyear();
   $.ajax({
       url: 'ajax/class_add_ajax.php',
@@ -259,7 +259,7 @@ function EditDataFunc(serialno,classno,state)
   var ca=$ ('#qry_acadm').val();
   $('#holiday_time').empty();
   $('#holidy_mark').empty();
-  $('#subject-name').empty();
+  $('#subject_name').empty();
   $('#class-name').empty();
   $('#ocyear').empty();
   $('#ocmonth').empty();
@@ -306,7 +306,7 @@ function EditDataFunc(serialno,classno,state)
   }
   $('#odate').datetimepicker(original_options);
   $('#ndate').datetimepicker(original_options);
-
+  alert(serialno);
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: 'edit_class' ,serialnoVar: serialno,class_year: cy, class_acadm: ca,class_no: classno},
@@ -317,10 +317,10 @@ function EditDataFunc(serialno,classno,state)
         if (JData.error_code)
             toastr["error"](JData.error_message);
         else{
-          row0="<button class='btn btn-primary' name='close' onclick='closeM()'>離開或被退重送</button>";
+          row0="<button type='button' class='btn btn-primary' name='close' onclick='closeM()'>離開或被退重送</button>";
           $('#action_btn').append(row0);
 
-          row0="<button class='btn btn-primary' name='check' onclick='CheckData("+serialno+","+state+")'>本班資料儲存</button>";
+          row0="<button type=\"submit\" class='btn btn-primary' name='check' onclick='CheckData("+serialno+","+state+")'>本班資料儲存</button>";
           $('#action_btn').append(row0);
           var row0 ="";
           row0=row0+JData["byear"]+"/"+JData["bmonth"]+"/"+JData["bday"]+"~"+JData["eyear"]+"/"+JData["emonth"]+"/"+JData["eday"];
@@ -331,14 +331,14 @@ function EditDataFunc(serialno,classno,state)
           row0=row0+JData["holidaymark"];
           $('#holidy_mark').append(row0);
           classnoval=JData["class_no"];
-          //alert(JData["class_no"]);
+
           row0 = "<option selected disabled class='text-hide'>選擇科目</option>";
           row0 =row0+ "<option value=\"電子學\">電子學</option>";
           row0 =row0+ "<option value=\"線性代數\">線性代數</option>";
           row0 =row0+ "<option value=\"遊戲設計\">遊戲設計</option>";
           row0 =row0+ "<option value=\"演算法\">演算法</option>";
           row0 =row0+ "<option value=\"作業系統\">作業系統</option>";
-          $('#subject-name').append(row0);
+          $('#subject_name').append(row0);
           var classname="資工三"
           row0=classname;
           $('#class-name').append(row0);
@@ -434,7 +434,7 @@ function Send(serailnoval,state)
   var cmonth=Ndate.getMonth()+1;
   var cday=Ndate.getDate();
 
-  var class_subject=$('#subject-name').val();
+  var class_subject=$('#subject_name').val();
   var class_section21=$ ('#class_section21').val();
   var class_section22=$ ('#class_section22').val();
   var class_room=$('#class_room').val();
@@ -445,20 +445,20 @@ function Send(serailnoval,state)
   var class_year=$ ('#qry_class_year').val();
   var class_acadm=$ ('#qry_acadm').val();
   //alert(oyear);
-  //alert(serailnoval);
+  alert("send"+serailnoval);
+  $.ajax({
+      url: 'ajax/class_add_ajax.php',
+      data: { oper: "send" ,classsubject:class_subject,byear:oyear,bmonth:omonth,bday:oday
+             ,eyear:cyear,emonth:cmonth,eday:cday,classsection21:class_section21,classsection22:class_section22,serialno:serailnoval,class_no:classnoval,class_room:class_room,class_memo:class_memo,class_year:class_year,class_acadm:class_acadm,State:state},
+      type: 'POST',
+      dataType: "json",
+      success: function() {
+        toastr["success"]("處理完成!!");
+        NextClick(serailnoval);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+    });
 
-      $.ajax({
-          url: 'ajax/class_add_ajax.php',
-          data: { oper: "send" ,classsubject:class_subject,byear:oyear,bmonth:omonth,bday:oday
-                 ,eyear:cyear,emonth:cmonth,eday:cday,classsection21:class_section21,classsection22:class_section22,serialno:serailnoval,class_no:classnoval,class_room:class_room,class_memo:class_memo,class_year:class_year,class_acadm:class_acadm,State:state},
-          type: 'POST',
-          dataType: "json",
-          success: function() {
-            toastr["success"]("處理完成!!");
-            NextClick(serailnoval);
-          },
-          error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-        });
 
 }
 function CheckData(serailnoval,state)
@@ -473,7 +473,7 @@ function CheckData(serailnoval,state)
   var cmonth=Ndate.getMonth()+1;
   var cday=Ndate.getDate();
 
-  var class_subject=$('#subject-name').val();
+  var class_subject=$('#subject_name').val();
   var class_section2=$ ('#class_section21').val();
   var class_room=$('#class_room').val();
   var class_memo=$('#class_memo').val();
@@ -485,7 +485,7 @@ function CheckData(serailnoval,state)
   $('#editform').bootstrapValidator({
     live: 'submitted',
       fields: {
-          subject-name: {
+          subject_name: {
               validators: {
                   notEmpty: {
                       message: '請選擇科目名稱'
@@ -515,6 +515,13 @@ function CheckData(serailnoval,state)
           }
         }
       })
+      .on('error.field.bv', function(e, data) {
+          data.bv.disableSubmitButtons(false);
+      })
+      // Triggered when any field is valid
+      .on('success.field.bv', function(e, data) {
+          data.bv.disableSubmitButtons(false);
+      })
       .on('success.form.bv', function(e) {
         $.ajax({
             url: 'ajax/class_add_ajax.php',
@@ -522,15 +529,17 @@ function CheckData(serailnoval,state)
             type: 'POST',
             dataType: "json",
             success: function() {
-
+              alert("Check"+serailnoval);
               Send(serailnoval,state);
             },
             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
           });
+
           e.preventDefault(); //STOP default action
           e.unbind(); //unbind. to stop multiple form submit.
 
       });
+
 
 
 

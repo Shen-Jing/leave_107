@@ -170,7 +170,7 @@
                                             						<td class="col-md-4">
 
 
-                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='subject-name' name='subject-name' onChange=''></select>
+                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='subject_name' name='subject_name' onChange=''></select>
 
                                             									<font size='2' color='darkred'>(如果沒有選項，表示您學年與學期選錯了，請返回上一步) </font>
 
