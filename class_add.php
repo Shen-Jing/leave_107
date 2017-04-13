@@ -76,7 +76,7 @@
                               <!-- Modal -->
 
                               <!--修改頁面2-->
-                              <div class="modal fade" name="ChangeModal2" id="ChangeModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                              <div class="modal fade" name="ChangeModal2" id="ChangeModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 
                                   <div class="modal-dialog modal-lg">
                                       <div class="modal-content">
@@ -113,6 +113,7 @@
 
                                           <!-- Modal Body -->
                                           <div class="modal-body">
+                                            <form method='POST' name="editform" id="editform" class="form-horizontal">
                                             <div class="panel-body">
                                               <div class="panel panel-primary">
                                               <div class="panel-heading">
@@ -188,9 +189,7 @@
                                             						<td class="col-md-4">
                                             							<div class='form-group'>
                                                             <div class='col-md-12'>
-                                            									<!--<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='ocyear' name='ocyear' onChange=''></select>年
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ocmonth' name='ocmonth' onChange=''></select>月
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ocday' name='ocday' onChange=''></select>日-->
+
                                                               <input type='text' class="form-control" id='odate' name="original_date">
                                             								</div>
                                             							</div>
@@ -207,9 +206,7 @@
                                             						<td class="col-md-4">
                                             							<div class='form-group'>
                                                             <div class='col-md-12'>
-                                            									<!--<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='ccyear' name='ccyear' onChange=''></select>年
-                                            									<select class='form-control' style='width:auto; display: inline-block;' name='ccmonth' id='ccmonth' onChange=''></select>月
-                                            									<select class='form-control' style='width:auto; display: inline-block;' id='ccday' name='ccday' onChange=''></select>日-->
+
                                                               <input type='text' class="form-control" id='ndate' name="new_date">
                                             								</div>
                                             							</div>
@@ -229,18 +226,26 @@
 
                                                       <thead>
                                             					<tr>
-                                            						<td class="td1" align="center">補課教室</td>
-                                            						<td colspan="3"><input type="text" class="form-control" name="class_room" id="class_room" value="" size="25" maxlength="30" required><font size="4">
 
+                                            						<td class="td1" align="center">補課教室</td>
+                                            						<td colspan="3">
+                                                          <div class='form-group'>
+                                                          <input type="text" class="form-control" name="class_room" id="class_room" value="" size="25" maxlength="30"><font size="4">
+                                                          </div>
                                             						</td>
+
                                             					</tr>
                                             					</thead>
                                                       <thead>
                                             					<tr>
-                                            						<td class="td1" align="center">備註</td>
-                                            						<td colspan="3"><input type="text" class="form-control" name="class_memo" id="class_memo" value="" size="25" maxlength="30" required><font size="4">
 
+                                            						<td class="td1" align="center">備註</td>
+                                            						<td colspan="3">
+                                                          <div class='form-group'>
+                                                          <input type="text" class="form-control" name="class_memo" id="class_memo" value="" size="25" maxlength="30" ><font size="4">
+                                                          </div>
                                             						</td>
+
                                             					</tr>
                                                       <tr>
                                             						<td colspan="4" align="center" id="action_btn">
@@ -260,7 +265,8 @@
                                                 </div>
 
                                                 </div>
-                                                <button type="submit" class="btn btn-primary" name="check" onclick='NewData()'>新增資料</button>
+                                                <button type="button" class="btn btn-primary" name="check" onclick='NewData()'>新增資料</button>
+                                              </form>
                                           </div>
                                           <!-- Modal Footer -->
                                           <div class="modal-footer">
@@ -273,7 +279,7 @@
                                           </div>
                                       </div>
                                   </div>
-                                
+
                               </div>
                           </div>
                       </div>
