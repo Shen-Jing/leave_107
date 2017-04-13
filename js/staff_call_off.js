@@ -33,6 +33,13 @@ $( // 表示網頁完成後才會載入
             this.style.cursor = 'pointer';
         });
 
+        // 點選該列任意處，跳出詳細記錄
+        $('#container tbody').on('click', 'tr', function() {
+             // 取得目前所在列的serialno（位在最後一個td(被隱藏)）
+            current_serialno = $(this).closest('tr').find('td:nth-last-child(1)').text();
+            view_call_off(current_serialno);
+        });
+
         // 選擇年份後，即可顯示資料
         $('#qry_year').change(
             function(e) {
@@ -119,8 +126,11 @@ function CRUD(oper, serialno) {
                             row = row + "    <button type='button' class='btn-warning' name='check' title='取消(真的取消假單)' onclick='CRUD(4, " + JData.call_off.SERIALNO[i] + ")'><i class='fa fa-check'></i> </button>";
                             // 不取消
                             row = row + "    <button type='button' class='btn-danger' name='not-check' title='不取消(請假者回到請假狀態)' onclick='CRUD(5, " + JData.call_off.SERIALNO[i] + ")'><i class='fa fa-times'></i> </button>";
+                            // serialno(隱藏td，取詳細資料方便用)
+                            row = row + "<td style='display: none;'>" + JData.call_off.SERIALNO[i] + "</td>";
                             row = row + "</tr>";
                             $('#_content').append(row);
+
                         }
                     }
                 } else if (oper == 4) { //取消假單
