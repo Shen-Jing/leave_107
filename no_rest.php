@@ -40,20 +40,21 @@
 								<td class="col-xs-2 col-md-6 td1" align="center">請勾選欲進行作業</td>
 								<td class="col-xs-2 col-md-6">
 									<input name="do_process" type="radio" value='1'>
-									<font size='4'>計算不休假獎金 -- 以</font><select name="base_month">
-									<option value="0">預設月份(註)</option>
-									<option value="1">1月</option>
-									<option value="2">2月</option>
-									<option value="3">3月</option>
-									<option value="4">4月</option>
-									<option value="5">5月</option>
-									<option value="6">6月</option>
-									<option value="7">7月</option>
-									<option value="8">8月</option>
-									<option value="9">9月</option>
-									<option value="10">10月</option>
-									<option value="11">11月</option>
-									<option value="12">12月</option>
+									<font size='4'>計算不休假獎金 -- 以</font>
+									<select name="base_month" id="base_month">
+										<option value="0">預設月份(註)</option>
+										<option value="1">1月</option>
+										<option value="2">2月</option>
+										<option value="3">3月</option>
+										<option value="4">4月</option>
+										<option value="5">5月</option>
+										<option value="6">6月</option>
+										<option value="7">7月</option>
+										<option value="8">8月</option>
+										<option value="9">9月</option>
+										<option value="10">10月</option>
+										<option value="11">11月</option>
+										<option value="12">12月</option>
 									</select> 薪資做為計算基準 (<span style="font-size:13px;color:red">註:正式職員:12月 , 教師兼主管:7月</span>)
 									<br><input name="do_process" type="radio" value='2'><font size='4'>發mail通知
 									<br><input name="do_process" type="radio" value='3'><font size='4'>列印清冊
@@ -103,16 +104,24 @@
 			                        					<th style='text-align:center;'>單位</th>
 			                        					<th style='text-align:center;'>職稱</th>
 			                        					<th style='text-align:center;'>姓名</th>
-			                        					<th style='text-align:center;'>休假年資</th>
-			                        					<th style='text-align:center;'>每月俸給</th>
-			                        					<th style='text-align:center;'>可休日數</th>
-			                        					<th style='text-align:center;'>已休日數</th>
-			                        					<th style='text-align:center;'>改發加班費日數</th>
-			                        					<th style='text-align:center;'>改發加班費金額</th>
-			                        					<th style='text-align:center;'>超過14天補助</th>
+			                        					<th class="col-md-1" style='text-align:center;'>休假年資</th>
+			                        					<th class="col-md-1" style='text-align:center;'>每月俸給</th>
+			                        					<th class="col-md-1" style='text-align:center;'>可休日數</th>
+			                        					<th class="col-md-1" style='text-align:center;'>已休日數</th>
+			                        					<th class="col-md-2" style='text-align:center;'>改發加班費日數</th>
+			                        					<th class="col-md-2" style='text-align:center;'>改發加班費金額</th>
+			                        					<th class="col-md-1" style='text-align:center;'>超過14天補助</th>
 			                        					<th style='text-align:center;'>合計</th>
 			                        				</tr>
 			                        			</thead>
+			                        			<tfoot>
+			                        			    <tr>
+			                        			        <th style='text-align:center;' id="total" colspan="8">全部統計</th>
+			                        			        <th style='text-align:center;'>Position</th>
+			                        			        <th style='text-align:center;'>Salary</th>
+			                        			        <th style='text-align:center;'>Office</th>
+			                        			    </tr>
+			                        			</tfoot>
 			                        			<tbody>
 			                        			</tbody>
 			                        		</table>

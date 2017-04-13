@@ -20,6 +20,14 @@
 
    $userid = $_SESSION['empl_no'];
 
+   $Shaveclas="0";
+   $Sabroa="0";
+   $Ssunday="0";
+   $Ssaturday="0";
+   $Strip="0";
+   $Ssure='1';  //取消表示已選好職務代理人
+   $Sstr="";
+
    //**************************************************
    //來自 來自 class_query_2.php 之修改功能，按了修改鈕 // =>    目前未處理部分
    //**************************************************
@@ -99,24 +107,25 @@
    $query2 = @$_POST['query2'];  //來自 class_apply.php
 
    $serialno = @$_GET["serialno"];
-   @$_SESSION['this_serialno'] =  $serialno;//未請假修改申請單
+   $Sthis_serialno =  $serialno;//未請假修改申請單
    if ($serialno != '')
    {
       @$_SESSION['check'] = 'cl';
       $sql = "select substr(pocard,1,3) byear,substr(pocard,4,2) bmonth,substr(pocard,6,2) bday, acadm_return,night_return
-				 from no_holidayform
-				 where pocard='$serialno'";
+             from no_holidayform
+             where pocard='$serialno'";
+             echo json_encode($sql);
+             exit;
 
-      $stmt = ociparse($conn,$sql);
-      ociexecute($stmt,OCI_DEFAULT);
-      if (OCIFETCH($stmt))
+      $data = $db -> query_array($sql);
+      if (empty($data["message"]))
       {
-		   @$_SESSION['byear']   = ociresult($stmt,"BYEAR");
-         @$_SESSION['bmonth'] = ociresult($stmt,"BMONTH");
-		   @$_SESSION['bday']    = ociresult($stmt,"BDAY");
-		   @$_SESSION['acadm_return']  = ociresult($stmt,"ACADM_RETURN");  //是否被退 null:正常核准, 0:被退重送簽核完成, 1:被退中
-		   @$_SESSION['night_return']    = ociresult($stmt,"NIGHT_RETURN");
-	   }
+         $Sbyear   = $data["BYEAR"][0];
+         $Sbmonth = $data["BMONTH"][0];
+         $Sbday   = $data["BDAY"][0];
+         $Sacadm_return  = $data["ACADM_RETURN"][0];  //是否被退 null:正常核准, 0:被退重送簽核完成, 1:被退中
+         $Snight_return    = $data["NIGHT_RETURN"][0];
+      }
    }
 
 
@@ -154,7 +163,7 @@
       $name='';
       if (@$_GET['serialno'] !='')
       {          //來自 class_apply.php
-         @$_SESSION['this_serialno'] = @$_GET['serialno'];
+         @$Sthis_serialno = @$_GET['serialno'];
          $serialno= @$_GET['serialno'];
          $query2 = @$_GET['query'];     //來自 class_apply.php
          $sql="select   empl_chn_name
@@ -351,14 +360,14 @@
       $class_year    =$_POST['class_year'];
       $class_acadm=$_POST['class_acadm'];
 
-      if ($_SESSION['this_serialno'] =='')
+      if ($Sthis_serialno =='')
       {
            //新增時的序號產生方式
          $serialno = $year.$month.$day.$_SESSION["empl_no"];
-         $_SESSION['this_serialno']=$serialno;
+         $Sthis_serialno = $serialno;
       }
       else
-          $serialno = $_SESSION['this_serialno'] ;  // 非請假調補課修改
+          $serialno = $Sthis_serialno ;  // 非請假調補課修改
 
       //-----------------------------------------------------------------
       $selcode  = $_POST["class_subject"];             //選課代碼
@@ -531,6 +540,87 @@
       } // 資料齊全 else
    }
 
+   else if($_POST["oper"] == "store")
+   {
+      $acadm_return = $Sacadm_return;//是否被退 null:正常核准, 0:被退重送簽核完成, 1:被退中
+      $night_return  =$Snight_return;
+
+      $serialno = $Sthis_serialno;
+
+      if ($acadm_return=='1'){//教務處重送
+      $update ="update no_holidayform set ACADM_DATE =null, ACADM2_DATE=null, ACADM3_DATE =null, ACADM_SIGN=null,acadm_return='2' where pocard='$serialno'";
+
+      $result = $db -> query_trsac($update);
+      if(!$result)
+      {
+         echo json_encode($result["message"]);
+         exit;
+      }
+
+   }
+
+   if ($night_return=='1'){//進修部重送
+      $update ="update no_holidayform set night_DATE =null, night2_DATE=null, night3_DATE =null, night_SIGN=null ,night_return='2' where pocard='$serialno'";
+
+      // echo $update;
+
+      $result = $db -> query_trsac($update);
+      if(!$result)
+      {
+         echo json_encode($result["message"]);
+         exit;
+      }
+
+    }
+
+     //****************************************************************
+     //調補課申請單填完離開(新增)
+     // 無請假調補課申請單號碼，寫到另一個資料庫 no_holidayform 供簽核用
+     //****************************************************************
+      $sql =" select count(*)  count from no_holidayform where  pocard='$serialno'";
+      //echo $sql;
+      $data = $db -> query_array($sql);
+
+      if (empty($data["message"]))
+         $count = $data["COUNT"][0];
+
+         if ($count ==0){
+            $update =" insert into no_holidayform(pocard)  values('$serialno')";
+            //echo "<br>".$update;
+            $result = $db -> query_trsac($update);
+            if(!$result)
+            {
+               echo json_encode($result["message"]);
+               exit;
+            }
+
+            $mail_from     ="edoc@cc.ncue.edu.tw";
+            $mail_headers  = "From: $mail_from\r\n";
+            $mail_headers .= "Reply-To:lucy@cc.ncue.edu.tw\r\n";
+            $mail_headers .= "X-Mailer: PHP\r\n"; // mailer
+            $mail_headers .= "Return-Path: edoc@cc2.ncue.edu.tw\r\n";
+            $mail_headers .= "Content-type: text/html; charset=big5\r\n";
+
+            $mail_subject="非請假調補課申請";
+            $mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
+            $mail_body=$update;
+            @mail('bob@cc.ncue.edu.tw', $mail_subject, $mail_body, $mail_headers);
+         }
+    //-----------------------------------------------------------------
+      $Shaveclass="0";
+      $Sabroad="0";
+      $Ssunday="0";
+      $Ssaturday="0";
+      $Strip="0";
+      $Ssure='1';  //取消表示已選好職務代理人
+      $str=$Sstr;
+
+      $db -> end_trsac();
+
+      echo json_encode("簽核完成!");
+      exit;
+   }
+
    else if($_POST['oper'] == "update")
    {
       $serialno = $_POST['serial_no'];
@@ -576,14 +666,14 @@
       $data = $db -> query_array($sql);
       $depart = $data["CRJB_DEPART"][0];
 
-      if ($_SESSION['this_serialno'] =='')
+      if ($Sthis_serialno =='')
       {
            //新增時的序號產生方式
          $this_serialno = $year.$month.$day.$_SESSION["empl_no"];
-         $_SESSION['this_serialno']=$this_serialno;
+         $Sthis_serialno = $this_serialno;
       }
       else
-          $this_serialno = $_SESSION['this_serialno'] ;
+          $this_serialno = $Sthis_serialno ;
 
       //--------------------------------------------------------------------
       if ($byear < 100)
@@ -663,4 +753,5 @@
       }
 
    }
+
 ?>

@@ -64,13 +64,13 @@
                                 國立彰化師範大學調補課申請單填寫作業(<font color="red">請每班各填寫一份，僅限於進修部課程</font>)
                         </div>
                         <div class="panel-body panel-height">
-                        <form class="form-horizontal" role="form" name="no_holiday" id="no_holiday" action="" method="post">
+                        <form class="form-horizontal" role="form" name="no_holiday" id="no_holiday_form" action="" method="post">
                             <table class="table table-bordered" >
                             <thead>
                             <tr>
                                 <td class="col-md-2 td1" align="center">科目名稱</td>
                                 <td class="col-md-4">
-                                    <select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='subject_name' name='subject_name' onChange=''></select>
+                                    <select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='subject_name' name='subject_name'></select>
                                     <font size='2' color='darkred'>(如果沒有選項，表示您學年與學期選錯了，請返回上一步) </font>
                                 </td>
                                 <td class="col-md-2 td1" align="center">上課班別</td>
@@ -110,8 +110,8 @@
                                 <div class='form-group'>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            第<select class='form-control' style='width:auto; display: inline-block;' name='class_section2_1' id='class_section2_1' onChange=''></select>節~
-                                            第<select class='form-control' style='width:auto; display: inline-block;' id='class_section2_2' name='class_section2_2' onChange=''></select>節
+                                            第<select class='form-control' style='width:auto; display: inline-block;' name='class_section2_1' id='class_section2_1'></select>節~
+                                            第<select class='form-control' style='width:auto; display: inline-block;' id='class_section2_2' name='class_section2_2'></select>節
                                         </div>
                                     </div>
                                 </div>
@@ -122,7 +122,7 @@
                             <thead>
                             <tr>
                                 <td class="td1" align="center">補課教室</td>
-                                <td colspan="3"><input type="text" class="form-control" name="class_room" id="class_room" value="" size="25" maxlength="30"><font size="4">
+                                <td colspan="3"><input type="text" class="form-control" name="class_room" id="class_room"><font size="4">
                                 </td>
                             </tr>
                             </thead>
@@ -131,14 +131,14 @@
                             <tr>
                                 <td class="td1" align="center">備註</td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control" name="class_memo" id="class_memo" value="" size="25" maxlength="30" required>
+                                    <input type="text" class="form-control" name="class_memo" id="class_memo">
                                     <font size="4">
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4" align="center">
-                                    <!-- <button type="submit" class="btn btn-primary" name="action" value="signed">存入簽核檔並離開或被退重送</button> -->
-                                    <button type="submit" class="btn btn-primary" name="action" value="store">本班資料儲存</button>
+                                    <button type="submit" class="btn btn-primary" name="action" id="store">存入簽核檔並離開或被退重送</button>
+                                    <button type="submit" class="btn btn-primary" name="action" id="insert">本班資料儲存</button>
                                 </td>
                             </tr>
                             </thead>
@@ -183,7 +183,7 @@
                                         <tr>
                                             <td class="col-md-2 td1" align="center">科目名稱</td>
                                             <td class="col-md-4">
-                                                <select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='edit_subject_name' name='edit_subject_name' onChange=''></select>
+                                                <select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='edit_subject_name' name='edit_subject_name'></select>
                                                 <font size='2' color='darkred'>(如果沒有選項，表示您學年與學期選錯了，請返回上一步) </font>
                                             </td>
                                             <td class="col-md-2 td1" align="center">上課班別</td>
@@ -219,7 +219,7 @@
                                             </td>
 
                                             <td class="col-md-2 td1" align="center">補課節次</td>
-                                            <td class="col-md-4" >第<select class='form-control' style='width:auto; display: inline-block;' name='edit_class_section2_1' id='edit_class_section2_1' onChange=''></select>節~第<select class='form-control' style='width:auto; display: inline-block;' id='edit_class_section2_2' name='edit_class_section2_2' onChange=''></select>節
+                                            <td class="col-md-4" >第<select class='form-control' style='width:auto; display: inline-block;' name='edit_class_section2_1' id='edit_class_section2_1'></select>節~第<select class='form-control' style='width:auto; display: inline-block;' id='edit_class_section2_2' name='edit_class_section2_2'></select>節
                                             </td>
                                         </tr>
                                         </thead>
@@ -236,7 +236,7 @@
                                         <tr>
                                             <td class="td1" align="center">備註</td>
                                             <td colspan="3">
-                                                <input type="text" class="form-control" name="edit_class_memo" id="edit_class_memo" value="" size="25" maxlength="30" required>
+                                                <input type="text" class="form-control" name="edit_class_memo" id="edit_class_memo">
                                                 <font size="4">
                                             </td>
                                         </tr>

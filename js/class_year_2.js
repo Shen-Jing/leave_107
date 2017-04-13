@@ -2,9 +2,6 @@ var date = new Date();
 var year = date.getFullYear() - 1911;
 $(
     function (){
-        $("body").tooltip({
-            selector: "[title]"
-        });
 
         row0 = "<option selected disabled value = '' class='text-hide'>請選擇學年度</option>";
         $ ('#class_year').append(row0);
@@ -24,6 +21,7 @@ $(
                 }
             }
         );
+
   }
 );
 
@@ -96,9 +94,9 @@ function CRUD(oper, status) {
 
         if(status != "delete")
         {
-            $('#class_room, #class_memo').blur();
-            $('#class_room, #class_memo').css("background-color","white");
-            $('#class_room, #class_memo').val("");
+            $('#class_section2, #class_room, #class_memo').blur();
+            $('#class_section2, #class_room, #class_memo').css("background-color","white");
+            $('#class_section2, #class_room, #class_memo').val("");
 
             //填寫表單部分
             //科目
@@ -118,9 +116,15 @@ function CRUD(oper, status) {
 
                     for(var i = 0 ; i < JData["SCR_SELCODE"].length ; i++)
                     {
-                        row0 = row0 + "<option class_no = '' value='" + JData["SCR_SELCODE"][i] + "'>" + JData["SCR_SELCODE"][i] + JData["SUB_NAME"][i] + "</option>";
+                        if(i == 1)
+                        {
+                            row0 = row0 + "<option class_no = '' value='" + JData["SCR_SELCODE"][i] + "' selected>" + JData["SCR_SELCODE"][i] + JData["SUB_NAME"][i] + "</option>";
+                        }
+                        else
+                        {
+                            row0 = row0 + "<option class_no = '' value='" + JData["SCR_SELCODE"][i] + "'>" + JData["SCR_SELCODE"][i] + JData["SUB_NAME"][i] + "</option>";
+                        }
                     }
-
                     $('#subject_name').append(row0);
                 }
 
@@ -155,15 +159,31 @@ function CRUD(oper, status) {
             $ ('#class_section2_1').append(row0);
             for (var i = 1; i <= 13 ; i++)
             {
-                row = "<option value=" +i+ ">" + i + " </option>";
-                $ ('#class_section2_1').append(row);
+                if(i == 1)
+                {
+                    row = "<option value=" +i+ " selected>" + i + " </option>";
+                    $ ('#class_section2_1').append(row);
+                }
+                else
+                {
+                    row = "<option value=" +i+ ">" + i + " </option>";
+                    $ ('#class_section2_1').append(row);
+                }
             }
             row0 = "<option selected disabled class='text-hide'>請選擇節次</option>";
             $ ('#class_section2_2').append(row0);
             for (var i = 1; i <= 13 ; i++)
             {
+                if(i == 3)
+                {
+                    row = "<option value=" +i+ " selected>" + i + " </option>";
+                    $ ('#class_section2_2').append(row);
+                }
+                else
+                {
                     row = "<option value=" +i+ ">" + i + " </option>";
-                $ ('#class_section2_2').append(row);
+                    $ ('#class_section2_2').append(row);
+                }
             }
 
             var start_options = {
@@ -249,7 +269,6 @@ function CRUD(oper, status) {
 
 }
 
-
 function DeleteRow(classno, serialno)
 {
     if(confirm("確定要刪除嗎?"))
@@ -278,7 +297,7 @@ function DeleteRow(classno, serialno)
 }
 
 //bootstrapValidator
-$("#no_holiday").bootstrapValidator({
+$("#no_holiday_form").bootstrapValidator({
     live: 'submitted',
     fields: {
         subject_name: {
@@ -324,13 +343,7 @@ $("#no_holiday").bootstrapValidator({
                 },
             }
         },
-        class_room: {
-            validators: {
-                notEmpty: {
-                    message: '請輸入補課教室'
-                },
-            }
-        },
+
     }
 })
 // 不論表單驗證正確與否時，皆可按下表單按鈕
@@ -344,10 +357,11 @@ $("#no_holiday").bootstrapValidator({
 })
 //submit by ajax----------------------------------
 .on( 'success.form.bv' , function(e) {
-    $("button").click(function () {
-        if ($(this).val() == "store") {
+    var $form = $(e.target),     // Form instance
+        $button = $form.data('bootstrapValidator').getSubmitButton();
 
-                alert("Insert");
+        switch ($button.attr('id')) {
+            case 'insert':
                 var class_year = $('#class_year').val();
                 var class_acadm = $('#class_acadm').val();
 
@@ -378,15 +392,82 @@ $("#no_holiday").bootstrapValidator({
                     },
                     error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
                 });
+                break;
+
+            case 'store':
+                var class_year = $('#class_year').val();
+                var class_acadm = $('#class_acadm').val();
+
+                $.ajax({
+                    url: 'ajax/class_year_2_ajax.php',
+                    data: { oper: 'store', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#subject_name').val(),
+                            class_name: $('#class_name').text(), scr_period: $('#scr_period').text() , class_section2_1: $('#class_section2_1').val(),
+                             class_section2_2: $('#class_section2_2').val(), class_room: $('#class_room').val(), class_memo: $('#class_memo').val(), origin_time: $('#origin_time').val(),
+                            change_time: $('#change_time').val() },
+                    type: 'POST',
+                    dataType: "json",
+                    success: function(JData) {
+
+                        if (JData.error_code)
+                            toastr["error"](JData.error_message);
+                        else
+                        {
+                            if(JData.length == 7)
+                            {
+                                toastr["success"](JData);
+                                CRUD(0,"insert");
+                            }
+                            else
+                                alert(JData);
+                                // toastr["error"](JData);
+                        }
+
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+                });
+                break;
+        }
+
+
                 e.preventDefault();
                 e.unbind();
 
-        }
-        else if($(this).val() == "signed"){
-        }
-    });
 });
 
+
+// function Insert()
+// {
+
+//     var class_year = $('#class_year').val();
+//     var class_acadm = $('#class_acadm').val();
+
+//     $.ajax({
+//         url: 'ajax/class_year_2_ajax.php',
+//         data: { oper: 'new', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#subject_name').val(),
+//                 class_name: $('#class_name').text(), scr_period: $('#scr_period').text() , class_section2: $('#class_section2').val(), class_room: $('#class_room').val(),
+//                 class_memo: $('#class_memo').val(), cyear: $('#cyear').val(), cmonth: $('#cmonth').val(), cday: $('#cday').val(),
+//                 dyear: $('#dyear').val(), dmonth: $('#dmonth').val(), dday: $('#dday').val() },
+//         type: 'POST',
+//         dataType: "json",
+//         success: function(JData) {
+
+//             if (JData.error_code)
+//                 toastr["error"](JData.error_message);
+//             else
+//             {
+//                 if(JData.length == 7)
+//                 {
+//                     toastr["success"](JData);
+//                     CRUD(0,"insert");
+//                 }
+//                 else
+//                     toastr["error"](JData);
+//             }
+
+//         },
+//         error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+//     });
+// }
 
 function EditRow(classno, serialno)
 {
@@ -585,107 +666,140 @@ function EditRow(classno, serialno)
     },
     error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
     });
-
 }
 
 //bootstrapValidator
-$("#update_form").bootstrapValidator({
-    live: 'submitted',
-    fields: {
-        edit_subject_name: {
-            validators: {
-                notEmpty: {
-                    message: '請選擇科目'
-                }
-            }
-        },
-        edit_origin_time: {
-            validators: {
-                notEmpty: {
-                    message: '原上課日期日期不可空白'
-                },
-                date: {
-                    format: 'YYYY/MM/DD',
-                    message: '不正確的日期格式！'
-                }
-            }
-        },
-        edit_change_time: {
-            validators: {
-                notEmpty: {
-                    message: '調補課日期不可空白'
-                },
-                date: {
-                    format: 'YYYY/MM/DD',
-                    message: '不正確的日期格式！'
-                }
-            }
-        },
-        edit_class_section2_1: {
-            validators: {
-                notEmpty: {
-                    message: '請選擇補課節次'
-                }
-            }
-        },
-        edit_class_section2_2: {
-            validators: {
-                notEmpty: {
-                    message: '請選擇補課節次'
-                },
-            }
-        },
-        edit_class_room: {
-            validators: {
-                notEmpty: {
-                    message: '請輸入補課教室'
-                },
-            }
-        },
-    }
-})
-// 不論表單驗證正確與否時，皆可按下表單按鈕
-// Triggered when any field is invalid
-.on('error.field.bv', function(e, data) {
-    data.bv.disableSubmitButtons(false);
-})
-// Triggered when any field is valid
-.on('success.field.bv', function(e, data) {
-    data.bv.disableSubmitButtons(false);
-});
-//submit by ajax----------------------------------
-// .on( 'success.form.bv' , function(e) {
-//     $("button").click(function () {
-
-//             $.ajax({
-//                 url: 'ajax/class_year_2_ajax.php',
-//                 data: { oper: 'update', class_no: $(this).name(), serial_no: $(this).id(), class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#edit_subject_name').val(),
-//                         class_name: $('#edit_class_name').text(), scr_period: $('#edit_scr_period').text() , class_section2_1: $('#edit_class_section2_1').val(),  class_section2_2: $('#edit_class_section2_2').val(), class_room: $('#edit_class_room').val(),
-//                         class_memo: $('#edit_class_memo').val(), edit_origin_time: $('#edit_origin_time').val(), edit_change_time: $('#edit_change_time').val() },
-//                 type: 'POST',
-//                 dataType: "json",
-//                 success: function(JData) {
-
-//                     if (JData.error_code)
-//                         toastr["error"](JData.error_message);
-//                     else
-//                     {
-//                         if(JData.length == 7)
-//                         {
-//                             toastr["success"](JData);
-//                             CRUD(0,"update");
-//                             $("#ChangeModal2").modal("hide");
-//                         }
-//                         else
-//                             // alert(JData);
-//                             toastr["error"](JData);
-//                     }
-
+// $("#update_form").bootstrapValidator({
+//     live: 'submitted',
+//     fields: {
+//         edit_subject_name: {
+//             validators: {
+//                 notEmpty: {
+//                     message: '請選擇科目'
+//                 }
+//             }
+//         },
+//         edit_origin_time: {
+//             validators: {
+//                 notEmpty: {
+//                     message: '原上課日期日期不可空白'
 //                 },
-//                 error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-//             });
+//                 date: {
+//                     format: 'YYYY/MM/DD',
+//                     message: '不正確的日期格式！'
+//                 }
+//             }
+//         },
+//         edit_change_time: {
+//             validators: {
+//                 notEmpty: {
+//                     message: '調補課日期不可空白'
+//                 },
+//                 date: {
+//                     format: 'YYYY/MM/DD',
+//                     message: '不正確的日期格式！'
+//                 }
+//             }
+//         },
+//         edit_class_section2_1: {
+//             validators: {
+//                 notEmpty: {
+//                     message: '請選擇補課節次'
+//                 }
+//             }
+//         },
+//         edit_class_section2_2: {
+//             validators: {
+//                 notEmpty: {
+//                     message: '請選擇補課節次'
+//                 },
+//             }
+//         },
+//         edit_class_room: {
+//             validators: {
+//                 notEmpty: {
+//                     message: '請輸入補課教室'
+//                 },
+//             }
+//         },
+//     }
+// })
+// // 不論表單驗證正確與否時，皆可按下表單按鈕
+// // Triggered when any field is invalid
+// .on('error.field.bv', function(e, data) {
+//     data.bv.disableSubmitButtons(false);
+// })
+// // Triggered when any field is valid
+// .on('success.field.bv', function(e, data) {
+//     data.bv.disableSubmitButtons(false);
+// })
+// //submit by ajax----------------------------------
+// .on( 'success.form.bv' , function(e) {
+//         $.ajax({
+//             url: 'ajax/class_year_2_ajax.php',
+//             data: { oper: 'update', class_no: $(this).name(), serial_no: $(this).id(), class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#edit_subject_name').val(),
+//                     class_name: $('#edit_class_name').text(), scr_period: $('#edit_scr_period').text() , class_section2_1: $('#edit_class_section2_1').val(),  class_section2_2: $('#edit_class_section2_2').val(), class_room: $('#edit_class_room').val(),
+//                     class_memo: $('#edit_class_memo').val(), edit_origin_time: $('#edit_origin_time').val(), edit_change_time: $('#edit_change_time').val() },
+//             type: 'POST',
+//             dataType: "json",
+//             success: function(JData) {
+
+//                 if (JData.error_code)
+//                     toastr["error"](JData.error_message);
+//                 else
+//                 {
+//                     if(JData.length == 7)
+//                     {
+//                         toastr["success"](JData);
+//                         CRUD(0,"update");
+//                         $("#ChangeModal2").modal("hide");
+//                     }
+//                     else
+//                         // alert(JData);
+//                         toastr["error"](JData);
+//                 }
+
+//             },
+//             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
 //     });
 // });
 
+// }
+
+
+
+function Update(classno, serialno)
+{
+
+    $.ajax({
+        url: 'ajax/class_year_2_ajax.php',
+        data: { oper: 'update', class_no: classno, serial_no: serialno, class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#edit_subject_name').val(),
+                class_name: $('#edit_class_name').text(), scr_period: $('#edit_scr_period').text() , class_section2: $('#edit_class_section2').val(), class_room: $('#edit_class_room').val(),
+                class_memo: $('#edit_class_memo').val(), cyear: $('#edit_cyear').val(), cmonth: $('#edit_cmonth').val(), cday: $('#edit_cday').val(),
+                dyear: $('#edit_dyear').val(), dmonth: $('#edit_dmonth').val(), dday: $('#edit_dday').val() },
+        type: 'POST',
+        dataType: "json",
+        success: function(JData) {
+
+            if (JData.error_code)
+                toastr["error"](JData.error_message);
+            else
+            {
+                if(JData.length == 7)
+                {
+                    toastr["success"](JData);
+                    CRUD(0,"update");
+                    $("#ChangeModal2").modal("hide");
+                }
+                else
+                    // alert(JData);
+                    toastr["error"](JData);
+            }
+
+        },
+        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+    });
+
+}
 
 

@@ -100,7 +100,21 @@ function CRUD(oper, id) {
     typeval = $ ('#qry_type').val();
 
 
+
     $('#Btable').DataTable({
+        "responsive": {
+            details: {
+                display: $.fn.dataTable.Responsive.display.modal( {
+                    header: function ( row ) {
+                        var data = row.data();
+                        return '詳細資料 '+data[0]+' '+data[1];
+                    }
+                } ),
+                renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                    tableClass: 'table'
+                } )
+            }
+        },
         "scrollY": "500px",
         "scrollCollapse": true,
         "displayLength": 10,
@@ -127,6 +141,7 @@ function CRUD(oper, id) {
             { "name": "PERTWO_SIGND" },
             { "name": "SECONE_SIGND" },
             { "name": "APPDATE" }
-        ]
+        ],
+
     });
 }

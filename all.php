@@ -59,7 +59,7 @@
                                                 <!--link rel="stylesheet" href="style.css"-->
                                                 <div id="_content">
                                                 	<div class='table-responsive'>
-                                                		<table class='table table-bordered table-striped' id="Btable" cellspacing="0">
+                                                		<table class="table table-striped table-bordered nowrap" id="Btable" cellspacing="0">
                                                 			<thead>
                                                 				<tr style="font-weight:bold">
                                                 					<th style='text-align:center;'>單位</th>
