@@ -4,16 +4,12 @@ var ad_year = date.getFullYear();
 var month = date.getMonth() + 1;
 $( // 表示網頁完成後才會載入
     function() {
-        $("body").tooltip({
-            selector: "[title]"
-        });
-
         var start_options = {
             defaultDate: new Date(),
             format: 'YYYY/MM/DD',
             ignoreReadonly: true,
-            maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-            minDate: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+            maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)),
+            minDate: new Date(new Date().setFullYear(new Date().getFullYear() - 1, 0, 1)),
             tooltips: {
                 clear: "清除所選",
                 close: "關閉日曆",
@@ -46,11 +42,10 @@ $( // 表示網頁完成後才會載入
         $('#qry_ymd').datetimepicker(start_options);
 
         // 查詢單位若有改變也要query
-        $('#qry_ymd').click(
-            function(e) {
-                CRUD(0);
-            }
-        )
+        $('#qry_ymd').on('input', function() {
+            CRUD(0);
+            alert("dffd");
+        });
     });
 
 function CRUD(oper, empl_no, over_date) {
