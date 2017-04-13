@@ -17,9 +17,6 @@ $( // 表示網頁完成後才會載入
             month = '0' + month;
         if (day.length < 2)
             day = '0' + day;
-        $("body").tooltip({
-            selector: "[title]"
-        });
 
         // select內容，也就是不需根據select所選而有不同sql顯示資料的部分
         // 可以一開始就ajax取內容的
@@ -653,6 +650,11 @@ $( // 表示網頁完成後才會載入
                           toastr["success"](JData.submit_remind);
                         // 刷新serailno, 加班補休
                         refresh_form();
+                        if ($('input[name=haveclass]:checked').val() == "1"){
+                          // 若有課，轉到「有請假補填調補課申請」頁面
+                          alert("請假/出差期間有課，將轉到「有請假補填調補課申請」補填資訊。");
+                          location.href = "class_add.php";
+                        }
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
