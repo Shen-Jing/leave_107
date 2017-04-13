@@ -446,18 +446,20 @@ function Send(serailnoval,state)
   var class_acadm=$ ('#qry_acadm').val();
   //alert(oyear);
   //alert(serailnoval);
-  $.ajax({
-      url: 'ajax/class_add_ajax.php',
-      data: { oper: "send" ,classsubject:class_subject,byear:oyear,bmonth:omonth,bday:oday
-             ,eyear:cyear,emonth:cmonth,eday:cday,classsection21:class_section21,classsection22:class_section22,serialno:serailnoval,class_no:classnoval,class_room:class_room,class_memo:class_memo,class_year:class_year,class_acadm:class_acadm,State:state},
-      type: 'POST',
-      dataType: "json",
-      success: function() {
-        toastr["success"]("處理完成!!");
-        NextClick(serailnoval);
-      },
-      error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-    });
+
+      $.ajax({
+          url: 'ajax/class_add_ajax.php',
+          data: { oper: "send" ,classsubject:class_subject,byear:oyear,bmonth:omonth,bday:oday
+                 ,eyear:cyear,emonth:cmonth,eday:cday,classsection21:class_section21,classsection22:class_section22,serialno:serailnoval,class_no:classnoval,class_room:class_room,class_memo:class_memo,class_year:class_year,class_acadm:class_acadm,State:state},
+          type: 'POST',
+          dataType: "json",
+          success: function() {
+            toastr["success"]("處理完成!!");
+            NextClick(serailnoval);
+          },
+          error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+        });
+
 }
 function CheckData(serailnoval,state)
 {
@@ -480,49 +482,57 @@ function CheckData(serailnoval,state)
 
   var class_year=$ ('#qry_class_year').val();
   var class_acadm=$ ('#qry_acadm').val();
-
-  /*$('#ChangeModal2').bootstrapValidator({
+  $('#editform').bootstrapValidator({
     live: 'submitted',
       fields: {
-          classroom: {
+          subject-name: {
+              validators: {
+                  notEmpty: {
+                      message: '請選擇科目名稱'
+                  }
+              }
+          },
+          class_room: {
               validators: {
                   notEmpty: {
                       message: '請填寫補課教室'
                   }
               }
+          },
+          class_section21: {
+              validators: {
+                  notEmpty: {
+                      message: '請選擇補課開始節次'
+                  }
+              }
+          },
+          class_section22: {
+              validators: {
+                  notEmpty: {
+                      message: '請選擇補課結束節次'
+                  }
+              }
           }
         }
       })
-      .on('error.field.bv', function(e, data) {
-          data.bv.disableSubmitButtons(false);
-      })
-      // Triggered when any field is valid
-      .on('success.field.bv', function(e, data) {
-          data.bv.disableSubmitButtons(false);
-      })
       .on('success.form.bv', function(e) {
-
-      });*/
-      $.ajax({
-          url: 'ajax/class_add_ajax.php',
-          data: { oper: 'ch' },
-          type: 'POST',
-          dataType: "json",
-          success: function() {
-            if(class_section2=="")
-            {
-              toastr["error"]("補課節次未填寫!");
-            }else if(class_room=="")
-              toastr["error"]("補課教室未填寫!");
-            else
-            {
+        $.ajax({
+            url: 'ajax/class_add_ajax.php',
+            data: { oper: 'ch' },
+            type: 'POST',
+            dataType: "json",
+            success: function() {
 
               Send(serailnoval,state);
-            }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+          });
+          e.preventDefault(); //STOP default action
+          e.unbind(); //unbind. to stop multiple form submit.
 
-          },
-          error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-        });
+      });
+
+
 
 }
 function closeM()
