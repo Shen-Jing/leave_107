@@ -13,7 +13,7 @@ include_once("inc/Mobile_Detect.php");
 $mbd = new Mobile_Detect();
 $ismobile = $mbd->isMobile() & !$mbd->isTablet();
 ?>
-    
+
 <!-- Page Content -->
 <div id="page-wrapper">
     <div class="container-fluid">
@@ -83,7 +83,7 @@ $ismobile = $mbd->isMobile() & !$mbd->isTablet();
                                     <? if($ismobile)echo "</tr><tr>"; ?>
                                 </td>
                                 <td class="td1 col-sm-2">請假開始時間</td>
-                                <td <? if($ismobile) echo "colspan='4'"; ?>> 
+                                <td <? if($ismobile) echo "colspan='4'"; ?>>
 									<span id="party" style="display: none;"></span>
 									<span id="vocation" style="display: none;"></span>
                                     <div class="col-sm-4">
@@ -95,7 +95,7 @@ $ismobile = $mbd->isMobile() & !$mbd->isTablet();
                             </tr>
                             <tr>
                                 <td class="td1 col-sm-2">請假結束日期</h3></td>
-                                    <td <? if($ismobile) echo "colspan='4'"; ?>> 
+                                    <td <? if($ismobile) echo "colspan='4'"; ?>>
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <input type='text' class="form-control" id='leave-end' name="leave_end">
@@ -104,10 +104,10 @@ $ismobile = $mbd->isMobile() & !$mbd->isTablet();
                                     </td>
                                     <? if($ismobile)echo "</tr><tr>"; ?>
 									<td class="td1 col-sm-2">請假結束時間</td>
-									<td <? if($ismobile) echo "colspan='4'"; ?>> 
+									<td <? if($ismobile) echo "colspan='4'"; ?>>
 										<div class="col-sm-4">
 											<div class="form-group">
-												<select name="etime" id="etime" class="form-control"> </select>時 
+												<select name="etime" id="etime" class="form-control"> </select>時
 											</div>
 										</div>
 									</td>
@@ -122,7 +122,7 @@ $ismobile = $mbd->isMobile() & !$mbd->isTablet();
                                 <td class='td1 col-sm-2'><span style="color: red;">是否含例假日</span></td>
                                 <td class="col-sm-4">
                                     <input type='radio' name='saturday' value='1'>是
-                                    <input type='radio' name='saturday' value='0' checked>否 
+                                    <input type='radio' name='saturday' value='0' checked>否
 								</td>
                             </tr>
                             <tr>
