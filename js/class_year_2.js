@@ -200,18 +200,13 @@ function CRUD(oper, status) {
                     incrementHour: "加一小時",
                     incrementMinute: "Increment Minute",
                     incrementSecond: "Increment Second",
-                    nextCentury: "下個世紀",
-                    nextDecade: "後十年",
                     nextMonth: "下個月",
                     nextYear: "下一年",
                     pickHour: "Pick Hour",
                     pickMinute: "Pick Minute",
                     pickSecond: "Pick Second",
-                    prevCentury: "上個世紀",
-                    prevDecade: "前十年",
                     prevMonth: "上個月",
                     prevYear: "前一年",
-                    selectDecade: "選擇哪十年",
                     selectMonth: "選擇月份",
                     selectTime: "選擇時間",
                     selectYear: "選擇年份",
@@ -233,18 +228,13 @@ function CRUD(oper, status) {
                     incrementHour: "加一小時",
                     incrementMinute: "Increment Minute",
                     incrementSecond: "Increment Second",
-                    nextCentury: "下個世紀",
-                    nextDecade: "後十年",
                     nextMonth: "下個月",
                     nextYear: "下一年",
                     pickHour: "Pick Hour",
                     pickMinute: "Pick Minute",
                     pickSecond: "Pick Second",
-                    prevCentury: "上個世紀",
-                    prevDecade: "前十年",
                     prevMonth: "上個月",
                     prevYear: "前一年",
-                    selectDecade: "選擇哪十年",
                     selectMonth: "選擇月份",
                     selectTime: "選擇時間",
                     selectYear: "選擇年份",
@@ -342,7 +332,14 @@ $("#no_holiday_form").bootstrapValidator({
                     message: '請選擇補課節次'
                 },
             }
-        },
+        }
+        class_room: {
+            validators: {
+                notEmpty: {
+                    message: '請填寫補課教室'
+                },
+            }
+        }
 
     }
 })
@@ -429,8 +426,8 @@ $("#no_holiday_form").bootstrapValidator({
         }
 
 
-                e.preventDefault();
-                e.unbind();
+        e.preventDefault();
+        // e.unbind();
 
 });
 
@@ -567,18 +564,13 @@ function EditRow(classno, serialno)
                         incrementHour: "加一小時",
                         incrementMinute: "Increment Minute",
                         incrementSecond: "Increment Second",
-                        nextCentury: "下個世紀",
-                        nextDecade: "後十年",
                         nextMonth: "下個月",
                         nextYear: "下一年",
                         pickHour: "Pick Hour",
                         pickMinute: "Pick Minute",
                         pickSecond: "Pick Second",
-                        prevCentury: "上個世紀",
-                        prevDecade: "前十年",
                         prevMonth: "上個月",
                         prevYear: "前一年",
-                        selectDecade: "選擇哪十年",
                         selectMonth: "選擇月份",
                         selectTime: "選擇時間",
                         selectYear: "選擇年份",
@@ -599,18 +591,13 @@ function EditRow(classno, serialno)
                         incrementHour: "加一小時",
                         incrementMinute: "Increment Minute",
                         incrementSecond: "Increment Second",
-                        nextCentury: "下個世紀",
-                        nextDecade: "後十年",
                         nextMonth: "下個月",
                         nextYear: "下一年",
                         pickHour: "Pick Hour",
                         pickMinute: "Pick Minute",
                         pickSecond: "Pick Second",
-                        prevCentury: "上個世紀",
-                        prevDecade: "前十年",
                         prevMonth: "上個月",
                         prevYear: "前一年",
-                        selectDecade: "選擇哪十年",
                         selectMonth: "選擇月份",
                         selectTime: "選擇時間",
                         selectYear: "選擇年份",
