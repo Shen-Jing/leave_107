@@ -2,182 +2,144 @@
 include '../inc/check.php';
 
 // 查詢退回原因
-$sql = "SELECT * FROM ps_menu
-        WHERE prgid='leave' ORDER BY to_number(sysid)";
-$row = $db -> query_array($sql);
-$a['data'] = "";
+if(!isset($_POST['oper']))
+  exit;
 
-for($i = 0; $i < count($row['SYSID']); ++$i){
-  $sysid = $row['SYSID'][$i];
+if ($_POST['oper'] == 0) {
+  $sql = "SELECT * FROM ps_menu
+          WHERE prgid='leave' ORDER BY to_number(sysid)";
+  $row = $db -> query_array($sql);
+  $a['data'] = "";
+
   $a['data'][] = array(
-    $sysid,
-    $row['PRGNAME'][$i],
-    "<button type=\"button\" class=\"btn btn-warning\" onclick='CRUD(2, $sysid);'>修改</button>",
-    "<button type=\"button\" class=\"btn btn-danger\" onclick='CRUD(3, $sysid);'>刪除</button>");
+    "<input value='' type='number' id='sysid-1' class='form-control' placeholder='序號（不在新增選項內）' readonly>",
+    "<input value='' type='text' id='prgname-1' class='form-control' size='100' placeholder='新增差假原因'>",
+    "<button type='button' class='btn-success' name='modify' id='modify' title='修改儲存' onclick='CRUD(1, -1)' title='新增儲存'><i class='fa fa-save'></i></button>"
+  );
+  for($i = 0; $i < count($row['SYSID']); ++$i){
+    $sysid = $row['SYSID'][$i];
+    $prgname = $row['PRGNAME'][$i];
+
+    $a['data'][] = array(
+      "<input value='$sysid' type='number' id='sysid$sysid' class='form-control'>",
+      "<input value='$prgname' type='text' id='prgname$sysid' class='form-control' size='100'>",
+      "<button type='button' class='btn-success' name='modify' id='modify' title='修改儲存' onclick='CRUD(2, $sysid)' title='儲存修改'><i class='fa fa-save'></i></button>" .
+      "<button type='button' class='btn-danger' name='delete' onclick='CRUD(3, $sysid)' title='刪除'><i class='fa fa-times'></i></button>"
+    );
+  }
+  echo json_encode($a);
+  exit;
 }
-echo json_encode($a);
-exit;
+$result = "";
+// 新增
+if ($_POST['oper'] == 1) {
+  // 欲新增的原因
+  $reason = $_POST['prgname'];
 
-// // 修改/取消
-// if(!isset($_POST["sn"])) exit;
-//
-// $proc_serialno = $_POST["sn"];
-// $sql = "SELECT count(*) count
-//         FROM holidayform
-//         WHERE POCARD='$userid'
-//         AND serialno='$proc_serialno'
-//         AND condition in ('0','2')";
-// $count = $db -> fetch_cell($sql);
-// if($count != 1){
-// 	echo "假單序列號有誤！！";
-// 	exit;
-// }
-//
-// // 取得資料庫系統時間
-// $sql = "select lpad(to_char(sysdate,'yyyymmdd')-'19110000',7,'0') ndate from dual";
-// $sys_date = $db -> fetch_cell($sql);
-//
-//
-// // 取消
-// if ( $_POST["oper"] == "cancel" )
-// {
-// 	// 未完成取消
-// 	if( $_POST["flag"] == "0" ) {
-// 		$SQLStr = " SELECT  h.POVHOURS,h.POVDAYS,h.over_date,h.povtype
-// 					FROM psfempl p,holidayform h,psqcode pc
-// 					where CONDITION in ('0','2')
-// 					and serialno='$proc_serialno'
-// 					and POCARD='$userid'
-// 					and p.empl_no=h.pocard
-// 					and pc.CODE_KIND='0302'
-// 					and pc.CODE_FIELD=h.POVTYPE";
-//
-// 		$data = $db -> fetch_row_assoc($SQLStr);
-//
-// 		$povtype   = $data["POVTYPE"];
-// 		$povday    = $data["POVDAYS"];
-// 		$povhour   = $data["POVHOURS"];
-// 		$over_date = $data["OVER_DATE"];
-//
-// 		// 進行取消
-// 		$SQLStr2 = "update holidayform set CONDITION='-1' ,THREESIGND='$sys_date' where serialno = '$proc_serialno' ";
-// 		$data_update = $db -> query($SQLStr2);
-// 		if (empty($data_update["message"]) )
-// 		{
-// 			//*************
-// 			//補休時數恢復
-// 			//*************
-// 			if ($povtype =='11')
-// 			{
-// 				//設定使用者按"回覆"時要顯示的e-mail  Reply-To
-// 				$mail_headers  = "From: edoc@cc.ncue.edu.tw\r\n";
-// 				$mail_headers .= "Reply-To:lucy@cc.ncue.edu.tw\r\n";
-// 				$mail_headers .= "X-Mailer: PHP\r\n"; // mailer
-// 				$mail_headers .= "Return-Path: edoc@cc2.ncue.edu.tw\r\n";
-// 				$mail_headers .= "Content-type: text/html; charset=big5\r\n";
-//
-// 				//抓出此取消假單補休時用到的加班日期及時數
-// 				$sql="select *
-// 					  from   overtime_use
-// 					  where  serialno='$proc_serialno'";
-// 				//echo $sql."<br>";
-// 				$data_temp = $db -> query_array($sql);
-// 				for( $i = 0 ; $i < count($data_temp) ; $i++)
-// 				{
-// 					$over_date = $data_temp["OVER_DATE"];
-// 					$use_hour = $data_temp["USE_HOUR"];
-//
-// 					$SQLStr2=  " update overtime o
-// 								set    nouse_time= o.nouse_time + $use_hour
-// 								where  empl_no= '$proc_serialno'
-// 								and    over_date= '$over_date'";
-//
-// 					$db -> query($SQLStr2);
-// 					$mail_subject = $userid."--".$proc_serialno."--update補休時數恢復通知";
-// 					$mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
-// 					// @mail('bob@cc.ncue.edu.tw',$mail_subject, $SQLStr2, $mail_headers);
-// 					//@mail($mail_to, $mail_subject, $mail_body, $mail_headers)
-// 				}
-// 					//刪除之前補休時所使用的加班記錄
-// 					$SQLStr2="delete from overtime_use
-// 								where serialno='$proc_serialno'";
-// 					//echo $SQLStr2;
-// 				   $db -> query($SQLStr2); //liru update
-// 					/* $mail_subject =$userid."--".$serialno."--delete補休時數恢復通知";
-// 					$mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
-// 					@mail('bob@cc.ncue.edu.tw',$mail_subject, $SQLStr2, $mail_headers); */
-// 			}
-// 			//**********************************
-// 			echo "本假單取消成功，假別為『補休』時，加班時數同步加回資料庫！！";
-// 			exit;
-// 		}
-// 	}
-// 	// 已完成取消註記
-// 	else if( $_POST["flag"] == "1" ) {
-// 		$SQLStr ="SELECT h.povtype
-// 						 FROM psfempl p,holidayform h,psqcode pc
-// 						 where CONDITION='1'
-// 						 and POCARD='$userid'
-// 						 and p.empl_no=h.pocard
-// 						 and pc.CODE_KIND='0302'
-// 						 and pc.CODE_FIELD=h.POVTYPE";
-// 		$data = $db -> fetch_row_assoc($SQLStr);
-// 		$povtype = $data["POVTYPE"];
-//
-// 		$SQLStr2=  "update holidayform set CONDITION='3' where serialno = $proc_serialno ";
-// 		$data_update = $db -> query($SQLStr2);
-// 		if ( empty($data_update["message"]) )
-// 		{
-// 				//*************
-// 				//補休時數恢復
-// 				//*************
-// 				if ($povtype =='11')
-// 				{
-// 					//設定使用者按"回覆"時要顯示的e-mail  Reply-To
-// 					$mail_headers  = "From: edoc@cc.ncue.edu.tw\r\n";
-// 					$mail_headers .= "Reply-To:lucy@cc.ncue.edu.tw\r\n";
-// 					$mail_headers .= "X-Mailer: PHP\r\n"; // mailer
-// 					$mail_headers .= "Return-Path: edoc@cc2.ncue.edu.tw\r\n";
-// 					$mail_headers .= "Content-type: text/html; charset=big5\r\n";
-//
-// 					//抓出此取消假單補休時用到的加班日期及時數
-// 					$sql="select *
-// 						  from   overtime_use
-// 						  where  serialno= $proc_serialno";
-// 					//echo $sql."<br>";
-// 					$data_temp = $db -> query_array($sql);
-// 					// echo json_encode($data_temp);
-// 					// exit;
-// 					for($i = 0 ; $i < count($data_temp) ; $i++)
-// 					{
-// 					   $over_date = $data_temp["OVER_DATE"][0];
-// 					   $use_hour = $data_temp["USE_HOUR"][0];
-// 					   $SQLStr2=  " update overtime o
-// 									set    nouse_time= o.nouse_time + $use_hour
-// 									where  empl_no= '$userid'
-// 									and    over_date= '$over_date'";
-//
-// 					   $db -> query($SQLStr2);
-// 					   $mail_subject =$userid."--".$proc_serialno."--update補休時數恢復通知";
-// 					   $mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
-// 						//@mail('bob@cc.ncue.edu.tw',$mail_subject, $SQLStr2, $mail_headers);
-// 					}
-// 					//刪除之前補休時所使用的加班記錄
-//
-// 					   $SQLStr2="delete from  overtime_use
-// 								 where  serialno= $proc_serialno";
-// 					   //echo $SQLStr2;
-// 					   $db -> query($SQLStr2);
-// 					   /*$mail_subject =$userid."--".$serialno."--delete補休時數恢復通知";
-// 					   $mail_subject = "=?big5?B?".base64_encode($mail_subject)."?=";
-// 					  @mail('bob@cc.ncue.edu.tw',$mail_subject, $SQLStr2, $mail_headers);*/
-// 				}
-// 				//**********************************
-// 				echo "系統已自動通知人事室執行真正取消動作！！請您不必再知會人事室";
-// 				exit;
-// 		}
-// 	}
-// }
+  // 取得目前序號最大多少，也就是此序號該到插入哪裡
+  $sql = "SELECT MAX(to_number(sysid)) sysid
+          FROM ps_menu
+          WHERE prgid='leave'";
+  $data = $db -> query_array($sql);
+  $sysid = 0;
+  if (count($data['SYSID']) != 0){
+    $sysid = $data['SYSID'][0];
+    $sysid++;
+  }
 
+  // 存入資料庫
+  $sql = "INSERT INTO ps_menu(PRGID,PRGNAME,SYSID) VALUES ('leave', '$reason', '$sysid')";
+  $data = $db -> query($sql);
+  // 若存入沒錯誤
+  if (empty($data['message'])){
+    $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "result" => $result
+    );
+  }
+  else{
+    $result = "資料修改有問題";
+    $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "result" => $result
+    );
+  }
+
+  echo json_encode($message);
+  exit;
+}
+
+// 修改儲存
+if ($_POST['oper'] == 2) {
+  $old_id = $_POST['old_id'];
+  // 欲修改成的id, 原因
+  $new_id = $_POST['new_id'];
+  $reason = $_POST['prgname'];
+  // 修改時先刪除
+	$sql = "DELETE FROM ps_menu
+        WHERE prgid = 'leave'
+        AND   sysid = '$old_id'";
+  $data = $db -> query($sql);
+
+  // 若刪除沒錯誤
+  if (!empty($data['message'])){
+    $result = "資料修改有問題";
+    $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "result" => $result
+    );
+    echo json_encode($message);
+    exit;
+  }
+
+  // 存入資料庫
+  $sql = "INSERT INTO ps_menu(PRGID,PRGNAME,SYSID) VALUES ('leave', '$reason', '$new_id')";
+  $data = $db -> query($sql);
+  // 若存入沒錯誤
+  if (empty($data['message'])){
+    $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "result" => $result
+    );
+  }
+  else{
+    $result = "資料修改有問題";
+    $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "result" => $result
+    );
+  }
+
+  echo json_encode($message);
+  exit;
+}
+
+// 刪除
+if ($_POST['oper'] == 3) {
+  $sysid = $_POST['old_id'];
+
+  $sql = "DELETE FROM ps_menu
+          WHERE prgid = 'leave'
+          AND   sysid = '$sysid'";
+  $data = $db -> query($sql);
+
+  // 若刪除沒錯誤
+  if (empty($data['message'])){
+    $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "result" => $result
+    );
+  }
+  else{
+    $result = "資料刪除有問題";
+    $message = array("error_code" => $data['code'],
+      "error_message" => $data['message'],
+      "result" => $result
+    );
+  }
+
+  echo json_encode($message);
+  exit;
+}
 
 ?>
