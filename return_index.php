@@ -18,7 +18,7 @@
                                         <table id="Btable" class="table table-striped table-bordered" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr style="font-weight:bold">
-                                                    <th序號</th>
+                                                    <th>序號</th>
                                                     <th>退回原因</th>
                                                     <th>功能區</th>
                                                 </tr>

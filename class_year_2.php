@@ -122,7 +122,9 @@
                             <thead>
                             <tr>
                                 <td class="td1" align="center">補課教室</td>
-                                <td colspan="3"><input type="text" class="form-control" name="class_room" id="class_room"><font size="4">
+                                <td colspan="3">
+                                    <input type="text" class="form-control" name="class_room" id="class_room">
+                                    <!-- <font size="4"> -->
                                 </td>
                             </tr>
                             </thead>
@@ -132,7 +134,7 @@
                                 <td class="td1" align="center">備註</td>
                                 <td colspan="3">
                                     <input type="text" class="form-control" name="class_memo" id="class_memo">
-                                    <font size="4">
+                                    <!-- <font size="4"> -->
                                 </td>
                             </tr>
                             <tr>

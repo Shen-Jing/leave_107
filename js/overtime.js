@@ -2,9 +2,6 @@ $( // 表示網頁完成後才會載入
     function ()
     {
 
-        $("body").tooltip({
-            selector: "[title]"
-        });
         var signed_start_options = {
             ignoreReadonly: true,
             defaultDate: new Date(),
@@ -278,7 +275,7 @@ $( // 表示網頁完成後才會載入
                 error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);/*location.reload();*/}
             });
             e.preventDefault();
-            e.unbind();
+            // e.unbind();
         });
     }
 );

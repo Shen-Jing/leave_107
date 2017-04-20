@@ -41,10 +41,8 @@ $( // 表示網頁完成後才會載入
 
         $('#qry_ymd').datetimepicker(start_options);
 
-        // 查詢單位若有改變也要query
-        $('#qry_ymd').on('input', function() {
+        $('#qry_ymd').on('dp.change', function() {
             CRUD(0);
-            alert("dffd");
         });
     });
 

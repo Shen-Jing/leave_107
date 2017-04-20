@@ -85,27 +85,26 @@ function CRUD(oper) {
             else {
                 if (oper == "0") { //查詢
                     $('#_content').empty();
-                    for (var i = 0; i < JData.EMPL_NO.length; i++) {
-                        var row = "<tr>";
-                        // 人員代號
-                        row = row + "<td>" + JData.EMPL_NO[i] + "</td>";
-                        // 姓名
-                        row = row + "<td>" + JData.EMPL_CHN_NAME[i] + "</td>";
-                        // 加班記錄
-                        row = row + "<td><button type='button' class='btn-info detail' id='detail' value=" + JData.EMPL_NO[i] + " title='加班記錄'> <i class='fa fa-info'></i> </button>";
-                        // 修改儲存、刪除按鈕
-                        // row = row + "    <button type='button' class='btn-success' name='modify' id='modify' value=" + JData.EMPL_NO[i] + " title='修改儲存'> <i class='fa fa-save'></i> </button>";
-                        // row = row + "    <button type='button' class='btn-danger' name='delete' id='delete' onclick='CRUD(3, " + JData.EMPL_NO[i] + "'><i class='fa fa-times' title='刪除'></i></button></td>";
-                        row = row + "</tr>";
-                        $('#_content').append(row);
+                    if (JData.EMPL_NO.length == 0){
+                        // 此處不懂為何明明<th>有3格，colspan設定3會導致多凸出「功能」的那一塊
+                        $('#_content').append("<tr><td colspan='2'>該單位無人員資料<td></tr>");
                     }
-                    // 新增列
-                    // var row2 = "<tr class='info'>";
-                    // row2 = row2 + "<td><input name='empl_no' id='empl_no_tmp' type='text' class='form-control' placeholder='人員代號'></td>";
-                    // row2 = row2 + "<td><input name='empl_name' id='empl_name_tmp' type='text' class='form-control' placeholder='姓名'></td>";
-                    // row2 = row2 + "<td><button class='btn-primary' type='button' name='new' id='new' onclick='CRUD(1)' title='新增'> <i class='fa fa-plus'></i></button></td>";
-                    // row2 = row2 + "</tr>";
-                    // $('#_content').append(row2);
+                    else {
+                        for (var i = 0; i < JData.EMPL_NO.length; i++) {
+                            var row = "<tr>";
+                            // 人員代號
+                            row = row + "<td>" + JData.EMPL_NO[i] + "</td>";
+                            // 姓名
+                            row = row + "<td>" + JData.EMPL_CHN_NAME[i] + "</td>";
+                            // 加班記錄
+                            row = row + "<td><button type='button' class='btn-info detail' id='detail' value=" + JData.EMPL_NO[i] + " title='加班記錄'> <i class='fa fa-info'></i> </button>";
+                            // 修改儲存、刪除按鈕
+                            // row = row + "    <button type='button' class='btn-success' name='modify' id='modify' value=" + JData.EMPL_NO[i] + " title='修改儲存'> <i class='fa fa-save'></i> </button>";
+                            // row = row + "    <button type='button' class='btn-danger' name='delete' id='delete' onclick='CRUD(3, " + JData.EMPL_NO[i] + "'><i class='fa fa-times' title='刪除'></i></button></td>";
+                            row = row + "</tr>";
+                            $('#_content').append(row);
+                        }
+                    }
                 }
             }
         },

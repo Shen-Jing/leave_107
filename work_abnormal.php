@@ -17,7 +17,7 @@
                                         <div class="col-lg-12">
                                             <!-- 年月份 -->
                                             <div class="form-group">
-                                                <input type='text' class="form-control" id='qry_ymd' name="qry_ymd" readonly="">
+                                                <input type='text' class="form-control" id='qry_ymd' name="qry_ymd" >
                                             </div>
                                         </div>
                                     </div>

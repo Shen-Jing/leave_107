@@ -343,6 +343,7 @@
     //**                資料檢核
     //*************************************************************************
     $count = array();
+    $count['empl_no'] = $count['agentno'] = $count['dept_boss'] = 0;
     //---------------------------------------
     // 判斷請假者是否重複請假
     //---------------------------------------
@@ -408,35 +409,35 @@
     if ($count['empl_no'] > 0) {
       $_POST['notefilename'] = "no file";
       $message = array("error_code" => $count['empl_no'],
-      "error_message" => "注意！您重複請假了！",
-      "sql" => $sql);
+      "error_message" => "注意！您重複請假了！"
+      );
       echo json_encode($message);
       exit;
     }
     elseif ($count['agentno'] > 0) {
       $message = array("error_code" => $count['agentno'],
-      "error_message" => "注意！代理人請假中！",
-      "sql" => $sql);
+      "error_message" => "注意！代理人請假中！"
+      );
       echo json_encode($message);
       exit;
     }
     elseif ($count['dept_boss'] > 0) {
       $message = array("error_code" => $count['dept_boss'],
-      "error_message" => "您是一級主管，系統將轉至一級主管請假作業！",
-      "sql" => $sql);
+      "error_message" => "您是一級主管，系統將轉至一級主管請假作業！"
+      );
       exit;
     }
-    elseif ( ($vtype == '01' || $vtype == '02') && $research == '1' && $count['teacher'] > 0) {
+    elseif ( ($vtype == '01' || $vtype == '02') && $research == '1' && $count['teacher'] == 0) {
       $message = array("error_code" => $count['teacher'],
-      "error_message" => "請假未成功，請先知會系辦助理，註記您要使用研發處經費！",
-      "sql" => $sql);
+      "error_message" => "請假未成功，請先知會系辦助理，註記您要使用研發處經費！"
+      );
       echo json_encode($message);
       exit;
     }
     elseif ( ($vtype == '06' || $vtype == '21' || $vtype == '22' || $vtype == '23') && $tot_day == 0 && $tot_hour < 4) {
       $message = array("error_code" => 1,
-      "error_message" => "寒休、暑休、休假至少要請半天！",
-      "sql" => $sql);
+      "error_message" => "寒休、暑休、休假至少要請半天！"
+      );
       echo json_encode($message);
       exit;
     }
@@ -449,8 +450,8 @@
     // 例假日出國(29)不檢查 -- 104/04/07 add */
     if ($tot_day < 0 || ( ($tot_day == 0 && $tot_hour == 0) && ($vtype != '29') ) ){
       $message = array("error_code" => 1,
-      "error_message" => "請假天數不合理，是否忘了填含例假日！",
-      "sql" => $sql);
+      "error_message" => "請假天數不合理，是否忘了填含例假日！"
+      );
       echo json_encode($message);
     	exit;
     }
@@ -538,8 +539,8 @@
 
   		if ($nouse_sum < $total_over){
         $message = array("error_code" => 1,
-        "error_message" => "補休時數超過可請時數，請先完成加班申請作業。",
-        "sql" => $sql);
+        "error_message" => "補休時數超過可請時數，請先完成加班申請作業。"
+        );
         echo json_encode($message);
         exit;
   		}
@@ -792,7 +793,7 @@
   		$submit_result = "請假成功！" . $filestatus;//."，但寄發email失敗";
       $message = array("error_code" => $data['code'],
       "error_message" => $data['message'],
-      "sql" => $sql, "submit_result" => $submit_result,
+      "submit_result" => $submit_result,
       "submit_remind" => $submit_remind);
       echo json_encode($message);
       exit;
@@ -807,7 +808,7 @@
   	  }
       $message = array("error_code" => $data['code'],
       "error_message" => $data['message'],
-      "sql" => $sql, "submit_result" => $submit_result,
+      "submit_result" => $submit_result,
       "submit_remind" => $submit_remind);
       echo json_encode($message);
       exit;
