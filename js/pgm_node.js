@@ -135,7 +135,7 @@ $(function(){
       $.ajax({
         url: 'ajax/file_copy_ajax.php',
         type: 'POST',
-        data: {o_url: $('temp').text(), n_url: $('#add-url').val()},
+        data: {o_url: $('#temp').text(), n_url: $('#add-url').val()},
         success: function(result){
           console.log(result);
         },
