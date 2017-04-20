@@ -130,7 +130,7 @@ $(function(){
           $('.root').append(text);
       }
     });
-    if ($('#selected').val() !== '0')
+    if ($('temp').text() !== '')
     {
       $.ajax({
         url: 'ajax/file_copy_ajax.php',
