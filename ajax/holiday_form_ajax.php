@@ -343,6 +343,7 @@
     //**                資料檢核
     //*************************************************************************
     $count = array();
+    $count['empl_no'] = $count['agentno'] = $count['dept_boss'] = 0;
     //---------------------------------------
     // 判斷請假者是否重複請假
     //---------------------------------------
@@ -426,7 +427,7 @@
       );
       exit;
     }
-    elseif ( ($vtype == '01' || $vtype == '02') && $research == '1' && $count['teacher'] > 0) {
+    elseif ( ($vtype == '01' || $vtype == '02') && $research == '1' && $count['teacher'] == 0) {
       $message = array("error_code" => $count['teacher'],
       "error_message" => "請假未成功，請先知會系辦助理，註記您要使用研發處經費！"
       );
