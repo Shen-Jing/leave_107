@@ -69,18 +69,16 @@ $d = $db -> query_array($sql);
             程式圖示：
             <input id="add-img" class="form-control"></input><br>
             模版套用：
-            <select id="selected">
-              <option selected disabled class="text-hide" value="0">請選擇模版</option>
-              <?
-              for ($i=0; $i < sizeof($d['PGMNAME']); $i++)
-                //if ($d['PGMURL'][$i] != "")
-                if (substr($d['PGMURL'][$i], -4) == '.php')
-                  echo "<option value='".$d['PGMURL'][$i]."'>".$d['PGMURL'][$i].":".$d['PGMID'][$i]." - ".$d['PGMNAME'][$i]."</option>";
-              ?>
-            </select>
-            <button id="apply-btn" type="button" class="btn btn-success">
-                模版預覽
-            </button>
+            <span id="temp" style="color: #F00"></span>
+            <br>
+            <img name="holiday_form.php" src="./template/holiday_form.png" alt="" class="img-rb">
+            <img name="holiday_view.php" src="./template/holiday_view.png" alt="" class="img-rb">
+            <img name="no_rest.php" src="./template/no_rest.png" alt="" class="img-rb">
+            <img name="psfpart_year.php" src="./template/psfpart_year.png" alt="" class="img-rb">
+            <img name="staff_call_off.php" src="./template/staff_call_off.png" alt="" class="img-rb">
+            <div>
+              <img src="" id="show_big_img" alt="" />
+            </div>
           </div>
           <!-- Modal Footer -->
           <div class="modal-footer">
@@ -89,33 +87,6 @@ $d = $db -> query_array($sql);
               </button>
               <button id="add-btn" type="button" class="btn btn-primary">
                   確定新增
-              </button>
-          </div>
-      </div>
-  </div>
-</div>
-
-<div class="modal fade" id="modal-apply" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-          <!-- Modal Header -->
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">
-                  <span aria-hidden="true">&times;</span>
-                  <span class="sr-only">Close</span>
-              </button>
-              <h4 class="modal-title" id="myModalLabel">模版選擇介面</h4>
-          </div>
-          <!-- Modal Body -->
-          <div class="modal-body">
-            <iframe id="iframe" src="">
-              <p>Your browser does not support iframes.</p>
-            </iframe>
-          </div>
-          <!-- Modal Footer -->
-          <div class="modal-footer">
-              <button id="back-btn" type="button" class="btn">
-                  返回
               </button>
           </div>
       </div>
