@@ -55,6 +55,7 @@ function year_control()
 );
 var serailnoval;
 var classnoval;
+var gstate;
 function CRUD(oper) {
 
   var yyval, mmval;
@@ -253,7 +254,7 @@ queryyear();
 function EditDataFunc(serialno,classno,state)
 {
   //4為修改 5為新增
-
+  gstate=state;
   $("#data_modify").show();
   var cy=$ ('#qry_class_year').val();
   var ca=$ ('#qry_acadm').val();
@@ -461,6 +462,66 @@ function Send(serailnoval,state)
 
 
 }
+
+$("#editform").bootstrapValidator({
+  live: 'submitted',
+    fields: {
+        subject_name: {
+            validators: {
+                notEmpty: {
+                    message: '請選擇科目'
+                }
+            }
+        },
+        class_room: {
+            validators: {
+                notEmpty: {
+                    message: '請填寫補課教室'
+                }
+            }
+        },
+        class_section21: {
+            validators: {
+                notEmpty: {
+                    message: '請選擇補課開始節次'
+                }
+            }
+        },
+        class_section22: {
+            validators: {
+                notEmpty: {
+                    message: '請選擇補課結束節次'
+                },
+            }
+        },
+      }
+    })
+    .on('error.field.bv', function(e, data) {
+        data.bv.disableSubmitButtons(false);
+    })
+    // Triggered when any field is valid
+    .on('success.field.bv', function(e, data) {
+        data.bv.disableSubmitButtons(false);
+    })
+    .on('success.form.bv', function(e) {
+      $.ajax({
+          url: 'ajax/class_add_ajax.php',
+          data: { oper: 'ch' },
+          type: 'POST',
+          dataType: "json",
+          success: function() {
+            alert("Check"+serailnoval);
+            alert($('#class_room').val());
+            Send(serailnoval,gstate);
+          },
+          error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+        });
+
+        e.preventDefault(); //STOP default action
+
+
+    });
+
 function CheckData(serailnoval,state)
 {
   var Odate=new Date($('#odate').val());
@@ -482,63 +543,7 @@ function CheckData(serailnoval,state)
 
   var class_year=$ ('#qry_class_year').val();
   var class_acadm=$ ('#qry_acadm').val();
-  $('#editform').bootstrapValidator({
-    live: 'submitted',
-      fields: {
-          subject_name: {
-              validators: {
-                  notEmpty: {
-                      message: '請選擇科目名稱'
-                  }
-              }
-          },
-          class_room: {
-              validators: {
-                  notEmpty: {
-                      message: '請填寫補課教室'
-                  }
-              }
-          },
-          class_section21: {
-              validators: {
-                  notEmpty: {
-                      message: '請選擇補課開始節次'
-                  }
-              }
-          },
-          class_section22: {
-              validators: {
-                  notEmpty: {
-                      message: '請選擇補課結束節次'
-                  }
-              }
-          }
-        }
-      })
-      .on('error.field.bv', function(e, data) {
-          data.bv.disableSubmitButtons(false);
-      })
-      // Triggered when any field is valid
-      .on('success.field.bv', function(e, data) {
-          data.bv.disableSubmitButtons(false);
-      })
-      .on('success.form.bv', function(e) {
-        $.ajax({
-            url: 'ajax/class_add_ajax.php',
-            data: { oper: 'ch' },
-            type: 'POST',
-            dataType: "json",
-            success: function() {
-              alert("Check"+serailnoval);
-              Send(serailnoval,state);
-            },
-            error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-          });
 
-          e.preventDefault(); //STOP default action
-          e.unbind(); //unbind. to stop multiple form submit.
-
-      });
 
 
 
