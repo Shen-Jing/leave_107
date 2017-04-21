@@ -71,11 +71,13 @@ $d = $db -> query_array($sql);
             模版套用：
             <span id="temp" style="color: #F00"></span>
             <br>
-            <img name="holiday_form.php" src="./template/holiday_form.png" alt="" class="img-rb">
-            <img name="holiday_view.php" src="./template/holiday_view.png" alt="" class="img-rb">
-            <img name="no_rest.php" src="./template/no_rest.png" alt="" class="img-rb">
-            <img name="psfpart_year.php" src="./template/psfpart_year.png" alt="" class="img-rb">
-            <img name="staff_call_off.php" src="./template/staff_call_off.png" alt="" class="img-rb">
+            <?
+            $imgs = glob("./template/*.png");
+            foreach ($imgs as $img) {
+              $file = substr($img, 11, -3).'php';
+              echo "<img name='$file' src='$img' alt='' class='img-rb'>";
+            }
+            ?>
             <div>
               <img src="" id="show_big_img" alt="" />
             </div>

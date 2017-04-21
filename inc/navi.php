@@ -43,6 +43,8 @@
                     </li>
                     <li><a href="grp_user.php"><i class="fa fa-plus-square fa-fw"></i> 用戶群組編輯介面</a>
                     </li>
+                    <li><a href="temp.php"><i class="fa fa-plus-square fa-fw"></i> 模版編輯介面</a>
+                    </li>
                 </ul>
             </li>
             <!-- /.dropdown -->
