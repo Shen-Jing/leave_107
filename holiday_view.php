@@ -24,9 +24,9 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">個人差假狀況(上)</div>
                         <div class="panel-body">
-                            <div id="hl_canceled">
+                            <div class="col-md-12 col-lg-12" id="hl_canceled">
                                 <h3>已取消假單</h3>
-                                <table cellspacing="0" class="dt-Table table table-striped table-bordered" id="Btable_canceled" width="100%">
+                                <table class="dt-Table table table-striped table-bordered" id="Btable_canceled" width="100%">
                                     <thead>
                                         <tr style="font-weight:bold">
                                             <th>姓名</th>
@@ -45,12 +45,11 @@
                                 </table>
                                 <hr />
                             </div>
-                            <div id="hl_dealing">
+                            <div class="col-md-12 col-lg-12" id="hl_dealing">
                                 <h3>處理中假單</h3>
-                                <table cellspacing="0" class="dt-Table table table-striped table-bordered" id="Btable_dealing" width="100%">
+                                <table class="dt-Table table table-striped table-bordered" id="Btable_dealing" width="100%">
                                     <thead>
                                         <tr style="font-weight:bold">
-                                            <th></th>
                                             <th>姓名</th>
                                             <th>假別</th>
                                             <th>起始日</th>
@@ -61,6 +60,11 @@
                                             <th>代理簽核</th>
                                             <th>直屬簽核</th>
                                             <th>單位簽核</th>
+											<th>院長</th>
+											<th>人事承辦員</th>
+											<th>人事主任</th>
+											<th>秘書室</th>
+											<th>備註</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -68,9 +72,9 @@
                                 </table>
                                 <hr />
                             </div>
-                            <div id="hl_rejected">
+                            <div class="col-md-12 col-lg-12" id="hl_rejected">
                                 <h3>未通過假單</h3>
-                                <table cellspacing="0" class="dt-Table table table-striped table-bordered" id="Btable_rejected" width="100%">
+                                <table class="dt-Table table table-striped table-bordered" id="Btable_rejected" width="100%">
                                     <thead>
                                         <tr style="font-weight:bold">
                                             <th>姓名</th>
@@ -89,12 +93,11 @@
                                 </table>
                                 <hr />
                             </div>
-                            <div id="hl_passing">
+                            <div class="col-md-12 col-lg-12" id="hl_passing">
                                 <h3>已核准假單</h3>
-                                <table cellspacing="0" class="dt-Table table table-striped table-bordered" id="Btable_passing" width="100%">
+                                <table class="dt-Table table table-striped table-bordered" id="Btable_passing" width="100%">
                                     <thead>
                                         <tr style="font-weight:bold">
-                                            <th></th>
                                             <th>姓名</th>
                                             <th>假別</th>
                                             <th>起始日</th>
@@ -105,6 +108,11 @@
                                             <th>代理簽核</th>
                                             <th>直屬簽核</th>
                                             <th>單位簽核</th>
+											<th>院長</th>
+											<th>人事承辦員</th>
+											<th>人事主任</th>
+											<th>秘書室</th>
+											<th>備註</th>
                                         </tr>
                                     </thead>
                                     <tbody>
