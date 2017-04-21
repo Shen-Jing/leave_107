@@ -34,7 +34,10 @@ $sqlStr ="SELECT empl_chn_name,substr(pc.CODE_CHN_ITEM,1,2) code_chn_item,
                  NVL(h.onesignd, '-') ONESIGND,
                  NVL(h.twosignd, '-') TWOSIGND,
                  NVL(h.poremark, '-') POREMARK,
-                 h.THREESIGND,h.perone_signd,h.pertwo_signd,h.secone_signd
+				 NVL(h.threesignd, '-') THREESIGND,
+				 NVL(h.perone_signd, '-') PERONE_SIGND,
+				 NVL(h.pertwo_signd, '-') PERTWO_SIGND,
+				 NVL(h.secone_signd, '-') SECONE_SIGND
 		  FROM   psfempl p,holidayform h,psqcode pc
 		  WHERE  p.empl_id_no='$id_no'
 		  AND    p.empl_no=h.pocard
@@ -78,7 +81,10 @@ $sqlStr = "SELECT empl_chn_name,substr(pc.CODE_CHN_ITEM,1,2) code_chn_item,
                   NVL(h.onesignd, '-') ONESIGND,
                   NVL(h.twosignd, '-') TWOSIGND,
                   NVL(h.poremark, '-') POREMARK,
-                  h.THREESIGND,h.perone_signd,h.pertwo_signd,h.secone_signd
+				  NVL(h.threesignd, '-') THREESIGND,
+				  NVL(h.perone_signd, '-') PERONE_SIGND,
+				  NVL(h.pertwo_signd, '-') PERTWO_SIGND,
+				  NVL(h.secone_signd, '-') SECONE_SIGND
 		   FROM   psfempl p,holidayform h,psqcode pc
 		   WHERE  h.POCARD IN ('$userid','$id_no') 
            AND    p.empl_no=h.pocard
