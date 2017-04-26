@@ -5,7 +5,7 @@
         $userid = $_SESSION['_ID'];
         $empl_no = $_SESSION['empl_no'];
         $empl_name = $_SESSION['empl_name'];
-		$title_id = $_SESSION['title_id'];
+        $title_id = $_SESSION['title_id'];
         $depart = $_SESSION['depart'];
         ?>
 <?
@@ -30,10 +30,9 @@ $ismobile = $mbd->isMobile() & !$mbd->isTablet();
                     <form name="holidayform" id="holidayform" class="form-inline" action="holiday_form_ajax.php">
                         <table class="table table-condensed table-hover table-bordered">
                             <tr>
-                                <td id="hide-depart" style="display:none">
-                                    <?=$depart ?>
-                                </td>
+                                <td id="hide-depart" style="display:none"><?=$depart ?></td>
                                 <td id="hide-check" style="display:none">fe</td>
+                                <td id="hide-titleid" style="display:none"><?=$title_id ?></td>
                                 <td class="td1 col-sm-2">員工編號</td>
                                 <td class="col-sm-4"><span id="empl_no"><?=$empl_no ?></span></td>
                                 <td class="td1 col-sm-2">姓名</td>
@@ -42,11 +41,10 @@ $ismobile = $mbd->isMobile() & !$mbd->isTablet();
                             <tr>
                                 <td class="td1 col-sm-2">請選擇單位</td>
                                 <td class="col-sm-4">
-                                    <select name="depart" id="qry_dept" class="form-control"> </select>
+                                    <select name="depart" id="qry_dept" class="form-control"></select>
                                 </td>
                                 <td class="td1 col-sm-2">職稱</td>
                                 <td class="col-sm-4" id="qry_title">
-                                    <input type="hidden" name="title" value="<?=$title_id ?>">
                                 </td>
                             </tr>
                             <tr>
