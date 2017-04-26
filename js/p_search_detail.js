@@ -47,6 +47,10 @@ $(document).ready(function()
         $('#end_ym').data("DateTimePicker").date(e.date);
     });
 
+    // 預設一開始顯示當年的1月到12月資料
+    $('#start_ym').data("DateTimePicker").date(new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)));
+    $('#end_ym').data("DateTimePicker").date(new Date(new Date().setFullYear(new Date().getFullYear(), 11, 1)));
+
     table =
     $('#Btable').DataTable({
         "responsive": true,

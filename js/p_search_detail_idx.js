@@ -64,7 +64,7 @@ $( // 表示網頁完成後才會載入
 
 function CRUD(oper) {
     $.ajax({
-        url: 'ajax/p_search_overtime_idx_ajax.php',
+        url: 'ajax/p_search_detail_idx_ajax.php',
         data: {
             oper: oper,
             dept_id: $('#qry_dept').val(),
