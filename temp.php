@@ -34,7 +34,7 @@ $p = $db -> query_array($sql);
         for ($i=0; $i < sizeof($p['PGMNAME']); $i++) {
           $pgmid = $p['PGMID'][$i] ;
           $pgmurl = substr($p['PGMURL'][$i], 0, -4) ;
-          $pgmname =  $p['PGMNAME'][$i] ;
+          $pgmname = $p['PGMNAME'][$i] ;
           $parent_folder = $p['PARENT_FOLDER'][$i] ; //父節點
 
           if($i>0 && $parent_folder<>$parent_previous)//換根節點
