@@ -27,6 +27,25 @@
         echo json_encode($data);
         exit;
     }
+    else if ($_POST["oper"] == "qry_dpt_empl" )
+    {
+        if($_POST["dpt"] != 'null' && $_POST["dpt"] != "請選擇單位")
+        {
+            $sql = "select empl_no,empl_chn_name
+                    from   psfempl,psfcrjb
+                    where  empl_no=crjb_empl_no
+                    and    crjb_quit_date is null
+                    and    substr(empl_no,1,1) in ('0','5','7')
+                    and    crjb_depart='$_POST[dpt]'";
+
+            $data = $db -> query_array($sql);
+
+            echo json_encode($data);
+        }
+
+        exit;
+
+    }
     else if($_POST['oper']=="qry_type")
     {
         $sql2 = "SELECT code_field,code_chn_item
@@ -43,52 +62,54 @@
 
     else if($_POST['oper'] == 0)
     {
-        if ( $_POST['dpt'] == 'null' || $_POST['dpt'] == "請選擇單位" )
-            if ( $_POST['type'] == 'null' || $_POST['type'] == "請選擇假別" )
-                $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
-                            h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno,h.CURENTSTATUS ,
-                            h.agentsignd,h.onesignd,h.twosignd,h.THREESIGND,h.depart,h.secone_signd,h.perone_signd,h.pertwo_signd,
-                            substr(DEPT_SHORT_NAME,1,14) dept_short_name,h.appdate
-                            FROM psfempl p,holidayform h,psqcode pc,stfdept
-                            where substr(lpad(povdateb,7,'0'),1,3) =  lpad('$_POST[p_year]',3,'0')
-                            and   substr(lpad(povdateb,7,'0'),4,2)  =  lpad('$_POST[p_month]',2,'0')
-                            and   dept_no=depart
-                            and   condition in ('0','1')
-                            and   p.empl_no=h.pocard
-                            and   pc.CODE_KIND='0302'
-                            and   pc.CODE_FIELD=h.POVTYPE
-                            order by depart,h.POVDATEB desc ,h.POVHOURS desc";
+        if($_POST["empl_no"] == 'null' || $_POST['empl_no'] == "請選擇人員")
+        {
+            if ( $_POST['dpt'] == 'null' || $_POST['dpt'] == "請選擇單位" )
+                if ( $_POST['type'] == 'null' || $_POST['type'] == "請選擇假別" )
+                    $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
+                                h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno,h.CURENTSTATUS ,
+                                h.agentsignd,h.onesignd,h.twosignd,h.THREESIGND,h.depart,h.secone_signd,h.perone_signd,h.pertwo_signd,
+                                substr(DEPT_SHORT_NAME,1,14) dept_short_name,h.appdate
+                                FROM psfempl p,holidayform h,psqcode pc,stfdept
+                                where substr(lpad(povdateb,7,'0'),1,3) =  lpad('$_POST[p_year]',3,'0')
+                                and   substr(lpad(povdateb,7,'0'),4,2)  =  lpad('$_POST[p_month]',2,'0')
+                                and   dept_no=depart
+                                and   condition in ('0','1')
+                                and   p.empl_no=h.pocard
+                                and   pc.CODE_KIND='0302'
+                                and   pc.CODE_FIELD=h.POVTYPE
+                                order by depart,h.POVDATEB desc ,h.POVHOURS desc";
+                else
+                    $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
+                                h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno,h.CURENTSTATUS ,
+                                h.agentsignd,h.onesignd,h.twosignd,h.THREESIGND,h.depart,h.secone_signd,h.perone_signd,h.pertwo_signd,
+                                substr(DEPT_SHORT_NAME,1,14) dept_short_name,h.appdate
+                                FROM psfempl p,holidayform h,psqcode pc,stfdept
+                                where substr(lpad(povdateb,7,'0'),1,3) =  lpad('$_POST[p_year]',3,'0')
+                                and   substr(lpad(povdateb,7,'0'),4,2)  =  lpad('$_POST[p_month]',2,'0')
+                                and   dept_no=depart
+                                and   condition in ('0','1')
+                                and   p.empl_no=h.pocard
+                                and   pc.CODE_KIND='0302'
+                                and   pc.CODE_FIELD=h.POVTYPE
+                                and   h.povtype= '$_POST[type]'
+                                order by depart,h.POVDATEB desc ,h.POVHOURS desc,depart";
             else
-                $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
-                            h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno,h.CURENTSTATUS ,
-                            h.agentsignd,h.onesignd,h.twosignd,h.THREESIGND,h.depart,h.secone_signd,h.perone_signd,h.pertwo_signd,
-                            substr(DEPT_SHORT_NAME,1,14) dept_short_name,h.appdate
-                            FROM psfempl p,holidayform h,psqcode pc,stfdept
-                            where substr(lpad(povdateb,7,'0'),1,3) =  lpad('$_POST[p_year]',3,'0')
-                            and   substr(lpad(povdateb,7,'0'),4,2)  =  lpad('$_POST[p_month]',2,'0')
-                            and   dept_no=depart
-                            and   condition in ('0','1')
-                            and   p.empl_no=h.pocard
-                            and   pc.CODE_KIND='0302'
-                            and   pc.CODE_FIELD=h.POVTYPE
-                            and   h.povtype= '$_POST[type]'
-                            order by depart,h.POVDATEB desc ,h.POVHOURS desc,depart";
-        else
-            if ($_POST['type'] == 'null' || $_POST['type'] == "請選擇假別")
-                $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
-                            h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno, h.CURENTSTATUS,
-                            h.agentsignd,h.onesignd,h.twosignd,h.THREESIGND,h.depart,h.secone_signd,h.perone_signd,h.pertwo_signd,
-                            substr(DEPT_SHORT_NAME,1,14) dept_short_name,h.appdate
-                            FROM psfempl p,holidayform h,psqcode pc,stfdept
-                            where substr(lpad(povdateb,7,'0'),1,3) =    lpad('$_POST[p_year]',3,'0')
-                            and   substr(lpad(povdateb,7,'0'),4,2)  =   lpad('$_POST[p_month]',2,'0')
-                            and   dept_no=depart
-                            and   substr(depart,1,2)=substr('$_POST[dpt]',1,2)
-                            and   condition in ('0','1')
-                            and   p.empl_no=h.pocard
-                            and   pc.CODE_KIND='0302'
-                            and   pc.CODE_FIELD=h.POVTYPE
-                            order by depart,h.POVDATEB desc ,h.POVHOURS desc,depart";
+                if ($_POST['type'] == 'null' || $_POST['type'] == "請選擇假別")
+                    $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
+                                h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno, h.CURENTSTATUS,
+                                h.agentsignd,h.onesignd,h.twosignd,h.THREESIGND,h.depart,h.secone_signd,h.perone_signd,h.pertwo_signd,
+                                substr(DEPT_SHORT_NAME,1,14) dept_short_name,h.appdate
+                                FROM psfempl p,holidayform h,psqcode pc,stfdept
+                                where substr(lpad(povdateb,7,'0'),1,3) =    lpad('$_POST[p_year]',3,'0')
+                                and   substr(lpad(povdateb,7,'0'),4,2)  =   lpad('$_POST[p_month]',2,'0')
+                                and   dept_no=depart
+                                and   substr(depart,1,2)=substr('$_POST[dpt]',1,2)
+                                and   condition in ('0','1')
+                                and   p.empl_no=h.pocard
+                                and   pc.CODE_KIND='0302'
+                                and   pc.CODE_FIELD=h.POVTYPE
+                                order by depart,h.POVDATEB desc ,h.POVHOURS desc,depart";
                 else
                     $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
                         h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno, h.CURENTSTATUS,
@@ -105,6 +126,43 @@
                         and   pc.CODE_FIELD=h.POVTYPE
                         and   h.povtype= '$_POST[type]'
                         order by depart,h.POVDATEB desc ,h.POVHOURS desc,depart";
+        }
+        else
+        {
+            if ($_POST['type'] == 'null' || $_POST['type'] == "請選擇假別")
+                $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
+                            h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno, h.CURENTSTATUS,
+                            h.agentsignd,h.onesignd,h.twosignd,h.THREESIGND,h.depart,h.secone_signd,h.perone_signd,h.pertwo_signd,
+                            substr(DEPT_SHORT_NAME,1,14) dept_short_name,h.appdate
+                            FROM psfempl p,holidayform h,psqcode pc,stfdept
+                            where substr(lpad(povdateb,7,'0'),1,3) =    lpad('$_POST[p_year]',3,'0')
+                            and   substr(lpad(povdateb,7,'0'),4,2)  =   lpad('$_POST[p_month]',2,'0')
+                            and   dept_no=depart
+                            and   substr(depart,1,2)=substr('$_POST[dpt]',1,2)
+                            and   condition in ('0','1')
+                            and   p.empl_no=h.pocard
+                            and   pc.CODE_KIND='0302'
+                            and   pc.CODE_FIELD=h.POVTYPE
+                            and   h.pocard = $_POST[empl_no]
+                            order by depart,h.POVDATEB desc ,h.POVHOURS desc,depart";
+            else
+                $SQLStr ="SELECT empl_chn_name,h.POCARD,substr(pc.CODE_CHN_ITEM,1,2)  code_chn_item,h.POVDATEB,
+                    h.POVDATEE,h.POVHOURS,h.POVTIMEB,h.POVTIMEE,h.POVDAYS,h.ABROAD, h.AGENTNO,h.serialno, h.CURENTSTATUS,
+                    h.agentsignd,h.onesignd,h.twosignd,h.THREESIGND,h.depart,h.secone_signd,h.perone_signd,h.pertwo_signd,
+                    substr(DEPT_SHORT_NAME,1,14) dept_short_name,h.appdate
+                    FROM psfempl p,holidayform h,psqcode pc,stfdept
+                    where substr(lpad(povdateb,7,'0'),1,3) =    lpad('$_POST[p_year]',3,'0')
+                    and   substr(lpad(povdateb,7,'0'),4,2)  =   lpad('$_POST[p_month]',2,'0')
+                    and   dept_no=depart
+                    and   substr(depart,1,2)=substr('$_POST[dpt]',1,2)
+                    and   condition in ('0','1')
+                    and   p.empl_no=h.pocard
+                    and   pc.CODE_KIND='0302'
+                    and   pc.CODE_FIELD=h.POVTYPE
+                    and   h.pocard = $_POST[empl_no]
+                    and   h.povtype= '$_POST[type]'
+                    order by depart,h.POVDATEB desc ,h.POVHOURS desc,depart";
+        }
 
         $row = $db -> query_array($SQLStr);
 

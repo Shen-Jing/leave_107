@@ -15,7 +15,7 @@
                                     </div>
                                     <div class="panel-body">
                                       <div class="table-responsive">
-                                        <table id="Btable" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                                        <table id="Btable" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr style="font-weight:bold">
                                                     <th>序號</th>

@@ -178,7 +178,7 @@ function NextClick(serialno)
   $("#ChangeModal2 .modal-title").html("資料填補");
   $("#ChangeModal2").modal("show"); //弹出框show
   $("#data_modify").hide();
-alert(serialno);
+
 queryyear();
   $.ajax({
       url: 'ajax/class_add_ajax.php',
@@ -254,6 +254,7 @@ queryyear();
 function EditDataFunc(serialno,classno,state)
 {
   //4為修改 5為新增
+  $("#editform").bootstrapValidator('resetForm', true);
   gstate=state;
   $("#data_modify").show();
   var cy=$ ('#qry_class_year').val();
@@ -305,9 +306,10 @@ function EditDataFunc(serialno,classno,state)
       },
       locale: 'zh-tw',
   }
-  $('#odate').datetimepicker(original_options);
-  $('#ndate').datetimepicker(original_options);
-  alert(serialno);
+
+
+
+
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: 'edit_class' ,serialnoVar: serialno,class_year: cy, class_acadm: ca,class_no: classno},
@@ -321,7 +323,7 @@ function EditDataFunc(serialno,classno,state)
           row0="<button type='button' class='btn btn-primary' name='close' onclick='closeM()'>離開或被退重送</button>";
           $('#action_btn').append(row0);
 
-          row0="<button type=\"submit\" class='btn btn-primary' name='check' onclick='CheckData("+serialno+","+state+")'>本班資料儲存</button>";
+          row0="<button type=\"submit\" class='btn btn-primary' name='check' >本班資料儲存</button>";
           $('#action_btn').append(row0);
           var row0 ="";
           row0=row0+JData["byear"]+"/"+JData["bmonth"]+"/"+JData["bday"]+"~"+JData["eyear"]+"/"+JData["emonth"]+"/"+JData["eday"];
@@ -334,85 +336,169 @@ function EditDataFunc(serialno,classno,state)
           classnoval=JData["class_no"];
 
           row0 = "<option selected disabled class='text-hide'>選擇科目</option>";
-          row0 =row0+ "<option value=\"電子學\">電子學</option>";
-          row0 =row0+ "<option value=\"線性代數\">線性代數</option>";
-          row0 =row0+ "<option value=\"遊戲設計\">遊戲設計</option>";
-          row0 =row0+ "<option value=\"演算法\">演算法</option>";
-          row0 =row0+ "<option value=\"作業系統\">作業系統</option>";
+          if(JData["class_subject"]=="電子學")
+          {
+            row0 =row0+ "<option value=\"電子學\" selected>電子學</option>";
+          }
+          else
+          {
+            row0 =row0+ "<option value=\"電子學\" >電子學</option>";
+          }
+
+          if(JData["class_subject"]=="線性代數")
+          {
+            row0 =row0+ "<option value=\"線性代數\" selected>線性代數</option>";
+          }
+          else
+          {
+            row0 =row0+ "<option value=\"線性代數\">線性代數</option>";
+          }
+
+          if(JData["class_subject"]=="遊戲設計")
+          {
+            row0 =row0+ "<option value=\"遊戲設計\" selected>遊戲設計</option>";
+          }
+          else
+          {
+            row0 =row0+ "<option value=\"遊戲設計\" >遊戲設計</option>";
+          }
+
+          if(JData["class_subject"]=="演算法")
+          {
+            row0 =row0+ "<option value=\"演算法\" selected>演算法</option>";
+          }
+          else
+          {
+            row0 =row0+ "<option value=\"演算法\">演算法</option>";
+          }
+
+          if(JData["class_subject"]=="作業系統")
+          {
+            row0 =row0+ "<option value=\"作業系統\" selected>作業系統</option>";
+          }
+          else
+          {
+            row0 =row0+ "<option value=\"作業系統\">作業系統</option>";
+          }
           $('#subject_name').append(row0);
           var classname="資工三"
           row0=classname;
           $('#class-name').append(row0);
 
 
-          row0 = "<option selected disabled class='text-hide'>請選擇年份</option>";
-          $ ('#ocyear').append(row0);
-          for (var i = JData["year"] - 1 ; i <= JData["year"]+1 ; i++)
-          {
-              if (i == JData["year"])
-                  row = "<option value=" +i+ " selected>" + i + "</option>";
-              else
-                  row = "<option value=" +i+ ">" + i + " </option>";
-              $ ('#ocyear').append(row);
-          }
 
-          row0 = "<option selected disabled class='text-hide'>請選擇月份</option>";
-          $ ('#ocmonth').append(row0);
-          for (var i = 1; i <= 12 ; i++)
-          {
-                  row = "<option value=" +i+ ">" + i + " </option>";
-              $ ('#ocmonth').append(row);
-          }
-
-          row0 = "<option selected disabled class='text-hide'>請選擇日期</option>";
-          $ ('#ocday').append(row0);
-          for (var i = 1; i <= 31 ; i++)
-          {
-                  row = "<option value=" +i+ ">" + i + " </option>";
-              $ ('#ocday').append(row);
-          }
-
-          row0 = "<option selected disabled class='text-hide'>請選擇年份</option>";
-          $ ('#ccyear').append(row0);
-          for (var i = JData["year"] - 1 ; i <= JData["year"]+1 ; i++)
-          {
-              if (i == JData["year"])
-                  row = "<option value=" +i+ " selected>" + i + "</option>";
-              else
-                  row = "<option value=" +i+ ">" + i + " </option>";
-              $ ('#ccyear').append(row);
-          }
-
-          row0 = "<option selected disabled class='text-hide'>請選擇月份</option>";
-          $ ('#ccmonth').append(row0);
-          for (var i = 1; i <= 12 ; i++)
-          {
-                  row = "<option value=" +i+ ">" + i + " </option>";
-              $ ('#ccmonth').append(row);
-          }
-
-          row0 = "<option selected disabled class='text-hide'>請選擇日期</option>";
-          $ ('#ocday').append(row0);
-          for (var i = 1; i <= 31 ; i++)
-          {
-                  row = "<option value=" +i+ ">" + i + " </option>";
-              $ ('#ccday').append(row);
-          }
-
+          edit_class_section2_1 = JData.CLASS_SECTION2.toString().split("-")[0];
+          edit_class_section2_2 = JData.CLASS_SECTION2.toString().split("-")[1];
           row0 = "<option selected disabled class='text-hide'>請選擇節次</option>";
           $ ('#class_section21').append(row0);
           for (var i = 1; i <= 13 ; i++)
           {
-                  row = "<option value=" +i+ ">" + i + " </option>";
+            if(i==edit_class_section2_1)
+            {
+              row = "<option value=" +i+ " selected>" + i + " </option>";
+            }
+            else {
+              row = "<option value=" +i+ ">" + i + " </option>";
+            }
+
               $ ('#class_section21').append(row);
           }
           row0 = "<option selected disabled class='text-hide'>請選擇節次</option>";
           $ ('#class_section22').append(row0);
           for (var i = 1; i <= 13 ; i++)
           {
-                  row = "<option value=" +i+ ">" + i + " </option>";
+            if(i==edit_class_section2_2)
+            {
+                row = "<option value=" +i+ " selected>" + i + " </option>";
+            }
+            else {
+                row = "<option value=" +i+ ">" + i + " </option>";
+            }
               $ ('#class_section22').append(row);
           }
+          if(state==4)
+          {
+
+            edit_cyear_origin = (parseInt(JData.class_date.toString().substring(0,3))+1911).toString();
+            edit_cmonth_origin = JData.class_date.toString().substring(3,5);
+            edit_cday_origin = JData.class_date.toString().substring(5,7);
+            edit_dyear_origin = (parseInt(JData.class_date2.toString().substring(0,3))+1911).toString();
+            edit_dmonth_origin = JData.class_date2.toString().substring(3,5);
+            edit_dday_origin = JData.class_date2.toString().substring(5,7);
+            //alert(edit_cyear_origin);
+            var change_start_options = {
+                defaultDate: edit_cyear_origin + "/" + edit_cmonth_origin + "/" + edit_cday_origin,
+                format: 'YYYY/MM/DD',
+                ignoreReadonly: true,
+                tooltips: {
+                    clear: "清除所選",
+                    close: "關閉日曆",
+                    decrementHour: "減一小時",
+                    decrementMinute: "Decrement Minute",
+                    decrementSecond: "Decrement Second",
+                    incrementHour: "加一小時",
+                    incrementMinute: "Increment Minute",
+                    incrementSecond: "Increment Second",
+                    nextCentury: "下個世紀",
+                    nextDecade: "後十年",
+                    nextMonth: "下個月",
+                    nextYear: "下一年",
+                    pickHour: "Pick Hour",
+                    pickMinute: "Pick Minute",
+                    pickSecond: "Pick Second",
+                    prevCentury: "上個世紀",
+                    prevDecade: "前十年",
+                    prevMonth: "上個月",
+                    prevYear: "前一年",
+                    selectDecade: "選擇哪十年",
+                    selectMonth: "選擇月份",
+                    selectTime: "選擇時間",
+                    selectYear: "選擇年份",
+                    today: "今日日期",
+                },
+                locale: 'zh-tw',
+            }
+            var change_end_options = {
+                defaultDate: edit_dyear_origin + "/" + edit_dmonth_origin + "/" + edit_dday_origin,
+                format: 'YYYY/MM/DD',
+                ignoreReadonly: true,
+                tooltips: {
+                    clear: "清除所選",
+                    close: "關閉日曆",
+                    decrementHour: "減一小時",
+                    decrementMinute: "Decrement Minute",
+                    decrementSecond: "Decrement Second",
+                    incrementHour: "加一小時",
+                    incrementMinute: "Increment Minute",
+                    incrementSecond: "Increment Second",
+                    nextCentury: "下個世紀",
+                    nextDecade: "後十年",
+                    nextMonth: "下個月",
+                    nextYear: "下一年",
+                    pickHour: "Pick Hour",
+                    pickMinute: "Pick Minute",
+                    pickSecond: "Pick Second",
+                    prevCentury: "上個世紀",
+                    prevDecade: "前十年",
+                    prevMonth: "上個月",
+                    prevYear: "前一年",
+                    selectDecade: "選擇哪十年",
+                    selectMonth: "選擇月份",
+                    selectTime: "選擇時間",
+                    selectYear: "選擇年份",
+                    today: "今日日期",
+                },
+                locale: 'zh-tw',
+            }
+            $('#odate').datetimepicker(change_start_options);
+            $('#ndate').datetimepicker(change_end_options);
+            $('#class_room').val(JData["class_room"]);
+            $('#class_memo').val(JData["class_memo"]);
+          }else {
+            $('#odate').datetimepicker(original_options);
+            $('#ndate').datetimepicker(original_options);
+          }
+
 
 
         }
@@ -446,7 +532,7 @@ function Send(serailnoval,state)
   var class_year=$ ('#qry_class_year').val();
   var class_acadm=$ ('#qry_acadm').val();
   //alert(oyear);
-  alert("send"+serailnoval);
+
   $.ajax({
       url: 'ajax/class_add_ajax.php',
       data: { oper: "send" ,classsubject:class_subject,byear:oyear,bmonth:omonth,bday:oday
@@ -455,6 +541,7 @@ function Send(serailnoval,state)
       dataType: "json",
       success: function() {
         toastr["success"]("處理完成!!");
+        $("#editform").bootstrapValidator('resetForm', true);
         NextClick(serailnoval);
       },
       error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
@@ -510,9 +597,9 @@ $("#editform").bootstrapValidator({
           type: 'POST',
           dataType: "json",
           success: function() {
-            alert("Check"+serailnoval);
-            alert($('#class_room').val());
+
             Send(serailnoval,gstate);
+
           },
           error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
         });
@@ -551,6 +638,7 @@ function CheckData(serailnoval,state)
 }
 function closeM()
 {
+  $("#editform").bootstrapValidator('resetForm', true);
   $("#ChangeModal2").modal("hide");
 }
 function NewData()

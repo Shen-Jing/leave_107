@@ -2,6 +2,7 @@ $(document).ready(function()
 {
     table =
     $('#Btable').DataTable({
+        "responsive": true,
         "scrollCollapse": true,
         "displayLength": 10,
         "paginate": true,
@@ -17,9 +18,9 @@ $(document).ready(function()
             dataType: 'json'
         },
         "columns": [
-            { "name": "SYSID" },
-            { "name": "PRGNAME" },
-            { "name": "BUTTON1" },
+          { "width": "10%" },
+          { "width": "80%" },
+          { "width": "10%" }
         ]
     });
 

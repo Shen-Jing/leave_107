@@ -27,7 +27,8 @@
    $Strip="0";
    $Ssure='1';  //取消表示已選好職務代理人
    $Sstr="";
-
+   $Sacadm_return = "";
+   $Snight_return = "";
    //**************************************************
    //來自 來自 class_query_2.php 之修改功能，按了修改鈕 // =>    目前未處理部分
    //**************************************************
@@ -114,8 +115,8 @@
       $sql = "select substr(pocard,1,3) byear,substr(pocard,4,2) bmonth,substr(pocard,6,2) bday, acadm_return,night_return
              from no_holidayform
              where pocard='$serialno'";
-             echo json_encode($sql);
-             exit;
+             // echo json_encode($sql);
+             // exit;
 
       $data = $db -> query_array($sql);
       if (empty($data["message"]))
@@ -123,8 +124,8 @@
          $Sbyear   = $data["BYEAR"][0];
          $Sbmonth = $data["BMONTH"][0];
          $Sbday   = $data["BDAY"][0];
-         $Sacadm_return  = $data["ACADM_RETURN"][0];  //是否被退 null:正常核准, 0:被退重送簽核完成, 1:被退中
-         $Snight_return    = $data["NIGHT_RETURN"][0];
+         $Sacadm_return = $data["ACADM_RETURN"][0];  //是否被退 null:正常核准, 0:被退重送簽核完成, 1:被退中
+         $Snight_return = $data["NIGHT_RETURN"][0];
       }
    }
 
@@ -461,8 +462,8 @@
             $class_date = $class_date.$bday;
 
          /*$class_week    = substr($_SESSION["scr_period"],1,2);   //原上課時間是星期幾？*/
-         $class_section = substr($_POST["scr_period"],5,5);     //原上課節次，暫不比對教務處課表 */
-
+         // $class_section = substr($_POST["scr_period"],5,5);     //原上課節次，暫不比對教務處課表 */
+         $class_section = $_POST["scr_period"];
          //求$class_week 上課時間是星期幾？有的上課時間有二個時段   100.11.03
          $sql="SELECT decode(calendar_week,'1','日','2','一','3','二','4','三','5','四', '6','五','7','六','') week FROM ps_calendar WHERE calendar_yymm='$class_yymm' AND calendar_dd='$bday'";
 
@@ -520,7 +521,8 @@
 
          // echo json_encode("= ". $serialno . "= " . $class_no . "= " . $depart . "= " . $class_name . "= " . $class_code . "= " . $class_subject . "= " . $class_id . "= " . $class_date . "= " . $class_week . "= " . $class_section . "= " . $class_date2 . "= " . $class_week2 . "= " . $class_section2 . "= " . $class_room . "= " . $class_memo . "= " . $selcode . "= " . $class_year . "= " . $class_acadm);
          // exit;
-
+         // echo json_encode($insert);
+         // exit;
          if($result = $db -> query_trsac($insert))//失敗需rollback
          {
             if( !empty($result["message"]) )
@@ -543,7 +545,7 @@
    else if($_POST["oper"] == "store")
    {
       $acadm_return = $Sacadm_return;//是否被退 null:正常核准, 0:被退重送簽核完成, 1:被退中
-      $night_return  =$Snight_return;
+      $night_return = $Snight_return;
 
       $serialno = $Sthis_serialno;
 
@@ -733,8 +735,13 @@
       $class_section2 = $_POST['class_section2_1']."-".$_POST['class_section2_2'];
 
       $update = "UPDATE haveclass SET CLASS_SERIALNO ='$this_serialno', CLASS_NO = '$class_no', CLASS_DEPART = '$depart', CLASS_NAME = '$class_name', CLASS_CODE = '$class_code', CLASS_SUBJECT = '$class_subject', CLASS_ID = '$class_id', CLASS_DATE = '$class_date', CLASS_WEEK = '$class_week' , CLASS_SECTION = '$class_section', CLASS_DATE2 = '$class_date2', CLASS_WEEK2 ='$class_week2' ,CLASS_SECTION2 = '$class_section2', CLASS_ROOM = '$_POST[class_room]', CLASS_MEMO = '$_POST[class_memo]', CLASS_SELCODE = '$selcode', CLASS_YEAR = '$_POST[class_year]', CLASS_ACADM = '$_POST[class_acadm]' WHERE CLASS_SERIALNO = '$serialno' AND CLASS_NO = '$class_no' ";
-
-      if($result = $db -> query_trsac($update))//失敗需rollback
+      // echo json_encode($update);
+      // exit;
+      
+      $result = $db -> query_trsac($update);
+      // echo json_encode($result);
+      // exit;
+      if($result)//失敗需rollback
       {
          if( !empty($result["message"]) )
          {

@@ -123,8 +123,10 @@
                             <tr>
                                 <td class="td1" align="center">補課教室</td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control" name="class_room" id="class_room">
-                                    <!-- <font size="4"> -->
+                                    <div class='form-group'>
+                                        <input type="text" class="form-control" name="class_room" id="class_room">
+                                        <!-- <font size="4"> -->
+                                    </div>
                                 </td>
                             </tr>
                             </thead>
@@ -132,16 +134,20 @@
                             <thead>
                             <tr>
                                 <td class="td1" align="center">備註</td>
-                                <td colspan="3">
-                                    <input type="text" class="form-control" name="class_memo" id="class_memo">
-                                    <!-- <font size="4"> -->
-                                </td>
+                                <div class='form-group'>
+                                    <td colspan="3">
+                                        <input type="text" class="form-control" name="class_memo" id="class_memo">
+                                        <!-- <font size="4"> -->
+                                    </td>
+                                </div>
                             </tr>
                             <tr>
-                                <td colspan="4" align="center">
-                                    <button type="submit" class="btn btn-primary" name="action" id="store">存入簽核檔並離開或被退重送</button>
-                                    <button type="submit" class="btn btn-primary" name="action" id="insert">本班資料儲存</button>
-                                </td>
+                                <div class='form-group'>
+                                    <td colspan="4" align="center">
+                                        <button type="submit" class="btn btn-primary" name="action" id="store" disabled="true">存入簽核檔並離開或被退重送</button>
+                                        <button type="submit" class="btn btn-primary" name="action" id="insert" disabled="true">本班資料儲存</button>
+                                    </td>
+                                </div>
                             </tr>
                             </thead>
                             </table>
@@ -229,7 +235,10 @@
                                         <thead>
                                         <tr>
                                             <td class="td1" align="center">補課教室</td>
-                                            <td colspan="3"><input type="text" class="form-control" name="edit_class_room" id="edit_class_room" value="" size="25" maxlength="30"><font size="4">
+                                            <td colspan="3">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="edit_class_room" id="edit_class_room" value="" size="25" maxlength="30"><font size="4">
+                                            </div>
                                             </td>
                                         </tr>
                                         </thead>
