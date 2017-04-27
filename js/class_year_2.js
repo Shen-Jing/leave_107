@@ -17,6 +17,8 @@ $(
         $('#class_year,#class_acadm').change( // 抓取區域選完的資料
             function(e) {
                 if ($('#class_year').val() !== null && $('#class_acadm').val() !== null) {
+                    $('#store').attr("disabled", false);
+                    $('#insert').attr("disabled", false);
                     CRUD(0,"init"); //query
                 }
             }
@@ -332,7 +334,7 @@ $("#no_holiday_form").bootstrapValidator({
                     message: '請選擇補課節次'
                 },
             }
-        }
+        },
         class_room: {
             validators: {
                 notEmpty: {
@@ -378,6 +380,7 @@ $("#no_holiday_form").bootstrapValidator({
                         {
                             if(JData.length == 7)
                             {
+                                // alert(JData);
                                 toastr["success"](JData);
                                 CRUD(0,"insert");
                             }
@@ -495,11 +498,12 @@ function EditRow(classno, serialno)
                 toastr["error"](JData.error_message);
             else
             {
+                // alert(JData);
                 $("#ChangeModal1").modal("hide");
                 $("#ChangeModal2 .modal-title").html("紀錄修改");
                 $("#ChangeModal2").modal("show"); //弹出框show
                 $('#update').empty();
-                $('#update').append("<button type='submit' class='btn btn-primary' name='" + classno + "' id='" + serialno + "' value='update' >修改資料儲存</button>");
+                $('#update').append("<button type='submit' class='btn btn-primary' name='" + classno + "' id='update_btn' value='"+ serialno + "'>修改資料儲存</button>");
 
                 // onclick='Update(" + classno + ", " + serialno + ")'
 
@@ -656,137 +660,139 @@ function EditRow(classno, serialno)
 }
 
 //bootstrapValidator
-// $("#update_form").bootstrapValidator({
-//     live: 'submitted',
-//     fields: {
-//         edit_subject_name: {
-//             validators: {
-//                 notEmpty: {
-//                     message: '請選擇科目'
-//                 }
-//             }
-//         },
-//         edit_origin_time: {
-//             validators: {
-//                 notEmpty: {
-//                     message: '原上課日期日期不可空白'
-//                 },
-//                 date: {
-//                     format: 'YYYY/MM/DD',
-//                     message: '不正確的日期格式！'
-//                 }
-//             }
-//         },
-//         edit_change_time: {
-//             validators: {
-//                 notEmpty: {
-//                     message: '調補課日期不可空白'
-//                 },
-//                 date: {
-//                     format: 'YYYY/MM/DD',
-//                     message: '不正確的日期格式！'
-//                 }
-//             }
-//         },
-//         edit_class_section2_1: {
-//             validators: {
-//                 notEmpty: {
-//                     message: '請選擇補課節次'
-//                 }
-//             }
-//         },
-//         edit_class_section2_2: {
-//             validators: {
-//                 notEmpty: {
-//                     message: '請選擇補課節次'
-//                 },
-//             }
-//         },
-//         edit_class_room: {
-//             validators: {
-//                 notEmpty: {
-//                     message: '請輸入補課教室'
-//                 },
-//             }
-//         },
-//     }
-// })
-// // 不論表單驗證正確與否時，皆可按下表單按鈕
-// // Triggered when any field is invalid
-// .on('error.field.bv', function(e, data) {
-//     data.bv.disableSubmitButtons(false);
-// })
-// // Triggered when any field is valid
-// .on('success.field.bv', function(e, data) {
-//     data.bv.disableSubmitButtons(false);
-// })
-// //submit by ajax----------------------------------
-// .on( 'success.form.bv' , function(e) {
-//         $.ajax({
-//             url: 'ajax/class_year_2_ajax.php',
-//             data: { oper: 'update', class_no: $(this).name(), serial_no: $(this).id(), class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#edit_subject_name').val(),
-//                     class_name: $('#edit_class_name').text(), scr_period: $('#edit_scr_period').text() , class_section2_1: $('#edit_class_section2_1').val(),  class_section2_2: $('#edit_class_section2_2').val(), class_room: $('#edit_class_room').val(),
-//                     class_memo: $('#edit_class_memo').val(), edit_origin_time: $('#edit_origin_time').val(), edit_change_time: $('#edit_change_time').val() },
-//             type: 'POST',
-//             dataType: "json",
-//             success: function(JData) {
+$("#update_form").bootstrapValidator({
+    live: 'submitted',
+    fields: {
+        edit_subject_name: {
+            validators: {
+                notEmpty: {
+                    message: '請選擇科目'
+                }
+            }
+        },
+        edit_origin_time: {
+            validators: {
+                notEmpty: {
+                    message: '原上課日期日期不可空白'
+                },
+                date: {
+                    format: 'YYYY/MM/DD',
+                    message: '不正確的日期格式！'
+                }
+            }
+        },
+        edit_change_time: {
+            validators: {
+                notEmpty: {
+                    message: '調補課日期不可空白'
+                },
+                date: {
+                    format: 'YYYY/MM/DD',
+                    message: '不正確的日期格式！'
+                }
+            }
+        },
+        edit_class_section2_1: {
+            validators: {
+                notEmpty: {
+                    message: '請選擇補課節次'
+                }
+            }
+        },
+        edit_class_section2_2: {
+            validators: {
+                notEmpty: {
+                    message: '請選擇補課節次'
+                },
+            }
+        },
+        edit_class_room: {
+            validators: {
+                notEmpty: {
+                    message: '請輸入補課教室'
+                },
+            }
+        }
+    }
+})
+// 不論表單驗證正確與否時，皆可按下表單按鈕
+// Triggered when any field is invalid
+.on('error.field.bv', function(e, data) {
+    data.bv.disableSubmitButtons(false);
+})
+// Triggered when any field is valid
+.on('success.field.bv', function(e, data) {
+    data.bv.disableSubmitButtons(false);
+})
+//submit by ajax----------------------------------
+.on( 'success.form.bv' , function(e) {
+        $.ajax({
+            url: 'ajax/class_year_2_ajax.php',
+            data: { oper: 'update', serial_no: $('#update_btn').val(), class_no: $('#update_btn').attr("name"), class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#edit_subject_name').val(),
+                    class_name: $('#edit_class_name').text(), scr_period: $('#edit_scr_period').text() , class_section2_1: $('#edit_class_section2_1').val(),  class_section2_2: $('#edit_class_section2_2').val(), class_room: $('#edit_class_room').val(),
+                    class_memo: $('#edit_class_memo').val(), edit_origin_time: $('#edit_origin_time').val(), edit_change_time: $('#edit_change_time').val() },
+            type: 'POST',
+            dataType: "json",
+            success: function(JData) {
 
-//                 if (JData.error_code)
-//                     toastr["error"](JData.error_message);
-//                 else
+                if (JData.error_code)
+                    toastr["error"](JData.error_message);
+                else
+                {
+                    if(JData.length == 7)
+                    {
+                        alert(JData);
+                        toastr["success"](JData);
+                        CRUD(0,"update");
+                        $("#ChangeModal2").modal("hide");
+                    }
+                    else
+                        // alert(JData);
+                        toastr["error"](JData);
+                }
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+    });
+    e.preventDefault();
+});
+
+
+
+
+
+// function Update(classno, serialno)
+// {
+
+//     $.ajax({
+//         url: 'ajax/class_year_2_ajax.php',
+//         data: { oper: 'update', class_no: classno, serial_no: serialno, class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#edit_subject_name').val(),
+//                 class_name: $('#edit_class_name').text(), scr_period: $('#edit_scr_period').text() , class_section2: $('#edit_class_section2').val(), class_room: $('#edit_class_room').val(),
+//                 class_memo: $('#edit_class_memo').val(), cyear: $('#edit_cyear').val(), cmonth: $('#edit_cmonth').val(), cday: $('#edit_cday').val(),
+//                 dyear: $('#edit_dyear').val(), dmonth: $('#edit_dmonth').val(), dday: $('#edit_dday').val() },
+//         type: 'POST',
+//         dataType: "json",
+//         success: function(JData) {
+
+//             if (JData.error_code)
+//                 toastr["error"](JData.error_message);
+//             else
+//             {
+//                 if(JData.length == 7)
 //                 {
-//                     if(JData.length == 7)
-//                     {
-//                         toastr["success"](JData);
-//                         CRUD(0,"update");
-//                         $("#ChangeModal2").modal("hide");
-//                     }
-//                     else
-//                         // alert(JData);
-//                         toastr["error"](JData);
+//                     toastr["success"](JData);
+//                     CRUD(0,"update");
+//                     $("#ChangeModal2").modal("hide");
 //                 }
+//                 else
+//                     // alert(JData);
+//                     toastr["error"](JData);
+//             }
 
-//             },
-//             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+//         },
+//         error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
 //     });
-// });
 
 // }
-
-
-
-function Update(classno, serialno)
-{
-
-    $.ajax({
-        url: 'ajax/class_year_2_ajax.php',
-        data: { oper: 'update', class_no: classno, serial_no: serialno, class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#edit_subject_name').val(),
-                class_name: $('#edit_class_name').text(), scr_period: $('#edit_scr_period').text() , class_section2: $('#edit_class_section2').val(), class_room: $('#edit_class_room').val(),
-                class_memo: $('#edit_class_memo').val(), cyear: $('#edit_cyear').val(), cmonth: $('#edit_cmonth').val(), cday: $('#edit_cday').val(),
-                dyear: $('#edit_dyear').val(), dmonth: $('#edit_dmonth').val(), dday: $('#edit_dday').val() },
-        type: 'POST',
-        dataType: "json",
-        success: function(JData) {
-
-            if (JData.error_code)
-                toastr["error"](JData.error_message);
-            else
-            {
-                if(JData.length == 7)
-                {
-                    toastr["success"](JData);
-                    CRUD(0,"update");
-                    $("#ChangeModal2").modal("hide");
-                }
-                else
-                    // alert(JData);
-                    toastr["error"](JData);
-            }
-
-        },
-        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-    });
-
-}
 
 

@@ -33,16 +33,16 @@
                                                     <select class="form-control" name="qry_month" id="qry_month" style='display: inline-block; width: auto;'></select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    姓名
-                                                    <select class="form-control" name="qry_dpt_empl" id="qry_dpt_empl" style='display: inline-block; width: auto;'></select>
-                                                </div>
-                                            </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     單位
                                                     <select class="form-control" name="qry_dpt" id="qry_dpt" style='display: inline-block; width: auto;'></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    姓名
+                                                    <select class="form-control" name="qry_dpt_empl" id="qry_dpt_empl" style='display: inline-block; width: auto;'></select>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
