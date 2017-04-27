@@ -515,15 +515,19 @@ function EditRow(classno, serialno)
                 edit_scr_period = JData.CLASS_SECTION;
                 edit_class_section2_1 = JData.CLASS_SECTION2.toString().split("-")[0];
                 edit_class_section2_2 = JData.CLASS_SECTION2.toString().split("-")[1];
-                edit_cyear_origin = JData.CLASS_DATE.toString().substring(0,3);
+                edit_cyear_origin = (parseInt(JData.CLASS_DATE.toString().substring(0,3))+1911).toString();
                 edit_cmonth_origin = JData.CLASS_DATE.toString().substring(3,5);
                 edit_cday_origin = JData.CLASS_DATE.toString().substring(5,7);
-                edit_dyear_origin = JData.CLASS_DATE2.toString().substring(0,3);
+                edit_dyear_origin = (parseInt(JData.CLASS_DATE2.toString().substring(0,3))+1911).toString();
                 edit_dmonth_origin = JData.CLASS_DATE2.toString().substring(3,5);
                 edit_dday_origin = JData.CLASS_DATE2.toString().substring(5,7);
                 edit_class_memo = JData.CLASS_MEMO;
                 edit_class_room = JData.CLASS_ROOM;
-
+                // alert(edit_dyear_origin+"/"+edit_dmonth_origin+"/"+edit_dday_origin);
+                // edit_dyear_origin = toString(parseInt(edit_dyear_origin)+1911);
+                // var eco = toString(parseInt(edit_cyear_origin)+1911) + "/" + edit_cmonth_origin + "/" + edit_cday_origin;
+                // var edo = toString(parseInt(edit_dyear_origin)+1911) + "/" + edit_dmonth_origin + "/" + edit_dday_origin;
+                // alert(edit_dyear_origin);
                 $('#edit_class_name').append(edit_class_code + edit_class_name);
                 $('#edit_scr_period').append(edit_scr_period);
                 // $('#edit_class_section2_1').val(edit_class_section2_1);
@@ -556,7 +560,7 @@ function EditRow(classno, serialno)
                 //原上課日期及調補課日期
                 var edit_start_options = {
                     ignoreReadonly: true,
-                    defaultDate: toString(parseInt(edit_cyear_origin)+1911) + "/" + edit_cmonth_origin + "/" + edit_cday_origin,
+                    defaultDate: edit_cyear_origin + "/" + edit_cmonth_origin + "/" + edit_cday_origin,
                     maxDate: date,
                     format: 'YYYY/MM/DD',
                     tooltips: {
@@ -584,7 +588,7 @@ function EditRow(classno, serialno)
                 }
                 var edit_end_options = {
                     ignoreReadonly: true,
-                    defaultDate: toString(parseInt(edit_dyear_origin)+1911) + "/" + edit_dmonth_origin + "/" + edit_dday_origin,
+                    defaultDate: edit_dyear_origin + "/" + edit_dmonth_origin + "/" + edit_dday_origin,
                     format: 'YYYY/MM/DD',
                     tooltips: {
                         clear: "清除所選",
