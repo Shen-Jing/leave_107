@@ -100,11 +100,11 @@ $sql = "select empl_no
                    $row = $db -> query_array($SQLStr);
                    $class_date    = $row['CLASS_DATE'];
 		               $class_date2   = $row['CLASS_DATE2'];
-                   $class_subject  = $row['CLASS_SELCODE'];
+                   $class_subject  = $row['CLASS_SUBJECT'];
 		               $class_room     = $row['CLASS_ROOM'];
 		               $class_section2 = $row['CLASS_SECTION2'];
-
-
+                   $class_room     = $row['CLASS_ROOM'];
+                   $class_memo     = $row['CLASS_MEMO'];
                    $class_acadm=$_POST['class_acadm'];
                    /*$SQLStr="select a.scr_selcode, b.sub_name , b.sub_id
 				                     from    dean.s32_smscourse@schlink.us.oracle.com a ,
@@ -128,7 +128,10 @@ $sql = "select empl_no
                    $selcode     = $row1['SCR_SELCODE'];
 				           $sub_name    = $row1['SUB_NAME'];*/
 
-                   $data = array('byear' => $byear,'bmonth'=>$bmonth,'bday'=>$bday,'eyear' => $eyear,'emonth'=>$emonth,'eday'=>$eday,'holidaymark'=>$holidaymark,'year' => $year,'class_no'=>$class_no,'class_room'=>$class_room);
+                   $data = array('byear' => $byear,'bmonth'=>$bmonth,'bday'=>$bday,'eyear' => $eyear,'emonth'=>$emonth,'eday'=>$eday,
+                   'class_date'=>$class_date,'class_date2'=>$class_date2,'holidaymark'=>$holidaymark,'year' => $year,'class_no'=>$class_no,
+                   'class_room'=>$class_room,'class_subject'=> $class_subject,'class_memo'=>$class_memo,'class_room'=>$class_room,
+                   'CLASS_SECTION2'=>$class_section2);
                    echo json_encode($data);
 
                    exit;
