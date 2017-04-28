@@ -46,8 +46,8 @@
                               for ($i = 0; $i < $len; $i++) {
                                 echo "<tr>";
                                 echo "  <td>" . $card_data['DO_DAT'][$i] . "</td>";
-                                echo "  <td>" . $card_data['MEMO'][$i] . "</td>";
                                 echo "  <td>" . $card_data['DO_TIME'][$i] . "</td>";
+                                echo "  <td>" . $card_data['MEMO'][$i] . "</td>";
                                 echo "</tr>";
                               }
                             }
