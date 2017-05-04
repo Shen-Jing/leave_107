@@ -53,6 +53,10 @@ function year_control()
 
   }
 );
+function toDate(dateStr) {
+    const [year, month, day] = dateStr.split("/")
+    return new Date(year, month - 1, day)
+}
 var serailnoval;
 var classnoval;
 var gstate;
@@ -177,7 +181,7 @@ function NextClick(serialno)
   $("#ChangeModal1").modal("hide");
   $("#ChangeModal2 .modal-title").html("資料填補");
   $("#ChangeModal2").modal("show"); //弹出框show
-  $("#data_modify").hide();
+  //$("#data_modify").hide();
 
 queryyear();
   $.ajax({
@@ -209,9 +213,9 @@ queryyear();
           row0 = row0 + "<td class='td1' style='text-align:center;'>補課節次</td>";
           row0 = row0 + "<td class='td1' style='text-align:center;'>修改或刪除</td></tr>";
 
-
+          var classno;
           for(var i=0;i<JData.CLASS_NAME.length;i++){
-            var classno=JData.CLASS_NO[i];
+            classno=JData.CLASS_NO[i];
 
             row0 = row0 + "<tr><td  style='text-align:center;'>" ;
             row0 = row0 + JData.CLASS_NAME[i];
@@ -237,8 +241,11 @@ queryyear();
 
 
           }
+
           row0 = row0 + "</tbody></table>";
           $('#class_content').append(row0);
+          var classtmp=parseInt(classno)+1;
+          EditDataFunc(serialno,classtmp,5);
 
         }
       }
@@ -274,6 +281,8 @@ function EditDataFunc(serialno,classno,state)
   $ ('#class_section22').empty();
   $('#class_room').val('');
   $('#class_memo').val('');
+  $('#odate').empty();
+  $('#ndate').empty();
   var original_options = {
       defaultDate: new Date(),
       format: 'YYYY/MM/DD',
@@ -425,9 +434,15 @@ function EditDataFunc(serialno,classno,state)
             edit_dyear_origin = (parseInt(JData.class_date2.toString().substring(0,3))+1911).toString();
             edit_dmonth_origin = JData.class_date2.toString().substring(3,5);
             edit_dday_origin = JData.class_date2.toString().substring(5,7);
+
+            var _eco = edit_cyear_origin + "/" + edit_cmonth_origin + "/" + edit_cday_origin;
+            var _edo = edit_dyear_origin + "/" + edit_dmonth_origin + "/" + edit_dday_origin;
+
+            var eco = toDate(_eco);
+            var edo = toDate(_edo);
             //alert(edit_cyear_origin);
             var change_start_options = {
-                defaultDate: edit_cyear_origin + "/" + edit_cmonth_origin + "/" + edit_cday_origin,
+                defaultDate: eco,
                 format: 'YYYY/MM/DD',
                 ignoreReadonly: true,
                 tooltips: {
@@ -459,7 +474,7 @@ function EditDataFunc(serialno,classno,state)
                 locale: 'zh-tw',
             }
             var change_end_options = {
-                defaultDate: edit_dyear_origin + "/" + edit_dmonth_origin + "/" + edit_dday_origin,
+                defaultDate: edo,
                 format: 'YYYY/MM/DD',
                 ignoreReadonly: true,
                 tooltips: {
@@ -490,8 +505,12 @@ function EditDataFunc(serialno,classno,state)
                 },
                 locale: 'zh-tw',
             }
+            change_start_options.useCurrent = false;
+            change_end_options.useCurrent = false;
             $('#odate').datetimepicker(change_start_options);
             $('#ndate').datetimepicker(change_end_options);
+            $('#odate').data("DateTimePicker").date(eco);
+            $('#ndate').data("DateTimePicker").date(edo);
             $('#class_room').val(JData["class_room"]);
             $('#class_memo').val(JData["class_memo"]);
           }else {
