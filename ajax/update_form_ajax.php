@@ -6,8 +6,11 @@
   if ($_POST['oper'] == "qry_item") {
     $data = array();
     $empl_no = $_POST['empl_no'];
+    // 當天年月日，例：106/04/26
     $vocdate = $_POST['vocdate'];
+    // 此為第一次qry_item，則採用登入系統時取得的單位SESSION資料
     $depart = $_SESSION['depart'];
+    // 之後單位有變動，則有另外動態更新對應職稱的程式碼(qry_title)
 
     // 單位
     $sql = "SELECT dept_no, dept_full_name
@@ -19,52 +22,52 @@
     $tmp_data = $db -> query_array($sql);
     $data['qry_dept'] = $tmp_data;
 
-    // 職稱
+    // 抓職稱名稱，根據單位有不一樣的職稱 103.04.22 加上 and crjb_quit_date is null(舊記錄保留，防抓到)
     $sql = "SELECT code_chn_item, code_field
-						FROM  psfcrjb, psqcode
-						WHERE  crjb_empl_no = '$empl_no'
-						AND    crjb_quit_date IS NULL
-						AND    crjb_depart = '$depart'
-						AND    code_kind = '0202'
-						AND    code_field = crjb_title";
+			FROM  psfcrjb, psqcode
+			WHERE  crjb_empl_no = '$empl_no'
+			AND    crjb_quit_date IS NULL
+			AND    crjb_depart = '$depart'
+			AND    code_kind = '0202'
+			AND    code_field = crjb_title";
     $tmp_data = $db -> query_array($sql);
     $data['qry_title'] = $tmp_data;
 
     // 假別
     $sql = "SELECT code_field, code_chn_item
-						FROM psqcode
-						WHERE code_kind = '0302'
-						ORDER BY code_field";
+			FROM psqcode
+			WHERE code_kind = '0302'
+			ORDER BY code_field";
     $tmp_data = $db -> query_array($sql);
     $data['qry_vtype'] = $tmp_data;
 
     // 職務代理人
     // 根據目前的empl_no找出所屬部門的所有代理人與其代理人號碼
     $sql = "SELECT  empl_no, empl_chn_name
-          FROM   psfempl, psfcrjb
-          WHERE empl_no = crjb_empl_no
-          AND   crjb_quit_date IS NULL
-          AND   crjb_depart = '$depart'
-          AND   (substr(crjb_title, 1, 1) != 'B' OR crjb_title = 'B60')
-          AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
-          AND   empl_no != '$empl_no'
-          ORDER BY crjb_depart, crjb_title, crjb_empl_no";
+			FROM   psfempl, psfcrjb
+			WHERE empl_no = crjb_empl_no
+			AND   crjb_quit_date IS NULL
+			AND   crjb_depart = '$depart'
+			AND   (substr(crjb_title, 1, 1) != 'B' OR crjb_title = 'B60')
+			AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
+			AND   empl_no != '$empl_no'
+			ORDER BY crjb_depart, crjb_title, crjb_empl_no";
     $tmp_data = $db -> query_array($sql);
     $data['qry_agentno'] = $tmp_data;
 
     // 職務代理人單位
     $sql = "SELECT dept_no,dept_full_name
-        FROM stfdept
-        WHERE use_flag IS NULL
-        AND  substr(dept_no, 1, 1) BETWEEN 'A' AND 'Z'
-        ORDER BY  dept_no";
+			FROM stfdept
+			WHERE use_flag IS NULL
+			AND  substr(dept_no, 1, 1) BETWEEN 'A' AND 'Z'
+			ORDER BY  dept_no";
     $tmp_data_1 = $db -> query_array($sql);
 
     $sql = "SELECT dept_no,dept_full_name
-        FROM stfdept
-        WHERE use_flag IS NULL
-        AND  substr(dept_no, 1, 1) BETWEEN '0' AND '9'
-        ORDER BY  dept_no";
+			FROM stfdept
+			WHERE use_flag IS NULL
+			AND  substr(dept_no, 1, 1) BETWEEN '0' AND '9'
+			ORDER BY  dept_no";
     $tmp_data_2 = $db -> query_array($sql);
 
     $data['qry_agent_depart'][] = $tmp_data_1;
@@ -84,15 +87,15 @@
 
     // 判斷是否為寒暑假期間
     $sql = "SELECT count(*) count
-						FROM    t_card_time
-						WHERE   '$vocdate' BETWEEN afternoon_s AND afternoon_e";
+			FROM    t_card_time
+			WHERE   '$vocdate' BETWEEN afternoon_s AND afternoon_e";
     $tmp_data = $db -> query_array($sql);
     $data['qry_voc'] = $tmp_data;
 
     // 判斷是否為特殊工作人員
     $sql = "SELECT nvl(empl_party,'0') empl_party
-						FROM psfempl
-						WHERE empl_no='$empl_no'";
+			FROM psfempl
+			WHERE empl_no='$empl_no'";
     $tmp_data = $db -> query_array($sql);
     $data['qry_party'] = $tmp_data;
 
@@ -105,18 +108,36 @@
     $empl_no = $_SESSION['empl_no'];
     $depart = $_POST['depart'];
     $sql = "SELECT  empl_no, empl_chn_name
-						FROM   psfempl, psfcrjb
-						WHERE empl_no = crjb_empl_no
-						AND   crjb_quit_date IS NULL
-						AND   crjb_depart = '$depart'
-						AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
-						AND   empl_no != '$empl_no'
-						ORDER BY crjb_depart, crjb_title, crjb_empl_no";
+			FROM   psfempl, psfcrjb
+			WHERE empl_no = crjb_empl_no
+			AND   crjb_quit_date IS NULL
+			AND   crjb_depart = '$depart'
+			AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
+			AND   empl_no != '$empl_no'
+			ORDER BY crjb_depart, crjb_title, crjb_empl_no";
     $data = $db -> query_array($sql);
     echo json_encode($data);
     exit;
   }
-
+  
+    // 若改變所屬單位選擇，則查詢該請假者在該單位下的職稱
+  if ($_POST['oper'] == "qry_title") {
+    $empl_no = $_SESSION['empl_no'];
+    $depart = $_POST['depart'];
+    // 抓職稱名稱，根據單位有不一樣的職稱 103.04.22 加上 and crjb_quit_date is null(舊記錄保留，防抓到)
+    $sql = "SELECT code_chn_item, code_field
+            FROM  psfcrjb, psqcode
+            WHERE  crjb_empl_no = '$empl_no'
+            AND    crjb_quit_date IS NULL
+            AND    crjb_depart = '$depart'
+            AND    code_kind = '0202'
+            AND    code_field = crjb_title";
+    $data = $db -> query_array($sql);
+    echo json_encode($data);
+    exit;
+  }
+  
+  // 勞基特休 / 教職休假
   if ($_POST['oper'] == "qry_apps") {
     $empl_no = $_POST['empl_no'];
     $vtype = $_POST['vtype'];
@@ -214,15 +235,18 @@
   
   if ($_POST['oper'] == "qry_oldform"){
 	$serialno = $_POST['sn'];
+	$empl_no = $_SESSION['empl_no'];
 
-	$sql="SELECT agentno,agent_depart,povdateb,povdatee,povtimeb,povtimee,meetdateb,meetdatee,meettimeb,meettimee,
+	$sql="SELECT depart,agentno,agent_depart,povdateb,povdatee,povtimeb,povtimee,meetdateb,meetdatee,meettimeb,meettimee,
 				 exit_date,back_date,povtype,eplace,extracase,class,poremark,abroad,containsat,budget,trip,permit_commt,on_dept,on_duty
-		  FROM  PSFEMPL P,HOLIDAYFORM H 
-		  WHERE SERIALNO=$serialno 
-		  AND   p.empl_no=h.pocard";
+		  FROM  HOLIDAYFORM H 
+		  WHERE SERIALNO=$serialno
+		  AND	h.pocard=$empl_no";
 	$data = $db -> fetch_row_assoc($sql);
 
+	
 	$form = array();
+	$form["depart"]       = $data["DEPART"];
 	$form["agentno"]      = $data["AGENTNO"];
 	$form["agent_depart"] = $data["AGENT_DEPART"];
 	$form["btime"]        = $data["POVTIMEB"];
@@ -311,14 +335,20 @@
 	$old_form = $db -> fetch_row_assoc($sql);
 	  
 	
-    $depart       = $_SESSION['depart'];
-    $title        = $_SESSION['title_id'];
-    $name         = $_SESSION['empl_name'];
-    $dept_name    = $_SESSION['dept_name'];
+    // 送出假單時所選取的單位
+    $depart = $_POST['depart'];
+    // 登入系統時的單位，舊系統命名為class_depart
+    $class_depart = $_SESSION['depart'];
+    // 送出假單的單位下該請假者的對應職稱id
+    $title_id = $_POST['title_id'];
+    $name = $_SESSION['empl_name'];
+    // 照理說應該是送出假單的單位中文名，可是舊頁面註解掉了，目前找不到有修改到dept_name的SESSION的code
+    // 所以先維持原樣（取登入系統時的單位中文）
+    $dept_name = $_SESSION['dept_name'];
     // 有別於submit_result的表單結果，remind是較為不重要的提醒（如請事假提醒惠幾天、會扣錢）
     $submit_remind = "";
-    $condi         = 0;  // 請假是否成功
-    $flag          = 0;
+    $condi = 0;  // 請假是否成功
+    $flag = 0;
 
     // 系統日期
     $sql = "SELECT lpad(to_char(sysdate, 'yyyymmdd') - '19110000', 7, '0') ndate

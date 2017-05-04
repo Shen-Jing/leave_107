@@ -40,8 +40,11 @@ $( // 表示網頁完成後才會載入
                 // 預先帶出第一個單位
                 $('#qry_dept').val("" + JData.qry_dept.DEPT_NO[0]);
 
-                // 職稱欄位
+                // 職稱欄位，職稱中文(可見)與id(display none)要一起更新
+				// EX: 技正
                 $('#qry_title').text(JData.qry_title.CODE_CHN_ITEM[0]);
+				  // EX: F50
+				$('#hide-titleid').text(JData.qry_title.CODE_FIELD[0]);
 
                 // 假別 select欄位
                 var row0 = "<option selected disabled class='text-hide'>請選擇假別</option>";
@@ -96,10 +99,21 @@ $( // 表示網頁完成後才會載入
 				
 				
 				// 查詢舊假單的資料
-				$.post(
-					"ajax/update_form_ajax.php",
-					{ oper: "qry_oldform", sn: getQueryVariable('sn') },
-					function( data ){
+				$.ajax({
+					async: false,
+					url: "ajax/update_form_ajax.php",
+					type: 'POST',
+					data: { oper: "qry_oldform", sn: getQueryVariable('sn') },
+					success: function( data ){
+						
+						// 原有假單的單位
+						$('#qry_dept').val(data.depart).trigger('change');
+						
+						// 因有寫改變單位時帶出職稱的函數
+						//$('#qry_title').text(data.qry_title);
+                        //$('#hide-titleid').text(data.hide-titleid);
+						
+						
 						$('#qry_agentno').val(data.agentno).trigger('change');
 						
 						$('#qry_vtype').val(data.vtype).trigger('change');
@@ -117,11 +131,15 @@ $( // 表示網頁完成後才會載入
 						if(data.abroad == '1'){
 							$('input[name="abroad"]').first().prop('checked', true).trigger('change');
 							$('input[name="eplace_text"]').val(data.eplace).trigger('change');
+							$('#depart-time').data("DateTimePicker").date(data.depart_time);
+							$('#immig-time').data("DateTimePicker").date(data.immig_time);
 						}
 						else{
 							$('#qry_eplace').val(data.eplace).trigger('change');
+							$('#bus-trip-start').data("DateTimePicker").date(data.bus_trip_start);
+							$('#bus-trip-end').data("DateTimePicker").date(data.bus_trip_end);
 						}
-							
+						
 						if(data.saturday == '1'){
 							$('input[name="saturday"]').first().prop('checked', true).trigger('change');
 						}
@@ -136,8 +154,8 @@ $( // 表示網頁完成後才會載入
 						$('input[name="on_dept"]').val(data.on_dept).trigger('change');
 						$('input[name="on_duty"]').val(data.on_duty).trigger('change');
 					},
-					'json'
-				);
+					dataType: 'json'
+				});
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 // console.log(xhr.responseText);
@@ -388,6 +406,7 @@ $( // 表示網頁完成後才會載入
             }
         });
 
+		// 選了新的代理人單位，需重新查詢該單位下有什麼代理人員
         $("#qry_agent_depart").change(function(){
             if ($('#qry_agent_depart').val() != "") {
                 $('#qry_agentno').empty();
@@ -407,6 +426,31 @@ $( // 表示網頁完成後才會載入
                             $('#qry_agentno').append(row);
                         }
                         $('#qry_agentno').append("<option value='0000000'>其它單位</option>");
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        // console.log(xhr.responseText);
+                    }
+                });
+            }
+        });
+		
+		// 若改變所屬單位選擇，則需ajax處理叫出該請假者在該單位下的職稱
+        $("#qry_dept").change(function(){
+            if ($('#qry_dept').val() != "") {
+                $.ajax({
+                    url: 'ajax/update_form_ajax.php',
+                    data: {
+                      oper: 'qry_title',
+                      depart: $('#qry_dept').val(),
+                    },
+                    type: 'POST',
+                    dataType: "json",
+                    success: function(JData) {
+                        // 職稱欄位，職稱中文(可見)與id(display none)要一起更新
+                        // EX: 技正
+                        $('#qry_title').text(JData.CODE_CHN_ITEM[0]);
+                        // EX: F50
+                        $('#hide-titleid').text(JData.CODE_FIELD[0]);
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         // console.log(xhr.responseText);
@@ -676,7 +720,8 @@ $( // 表示網頁完成後才會載入
             var date = new Date();
             var year = date.getFullYear() - 1911;
             var postData = $(this).serialize()
-            + "&oper=submit" + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
+            + "&oper=submit" + "&depart=" + $('#qry_dept').val() 
+			+ "&title_id=" + $('#hide-titleid').text() + "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()
             + "&party=" + $('#party').text() + "&year=" + year + "&sn=" + getQueryVariable('sn');
             var formURL = $('#holidayform').attr('action');
             $.ajax({
