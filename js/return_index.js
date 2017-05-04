@@ -17,10 +17,10 @@ $(document).ready(function()
             type: 'POST',
             dataType: 'json'
         },
-        "columns": [
-          { "width": "10%" },
-          { "width": "80%" },
-          { "width": "10%" }
+        "columnDefs": [
+            { "display": "inline",
+              "targets": "_all"
+            }
         ]
     });
 
