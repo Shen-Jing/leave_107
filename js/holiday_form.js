@@ -403,12 +403,12 @@ $( // 表示網頁完成後才會載入
         // 若「出差地點」的選擇改變
         $("#qry_eplace").change(function(){
             // 若出差地點選擇「自行輸入」 => enable input text讓使用者輸入
-            if ($('#qry_eplace').val() == "23") {
-                $('#place-row > td > div > input').prop("disabled", false);
-                $('#place-row > td > div > input').focus();
+            if ($('#qry_eplace').val() == "自行輸入") {
+                $("input[name='eplace_text']").prop("disabled", false);
+                $("input[name='eplace_text']").focus();
             }
             else {
-                $('#place-row > td > div > input').prop("disabled", true);
+                $("input[name='eplace_text']").prop("disabled", true);
             }
         });
         // 是否出國的radio checked改變
@@ -417,8 +417,8 @@ $( // 表示網頁完成後才會載入
             if ($('input[name="abroad"]:checked').val() == "1") {
                 // 出差地點show來填出國地點
                 $('#place-row').show();
-                $('#place-row > td > div > input').prop("disabled", false);
-                $('#place-row > td > div > input').focus();
+                $("input[name='eplace_text']").prop("disabled", false);
+                $("input[name='eplace_text']").focus();
                 // 並且將出差地點改為「自行輸入」一項
                 $('#qry_eplace').val("23");
                 // 並且出差地點不可更換
@@ -439,7 +439,7 @@ $( // 表示網頁完成後才會載入
             }
             else {
                 // 若沒有要出國就不開放填寫
-                $('#place-row > td > div > input').prop("disabled", true);
+                $("input[name='eplace_text']").prop("disabled", true);
                 // 且出差地點開放選取國內地點
                 $('#qry_eplace').prop("disabled", false);
 
