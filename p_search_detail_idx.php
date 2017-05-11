@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
-                                        差假明細狀況
+                                        <h3 class="panel-title"><span class="clickable"><i class="glyphicon glyphicon-chevron-up"></i></span> 差假明細狀況</h3>
                                     </div>
                                     <div class="panel-body" id="container">
                                         <div class="row">
@@ -99,7 +99,7 @@
                                 </div> -->
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
-                                        差假統計狀況
+                                        <h3 class="panel-title"><span class="clickable"><i class="glyphicon glyphicon-chevron-up"></i></span> 差假統計狀況</h3>
                                     </div>
                                     <div class="panel-body" id="container">
                                         <div class="row">
