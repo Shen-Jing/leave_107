@@ -123,24 +123,30 @@ if ($_POST['oper']=="qry_year")
 	$begin_date	=$tyear.$tmonth.$tday;
 	$end_date   =$syear.$smonth.$sday;
   //echo $end_date;
+
 $a['data']="";
-//echo sizeof($row['EMPL_CHN_NAME']);
+  //echo sizeof($row['EMPL_CHN_NAME']).'<br>';
   for($i = 0; $i < sizeof($row['EMPL_CHN_NAME']); ++$i)
   {
+    //echo 'i='.$i.'<br>';
      $empl_no      = $row['CRJB_EMPL_NO'][$i];
 		 $empl_name = $row['EMPL_CHN_NAME'][$i];
 		 $dept_name  = $row['DEPT_SHORT_NAME'][$i];
 		 $title_name   = $row['CODE_CHN_ITEM'][$i];
      $user_no="";
+
      $vtype =array('01','02','03','32','30','17','04','05','06','07','08','09','11','21','22','23','34');
      /*    DAY12,  DAY13,  DAY14,	 DAY15,  DAY16, DAY17, DAY18 */
      $x[17]="";
-     /*for($j=0;$j<count($vtype);$j++){//各假別處理
+     //echo count($vtype).'<br>';
+     //echo $empl_no.'<br>';
+     for($j=0;$j<count($vtype);$j++){//各假別處理
           $pohdaye=0;
 					$pohoure=0;
 					//-------------------------------------------
 					//1.請假總天數及總時數，在選擇的範圍內
 					//-------------------------------------------
+          //echo $empl_no.'<br>'.$user_no.'<br>'.'<br>';
 					$SQLStr = "SELECT sum(nvl(POVDAYS,0)) POHDAYE,sum(nvl(POVHOURS,0))    POHOURE
 										 from   holidayform
 										 where povtype='$vtype[$j]'
@@ -149,28 +155,33 @@ $a['data']="";
 										 and     pocard in ('$empl_no','$user_no')
 										 and    condition in ('1','0')";
           $Arr = $db -> query_array($SQLStr);
+
           if(sizeof($Arr)>0)
           {
             $pohdaye=$Arr['POHDAYE'][0];
             $pohoure=$Arr['POHOURE'][0];
           }
+
+          //echo 'Part1:'.$pohdaye.'<br>'.$pohoure;
           //----------------------------------------------------------------------------------
 					//2.跨月請假--上月月底至本月月初
 					//----------------------------------------------------------------------------------
 					//97.01.04  POVDATEB<='$begin_date' 改為POVDATEB<'$begin_date'
 					$SQLStr = "SELECT POVDATEE,POVTIMEE ,CONTAINSAT,CONTAINSUN
 										 FROM holidayform
-										 where  povtype='$vtype[$i]'
+										 where  povtype='$vtype[$j]'
 										 and      POVDATEB<'$begin_date'
 										 and      POVDATEE>='$begin_date'
 										 and      pocard in ('$empl_no','$user_no')
 										 and      condition in ('1','0')";
           $Arr = $db -> query_array($SQLStr);
-          if(sizeof($Arr)>0)
+          //echo "size:". sizeof($Arr['POVDATEE']).'<br>';
+          if(sizeof($Arr['POVDATEE'])>0)
           {
             $edate=$Arr['POVDATEE'][0];
             $etime=$Arr['POVTIMEE'][0];
-            $saturday=$Arr['CONTAINSAT'];
+
+            $saturday=$Arr['CONTAINSAT'][0];
             $bdate=$begin_date;
             $btime='8';
             if (substr($etime,2,2)=='30')
@@ -179,23 +190,24 @@ $a['data']="";
 						$pohdaye += $tot_day;
 						$pohoure += $tot_hour;
           }
+          //echo 'Part2:'.$pohdaye.' '.$pohoure.'<br>';
           //----------------------------------------------------------------------------------
 					//3.跨月請假--本月月底至下月月初
 					//----------------------------------------------------------------------------------
           $SQLStr = "SELECT POVDATEB,POVTIMEB ,CONTAINSAT,CONTAINSUN
 										 FROM holidayform
-										 where povtype='$vtype[$i]'
+										 where povtype='$vtype[$j]'
 										 and     POVDATEB<='$end_date'
 										 and     POVDATEE>'$end_date'
 										 and     pocard in ('$empl_no','$user_no')
 										 and     condition in ('1','0')";
           $Arr = $db -> query_array($SQLStr);
           //$tmpint=0;
-          if(sizeof($Arr)>0)
+          if(sizeof($Arr['POVDATEB'])>0)
           {
             $bdate=$Arr['POVDATEB'][0];  //起始日期
 						$btime=$Arr['POVTIMEB'][0];  //起始時間
-						$saturday=$Arr['CONTAINSAT'];
+						$saturday=$Arr['CONTAINSAT'][0];
 						$edate=$end_date;
 						$etime='17';
 						//...........................................................
@@ -207,6 +219,7 @@ $a['data']="";
 						$pohdaye += $tot_day;
 						$pohoure += $tot_hour;
           }
+          //echo 'Part3:'.$pohdaye.' '.$pohoure.'<br>';
           $temp_h = 0;
 					if ($pohoure >= 8){
 						$temp_h= $pohoure % 8;
@@ -217,10 +230,12 @@ $a['data']="";
 					if ($pohoure=='') $pohoure=0;
 
           $x[$j]=$pohdaye."/".$pohoure;
-          //echo $x[$j];
-     }*/
+          //echo $pohdaye."/".$pohoure.'<br>';
+          //echo $x[$j].'<br>';
+     }
+     //echo 'out'.'<br>'.'<br>';
      //echo $i." ";
-       /*$a['data'][] = array(
+      $a['data'][] = array(
          $dept_name,
          $title_name,
          $empl_name,
@@ -240,13 +255,13 @@ $a['data']="";
          $x[13],
          $x[14],
          $x[15],
-         $x[16]);*/
+         $x[16]);
 
          //echo $dept_name." ".$title_name." ".$empl_name."  ";
-         $a['data'][] = array(
+      /*$a['data'][] = array(
            $dept_name,
            $title_name,
-           $empl_name);
+           $empl_name);*/
 
 
   }
