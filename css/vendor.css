@@ -112,6 +112,10 @@ a.dt-button.blue {
 .modal-body.fullscr-iframe {
   max-height: inherit;
 }
+
+.clickable {
+    cursor: pointer;
+}
 /*!
  * Start Bootstrap - SB Admin 2 (http://startbootstrap.com/)
  * Copyright 2013-2016 Start Bootstrap
