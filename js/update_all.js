@@ -1,77 +1,89 @@
-$( 
-	function() {
-		$("body").tooltip({
-            selector: "[title]"
-        });
-		init_table();
-	}
-    
-);
+$(function() {
+    initYearMonthsSel();
 
+    initTable();
+
+
+
+    $('#unpassed').on('change', function() { oTable.ajax.reload(); });
+});
+
+// use global variable for datatable
 var oTable;
-function init_table() 
-{
-    oTable = 
-    $('#oTable').DataTable({
-        "ajax": {
-            url: 'ajax/update_all_ajax.php',
-            data: {
-                oper : 'load'
-            },
-            type: 'POST',
-            dataType: 'json'
-        },
-		"deferRender": true,
-		"columns": [
-			{ "data": "DEPT_SHORT_NAME" },
-            { "data": "EMPL_CHN_NAME" },
-            { "data": "CODE_CHN_ITEM" },
-            { "data": "POVDATEB" },
-            { "data": "POVDATEE" },
-            { "data": "POVTIMEB" },
-			{ "data": "POVDAYS" },
-            { "data": "APPDATE" },
-			{ "data": "CONDITION" },
-			{ "data": "CURENTSTATUS" }
-        ],
-		"columnDefs":[
-			{
-				"targets": 10,
-				"data": null,
-				"defaultContent": "<button id='editrow' class='btn-primary' type='button' title='編輯'><i class='fa fa-edit'></i></button><button id='delrow' class='btn-danger' type='button' title='刪除'><i class='fa fa-trash-o'></i></button>"
-			}
-		],
-        "buttons": [
-        'print','excel'
-        ],
-        "dom": '<"top"l>Bftrip'
+
+function initYearMonthsSel() {
+    var fulldate = new Date();
+    var thismonth = fulldate.getMonth() + 1;
+    var thisyear = fulldate.getUTCFullYear() - 1911;
+
+    for (var i = 1; i <= 12; i++)
+        $("#qry_month").append('<option value=' + i + '>' + i + '</option>');
+
+    for (var i = 0, year = thisyear - 3; i < 5; i++, year++)
+        $("#qry_year").append('<option value=' + year + '>' + year + '</option>');
+
+    $("#qry_year, #qry_month").on("change", function(e) {
+        oTable.ajax.reload();
     });
-	
-	$('#oTable tbody').on('click', 'button#delrow', function() {
-            var rowid = oTable.row($(this).parents('tr')).id();
-            if (!confirm("確定要刪除此筆資料 ( " + rowid + " ) ?")) return false;
-            $.ajax({
-                url: 'ajax/update_all_ajax.php',
-                data: {
-                    oper: 'del'
-                },
-                type: 'POST',
-                dataType: 'json',
-                success: function(JData) {
-                    oTable.ajax.reload();
-                },
-                error: function(xhr, ajaxOptions, thrownError) {}
-            });
-    });
+
+    $("#qry_year").val(thisyear);
+    $("#qry_month").val(thismonth);
 }
 
 
+function initTable() {
+    oTable =
+        $('#oTable').DataTable({
+            "responsive": true,
+            "processing": true,
+            "language": {
+                "processing": '<i class="fa fa-refresh fa-spin fa-lg fa-fw"> </i> 讀取中...'
+            },
+            "ajax": {
+                url: 'ajax/update_all_ajax.php',
+                data: function(d) {
+                    d.oper = "load";
+                    d.year = $('#qry_year').val();
+                    d.month = $('#qry_month').val();
+                    d.unpassed = $('#unpassed').prop("checked");
+                },
+                type: 'POST',
+                dataType: 'json'
+            },
+            //"deferRender": true, 
+            "columns": [
+                { "data": "DEPTNAME" },
+                { "data": "PONAME" },
+                { "data": "POVTYPE" },
+                { "data": "POVDATEB" },
+                { "data": "POVDATEE" },
+                { "data": "POVTIMEB" },
+                { "data": "AGGRETIME" },
+                { "data": "APPDATE" },
+                { "data": "CONDITION" },
+                { "data": "CURENTSTATUS" }
+            ],
+            "columnDefs": [{
+                    "targets": 10,
+                    "orderable": false,
+                    "data": "SERIALNO",
+                    "render": function(data) {
+                        // 取消
+                        return "<button type='button' class='btn btn-primary' onclick='openHoildayForm(" + data + ")'><i class='fa fa-edit' aria-hidden='true'></i></button>";
+                    }
+                },
+                { "className": "dt-center", "targets": "_all" }
+            ]
+        });
 
- function sel_years_onchange()
- {
-     sel_year = document.getElementById("sel_years")
-                .options[document.getElementById("sel_years").selectedIndex]
-                .text;
+}
 
-     oTable.ajax.reload();
- } 
+function openHoildayForm(sn) {
+    if (typeof sn === 'undefined')
+        return;
+
+    var url = "update_form.php?fra=1&sn=" + sn;
+
+    $('.NewPage-IFrame').attr("src", url);
+    $('#fullscrModal').modal('show');
+}
