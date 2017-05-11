@@ -19,8 +19,7 @@
             AND   crjb_quit_date IS NULL
             AND   crjb_depart = dept_no
             ORDER BY crjb_seq DESC";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_dept'] = $tmp_data;
+    $data['qry_dept'] = $db -> query_array($sql);
 
     // 抓職稱名稱，根據單位有不一樣的職稱 103.04.22 加上 and crjb_quit_date is null(舊記錄保留，防抓到)
     $sql = "SELECT code_chn_item, code_field
@@ -30,16 +29,14 @@
             AND    crjb_depart = '$depart'
             AND    code_kind = '0202'
             AND    code_field = crjb_title";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_title'] = $tmp_data;
+    $data['qry_title'] = $db -> query_array($sql);
 
     // 假別
     $sql = "SELECT code_field, code_chn_item
             FROM psqcode
             WHERE code_kind = '0302'
             ORDER BY code_field";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_vtype'] = $tmp_data;
+    $data['qry_vtype'] = $db -> query_array($sql);
 
     // 職務代理人
     // 根據目前的empl_no找出所屬部門的所有代理人與其代理人號碼
@@ -52,8 +49,7 @@
           AND   substr(empl_no, 1, 1) IN ('0', '7', '5', '3', '4')
           AND   empl_no != '$empl_no'
           ORDER BY crjb_depart, crjb_title, crjb_empl_no";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_agentno'] = $tmp_data;
+    $data['qry_agentno'] = $db -> query_array($sql);
 
     // 職務代理人單位
     $sql = "SELECT dept_no,dept_full_name
@@ -61,17 +57,14 @@
         WHERE use_flag IS NULL
         AND  substr(dept_no, 1, 1) BETWEEN 'A' AND 'Z'
         ORDER BY  dept_no";
-    $tmp_data_1 = $db -> query_array($sql);
+    $data['qry_agent_depart'][] = $db -> query_array($sql);
 
     $sql = "SELECT dept_no,dept_full_name
         FROM stfdept
         WHERE use_flag IS NULL
         AND  substr(dept_no, 1, 1) BETWEEN '0' AND '9'
         ORDER BY  dept_no";
-    $tmp_data_2 = $db -> query_array($sql);
-
-    $data['qry_agent_depart'][] = $tmp_data_1;
-    $data['qry_agent_depart'][] = $tmp_data_2;
+    $data['qry_agent_depart'][] = $db -> query_array($sql);
 
     // 可補休之加班時數
     $sql = "SELECT over_date, nouse_time,
@@ -82,22 +75,19 @@
             AND    nouse_time > 0
             AND    due_date >= '$vocdate'
             ORDER BY over_date";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_nouse'] = $tmp_data;
+    $data['qry_nouse'] = $db -> query_array($sql);
 
     // 判斷是否為寒暑假期間
     $sql = "SELECT count(*) count
-						FROM    t_card_time
-						WHERE   '$vocdate' BETWEEN afternoon_s AND afternoon_e";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_voc'] = $tmp_data;
+            FROM    t_card_time
+            WHERE   '$vocdate' BETWEEN afternoon_s AND afternoon_e";
+    $data['qry_voc'] = $db -> query_array($sql);
 
     // 判斷是否為特殊工作人員
     $sql = "SELECT nvl(empl_party,'0') empl_party
             FROM psfempl
             WHERE empl_no='$empl_no'";
-    $tmp_data = $db -> query_array($sql);
-    $data['qry_party'] = $tmp_data;
+    $data['qry_party'] = $db -> query_array($sql);
 
     echo json_encode($data);
     exit;
@@ -202,11 +192,11 @@
       $sens = $tmp_data['SEN'][0];
       $apps = $tmp_data['SHALL'][0];
       /*公務人員:
-				1.	服務滿一年者，第二年起，每年應給休假七日；
-				2.	服務滿三年者，第四年起，每年應給休假十四日；
-				3.	滿六年者，第七年起，每年應給休假二十一日；
-				4.	滿九年者，第十年起，每年應給休假二十八日；
-				5.	滿十四年者，第十五年起，每年應給休假三十日*/
+        1.	服務滿一年者，第二年起，每年應給休假七日；
+        2.	服務滿三年者，第四年起，每年應給休假十四日；
+        3.	滿六年者，第七年起，每年應給休假二十一日；
+        4.	滿九年者，第十年起，每年應給休假二十八日；
+        5.	滿十四年者，第十五年起，每年應給休假三十日  */
 
       echo "至去年年底您的在校年資 $sens 年，今年有 $apps 天特休假，目前已休 $days 天 $hours 小時。";
       exit;
@@ -270,24 +260,7 @@
     $agent_depart = @$_POST['agent_depart'];
     if ($agent_depart == '')
       $agent_depart = $depart;
-    // 請假開始、結束日期 ex: 2016/12/08
-    list($byear, $bmonth, $bday) = explode("/", $_POST['leave_start']);
-    list($eyear, $emonth, $eday) = explode("/", $_POST['leave_end']);
-    // 開始、結束時間
-    $btime = $_POST['btime'];
-    $etime = $_POST['etime'];
-    // 起訖時間 ex: 2016/12/08 20時
-    list($tyear, $tmonth, $tday) = explode("/", $_POST['bus_trip_start']);
-    list($syear, $smonth, $sday) = explode("/", $_POST['bus_trip_end']);
-    $tday = substr($tday, 0, 2);
-    $sday = substr($sday, 0, 2);
-    // 會議開始、結束時間 ex: 2016/12/08
-    $mtimeb = substr(explode(" ", $_POST['bus_trip_start'])[1], 0, 2);
-    $mtimee = substr(explode(" ", $_POST['bus_trip_end'])[1], 0, 2);
 
-    // 出國出入境時間 ex: 2016/12/08
-    list($oyear, $omonth, $oday) = explode("/", $_POST['depart_time']);
-    list($iyear, $imonth, $iday) = explode("/", $_POST['immig_time']);
     $vtype = $_POST['vtype'];
     // 若沒有傳送自行輸入差假地點之值
     if (@$_POST['eplace_text'] === null)
@@ -298,31 +271,77 @@
     // 研發經費
     $research = '0';
     // 差假期間是否有課
-    $haveclass = $_POST['haveclass'];
+    $haveclass = @$_POST['haveclass'];
     // 事由或服務項目
-    $mark =  $_POST["mark"];
+    $mark =  @$_POST["mark"];
     // 是否出國
-    $abroad = $_POST["abroad"];
+    $abroad = @$_POST["abroad"];
     // 差假合計日數是否含例假日
-    $saturday = $_POST["saturday"];
+    $saturday = @$_POST["saturday"];
     $sunday = '0';
     $filestatus = "";
     $notefilename  = "";
     // 經費來源
-    $budget = $_POST["budget"];
+    $budget = @$_POST["budget"];
     // 是否刷國民旅遊卡
-    $trip = ($_POST["trip"] == '') ? 0 : $_POST["trip"];
+    $trip = (@$_POST["trip"] == '') ? 0 : @$_POST["trip"];
     // 奉派文號或提簽日期或填'免'
-    $permit = $_POST["permit"];
+    $permit = @$_POST["permit"];
     // 出差服務單位
-    $on_dept = $_POST["on_dept"];
+    $on_dept = @$_POST["on_dept"];
     // 出差擔任職務
-    $on_duty = $_POST["on_duty"];
+    $on_duty = @$_POST["on_duty"];
 
     // 特殊上班人員
-    $party = $_POST['party'];
+    $party = @$_POST['party'];
     // 寒暑假
-    $voc = $_POST['voc'];
+    $voc = @$_POST['voc'];
+
+    // 請假開始、結束日期 ex: 2016/12/08
+    list($byear, $bmonth, $bday) = explode("/", $_POST['leave_start']);
+    list($eyear, $emonth, $eday) = explode("/", $_POST['leave_end']);
+    // 開始、結束時間
+    $btime = $_POST['btime'];
+    $etime = $_POST['etime'];
+
+    // 先用一個預設值給資料，後面有取到正確的選填日期自然會將變數值覆蓋過去
+    // 就算沒有選填日期，後面程式碼仍會有一連串判斷將t, s, o, idate等決定保留值或歸空字串
+    list($tyear, $tmonth, $tday) = explode("/", "2017/05/10");
+    list($syear, $smonth, $sday) = explode("/", "2017/05/10");
+    list($oyear, $omonth, $oday) = explode("/", "2017/05/10");
+    list($iyear, $imonth, $iday) = explode("/", "2017/05/10");
+    // 會議開始、結束時間 ex: 2016/12/08 20時的20
+    if ( ($vtype == '01' || $vtype == '02' || $vtype == '03') && $abroad == '0') {//出差、公假未出國
+      // 起訖時間 ex: 2016/12/08 20時
+      list($tyear, $tmonth, $tday) = explode("/", @$_POST['bus_trip_start']);
+      list($syear, $smonth, $sday) = explode("/", @$_POST['bus_trip_end']);
+
+      $tday = substr( explode(" ", $tday)[0], 0, 2);
+      $sday = substr( explode(" ", $sday)[0], 0, 2);
+      // 表單只有填起迄時間(tyear, syear)，故取時數
+      $mtimeb = substr( explode(" ", @$_POST['bus_trip_start'])[1], 0, 2);
+      $mtimee = substr( explode(" ", @$_POST['bus_trip_end'])[1], 0, 2);
+    }
+    else {
+      // 此處沒有很嚴謹用if else判斷出國會議時間內些賦值是因後面取會議日程mdays會
+      // 有一連串判斷將t, s, o, idate等決定保留值或歸空字串
+      //  ex: 2016/12/08
+      if (@$_POST['meeting_start'] !== null && @$_POST['meeting_end'] !== null){
+        list($tyear, $tmonth, $tday) = explode("/", @$_POST['meeting_start']);
+        list($syear, $smonth, $sday) = explode("/", @$_POST['meeting_end']);
+        $tday = substr($tday, 0, 2);
+        $sday = substr($sday, 0, 2);
+      }
+
+      $mtimeb = 0;
+      $mtimee = 0;
+    }
+
+    // 出國出入境時間 ex: 2016/12/08
+    if (@$_POST['depart_time'] !== null && @$_POST['immig_time'] !== null){
+      list($oyear, $omonth, $oday) = explode("/", @$_POST['depart_time']);
+      list($iyear, $imonth, $iday) = explode("/", @$_POST['immig_time']);
+    }
 
     // 取假單序號
     // 送出表單用的serial_no
@@ -433,7 +452,7 @@
 
     // 請假狀況驗證
     if ($count['empl_no'] > 0) {
-      $_POST['notefilename'] = "no file";
+      @$_POST['notefilename'] = "no file";
       $message = array("error_code" => $count['empl_no'],
       "error_message" => "注意！您重複請假了！"
       );
@@ -494,12 +513,12 @@
       // echo "\n";
       // print_r();
       // exit;
-  			//時數超過八小時轉入天數
-  		$temp_h = 0;
-  		if ($pohoure > 8){
-  			$temp_h = $pohoure % 8;
-  			$pohdaye += floor($pohoure / 8 );
-  			$pohoure = $temp_h;
+      //時數超過八小時轉入天數
+      $temp_h = 0;
+      if ($pohoure > 8){
+        $temp_h = $pohoure % 8;
+        $pohdaye += floor($pohoure / 8 );
+        $pohoure = $temp_h;
       }
 	    if ($pohdaye > 7 || ($pohdaye == 7 and $pohoure > 0)){
         // 舊頁面是以script給使用者選擇是否要取消，但因新版改以ajax運作，故僅顯示提醒
@@ -510,51 +529,55 @@
 
     // 統計會議日程天數   980630 add
     if ( ($vtype == '01' || $vtype == '02' || $vtype == '03') && $abroad == '1'){//出差、公假、出國
-    	$sql = "SELECT count(*) count  FROM  ps_calendar
-        			WHERE  lpad(calendar_yymm || lpad(to_char(calendar_dd), 2, '0'), 7, '0')
-        			BETWEEN '$tdate' AND '$sdate' ";
+      // 表單有填出國出入境(oyear, iyear)、出國會議(tyear, syear)，故用後者計算日程天數
+      $sql = "SELECT count(*) count  FROM  ps_calendar
+              WHERE  lpad(calendar_yymm || lpad(to_char(calendar_dd), 2, '0'), 7, '0')
+              BETWEEN '$tdate' AND '$sdate' ";
       $data = $db -> query_array($sql);
       $mdays = $data['COUNT'][0];
     }
     elseif ( ($vtype == '01' || $vtype == '02' || $vtype == '03') && $abroad == '0') {//出差、公假未出國
-    	$odate = '';
-    	$idate = '';
+      // 表單只有填起迄時間(tyear, syear)，故去除出國出入境時間(oyear, iyear)的變數
+      $odate = '';
+      $idate = '';
     }
     elseif ( !($vtype == '01' || $vtype == '02' || $vtype == '03') && $abroad == '1'){//非出差、公假但出國
-    	$tdate = '';
-    	$sdate = '';
+      // 表單只有填出國出入境(oyear, iyear)，故去除起迄時間(tyear, syear)的變數
+      $tdate = '';
+      $sdate = '';
     }
     else{//非(出差、公假、出國)
-    	$tdate = '';
-    	$sdate = '';
-    	$odate = '';
-    	$idate = '';
-    }
-
-  	//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-  	// 事假（因故無法參加學校慶典）
-  	//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-  	if ($vtype == '31'){
-  		$tot_day = 0;
-  		$tot_hour = 0;
+      // 什麼都沒有，都不保留
+      $tdate = '';
+      $sdate = '';
+      $odate = '';
+      $idate = '';
     }
 
     //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-  	// 可否補休之判斷
-  	//,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-  	if ($vtype == '11'){ //補休
-  		$flag_11 = 0;        //控制能否儲存
-  		$cnt_nouse = 0; // 有多少個加班日期
+    // 事假（因故無法參加學校慶典）
+    //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+    if ($vtype == '31'){
+      $tot_day = 0;
+      $tot_hour = 0;
+    }
+
+    //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+    // 可否補休之判斷
+    //,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+    if ($vtype == '11'){ //補休
+      $flag_11 = 0;        //控制能否儲存
+      $cnt_nouse = 0; // 有多少個加班日期
       $nouse_sum = 0; //累計未使用時數
 
-  		//抓出所有可補休之加班記錄並累計可使用總時數
-  		$sql = "SELECT over_date, nouse_time
-  				  FROM   overtime
-  				  WHERE  empl_no = '$empl_no'
-  				  AND    person_check = '1'
-  				  AND    nouse_time > 0
-  				  AND    due_date >= '$bdate'
-  				  ORDER BY over_date";
+      //抓出所有可補休之加班記錄並累計可使用總時數
+      $sql = "SELECT over_date, nouse_time
+              FROM   overtime
+              WHERE  empl_no = '$empl_no'
+              AND    person_check = '1'
+              AND    nouse_time > 0
+              AND    due_date >= '$bdate'
+              ORDER BY over_date";
       $data = $db -> query_array($sql);
       for ($i = 0; $i < count($data['OVER_DATE']); ++$i){
         $over[$i]  = $data['OVER_DATE'][$i]; //加班日期
@@ -748,6 +771,8 @@
       }
     }
     $data = $db -> query($sql);
+    // print_r($GLOBALS);
+    // exit;
     // 請假成功後，補休才能扣除
     // 若沒錯誤
     if (empty($data['message'])){
@@ -839,8 +864,6 @@
       echo json_encode($message);
       exit;
     }
-    // print_r($GLOBALS);
-
   }
 
 
