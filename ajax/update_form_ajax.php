@@ -9,7 +9,7 @@
     // 當天年月日，例：106/04/26
     $vocdate = $_POST['vocdate'];
     // 此為第一次qry_item，則採用登入系統時取得的單位SESSION資料
-    $depart = $_SESSION['depart'];
+    $depart = $_POST['depart'];
     // 之後單位有變動，則有另外動態更新對應職稱的程式碼(qry_title)
 
     // 單位
@@ -105,7 +105,7 @@
 
   // 若有指定職務代理人單位，叫出該單位所有職務代理人
   if ($_POST['oper'] == "qry_agent") {
-    $empl_no = $_SESSION['empl_no'];
+    $empl_no = $_POST['empl_no'];
     $depart = $_POST['depart'];
     $sql = "SELECT  empl_no, empl_chn_name
 			FROM   psfempl, psfcrjb
@@ -122,7 +122,7 @@
   
     // 若改變所屬單位選擇，則查詢該請假者在該單位下的職稱
   if ($_POST['oper'] == "qry_title") {
-    $empl_no = $_SESSION['empl_no'];
+    $empl_no = $_POST['empl_no'];
     $depart = $_POST['depart'];
     // 抓職稱名稱，根據單位有不一樣的職稱 103.04.22 加上 and crjb_quit_date is null(舊記錄保留，防抓到)
     $sql = "SELECT code_chn_item, code_field
@@ -235,13 +235,15 @@
   
   if ($_POST['oper'] == "qry_oldform"){
 	$serialno = $_POST['sn'];
-	$empl_no = $_SESSION['empl_no'];
+
+  //是否來自查詢及修改同仁假單
+  //$sqlstr_all = !isset($_POST['fra']) ? " AND	h.pocard=$empl_no" : "";
 
 	$sql="SELECT depart,agentno,agent_depart,povdateb,povdatee,povtimeb,povtimee,meetdateb,meetdatee,meettimeb,meettimee,
-				 exit_date,back_date,povtype,eplace,extracase,class,poremark,abroad,containsat,budget,trip,permit_commt,on_dept,on_duty
-		  FROM  HOLIDAYFORM H 
-		  WHERE SERIALNO=$serialno
-		  AND	h.pocard=$empl_no";
+				       exit_date,back_date,povtype,eplace,extracase,class,poremark,abroad,containsat,budget,trip,permit_commt,on_dept,on_duty
+		    FROM  HOLIDAYFORM H 
+		    WHERE SERIALNO=$serialno"
+		    ;
 	$data = $db -> fetch_row_assoc($sql);
 
 	
@@ -289,13 +291,13 @@
 	// 修改假單的假單序列號
 	$serialno = $_POST['sn'];
 	
-	$empl_no = $_SESSION['empl_no'];
+	$empl_no = $_POST['empl_no'];
 	
 	$sql = "SELECT count(*) count
-			FROM holidayform 
-			WHERE POCARD='$empl_no'
-			AND serialno='$serialno'
-			AND condition in ('0','2')";
+			    FROM holidayform
+			    WHERE POCARD='$empl_no'
+			    AND serialno='$serialno'
+			    AND condition in ('0','2')";
 	$count = $db -> fetch_cell($sql);
 	if($count != 1){
 	  exit;
