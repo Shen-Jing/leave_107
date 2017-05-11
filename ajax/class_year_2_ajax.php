@@ -66,44 +66,48 @@
 
       $class_year   = $_POST['class_year']; //學年度
       $class_acadm = $_POST['class_acadm']; //學期
-      @$_SESSION['class_year'] = $class_year;
-      @$_SESSION['class_acadm'] = $class_acadm;
+      // @$_SESSION['class_year'] = $class_year;
+      // @$_SESSION['class_acadm'] = $class_acadm;
 
-      if (@$_POST['class_year'] == '')
-      {  //來自 store
-         $class_year   = @$_GET['year']; //學年度
-         $class_acadm = @$_GET['acadm']; //學期
-      }
+      // if (@$_POST['class_year'] == '')
+      // {  //來自 store
+      //    $class_year   = @$_GET['year']; //學年度
+      //    $class_acadm = @$_GET['acadm']; //學期
+      // }
 
-      if (@$_SESSION['class_year'] == '' || @$_SESSION['class_year'] != $class_year || @$_SESSION['class_acadm'] != $class_acadm)
-      {
-         @$_SESSION['class_year'] = $class_year;
-         @$_SESSION['class_acadm'] = $class_acadm;
-      }
+      // if (@$_SESSION['class_year'] == '' || @$_SESSION['class_year'] != $class_year || @$_SESSION['class_acadm'] != $class_acadm)
+      // {
+      //    @$_SESSION['class_year'] = $class_year;
+      //    @$_SESSION['class_acadm'] = $class_acadm;
+      // }
 
 
-      if ( @$_POST['serialno'] == '')  //從未休假修改申請單
-            $serialno= $year.$month.$day.$_SESSION["empl_no"];
+      if ( $_POST['serialno'] == '')  //從未休假修改申請單
+         $serialno= $year.$month.$day.$_SESSION["empl_no"];
       else
-            $serialno= @$_POST['serialno']; //來自非請假調補課修改  class_add_2.php
+         $serialno= $_POST['serialno']; //來自非請假調補課修改  class_add_2.php
 
 
       $name='';
-      if (@$_GET['serialno'] !='')
+
+      if ($_POST['serialno'] !='')
       {          //來自 class_apply.php
-         @$Sthis_serialno = @$_GET['serialno'];
-         $serialno= @$_GET['serialno'];
+         $Sthis_serialno = $_POST['serialno'];
+         $serialno= $_POST['serialno'];
          $query2 = @$_GET['query'];     //來自 class_apply.php
-         $sql="select   empl_chn_name
-               from  psfempl
-               where  empl_no=".$_SESSION["empl_no"];
+         $sql="select empl_chn_name from psfempl where empl_no='$_SESSION[empl_no]'";
+
+         // echo json_encode($sql);
+         // exit;
+
          $data = $db -> query_array($sql);
          $name = $data["EMPL_CHN_NAME"][0];
       }
 
+
       $SQLStr = "SELECT * FROM haveclass WHERE class_serialno='$serialno'";
 
-      // echo json_encode($serialno);
+      // echo json_encode($SQLStr);
       // exit;
 
       // echo json_encode($query2 . " " . $query2_ck);

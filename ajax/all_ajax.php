@@ -30,12 +30,8 @@
     {
         if($_POST["dpt"] != 'null' && $_POST["dpt"] != "請選擇單位")
         {
-            $sql = "select empl_no,empl_chn_name
-                    from   psfempl,psfcrjb
-                    where  empl_no=crjb_empl_no
-                    and    crjb_quit_date is null
-                    and    substr(empl_no,1,1) in ('0','5','7')
-                    and    crjb_depart='$_POST[dpt]'";
+            $deptt = substr($_POST["dpt"],0,2);
+            $sql = "select empl_no,empl_chn_name from psfempl,psfcrjb where empl_no=crjb_empl_no and crjb_quit_date is null and substr(empl_no,1,1) in ('0','5','7','3','4') and substr(crjb_depart,0,2)='$deptt' ";
 
             $data = $db -> query_array($sql);
 

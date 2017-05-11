@@ -32,68 +32,141 @@ function toDate(dateStr) {
     return new Date(year, month - 1, day)
 }
 
+// if($('#serialno').text() != "")
+// {
+//     // alert($('#serialno').text());
+//     var serialno = $('#serialno').text();
+//     $.ajax({
+//             url: 'ajax/class_year_2_ajax.php',
+//             data: { oper: 'qry_record', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val() , serialno: serialno },
+//             type: 'POST',
+//             dataType: "json",
+//             success: function(JData) {
+//                 $('#_content').empty();
+//                 if (JData.error_code)
+//                     toastr["error"](JData.error_message);
+//                 else
+//                 {
+//                     if (JData.length == "0")
+//                     {
+//                         var row_part_new = "<center style='color:red'>無任何記錄。</center>";
+//                         $('#_content').append(row_part_new);
+//                     }
+//                     else
+//                     {
+//                         var row0 ="";
+//                         row0 = row0 + "<table class='table table-bordered col-md-8'><tbody><tr>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>上課班別</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>科目名稱</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>原上課時間</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>補課時間</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>補課教室</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>補課節次</td>";
+//                         if(JData["SERIALNO"].length != 0)
+//                             row0 = row0 + "<td class='td1' style='text-align:center;'>刪除或修改申請單</td>";
+
+//                         row0 = row0 + "</tr>";
+
+//                         for(var i = 0 ; i < JData["CLASS_NAME"].length ; i++)
+//                         {
+//                             row0 = row0 + "<tr><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_NAME"][i];
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_SUBJECT"][i];
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_DATE"][i];
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_DATE2"][i];
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_ROOM"][i];
+
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_SECTION2"][i];
+//                             if( JData["SERIALNO"][i] != null )
+//                             {
+//                               row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                               row0 = row0 + "<button id='delete' name='delete' class='btn-danger' type='button' onclick='DeleteRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + ")'; title='刪除'>刪除</button>" ;
+//                               row0 = row0 + " <button id='edit' name='edit' class='btn-primary' type='button' onclick='EditRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + "," + 2 + ")' title='修改'>修改</button>" ;
+//                             }
+//                             row0 = row0 + "</td></tr>";
+
+//                         }
+//                         row0 = row0 + "</tbody></table>";
+//                         $('#_content').append(row0);
+//                     }
+//                 }
+
+//             },
+//             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+//         });
+// }
+
 function CRUD(oper, status) {
 
     if(oper == 0)
     {
+        var serialno = $('#serialno').text();
         //本次填寫紀錄
         $.ajax({
             url: 'ajax/class_year_2_ajax.php',
-            data: { oper: 'qry_record', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val() },
+            data: { oper: 'qry_record', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), serialno: serialno},
             type: 'POST',
             dataType: "json",
             success: function(JData) {
-              $('#_content').empty();
+                $('#_content').empty();
 
-              if (JData.error_code)
-                  toastr["error"](JData.error_message);
-              else{
-              if (JData.length == "0"){
-                  var row_part_new = "<center style='color:red'>無任何記錄。</center>";
-                  $('#_content').append(row_part_new);
+                if(JData.error_code)
+                    toastr["error"](JData.error_message);
+                else
+                {
+                    if (JData.length == "0")
+                    {
+                        var row_part_new = "<center style='color:red'>無任何記錄。</center>";
+                        $('#_content').append(row_part_new);
+                    }
+                    else
+                    {
+                        var row0 ="";
+                        row0 = row0 + "<table class='table table-bordered col-md-8'><tbody><tr>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>上課班別</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>科目名稱</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>原上課時間</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>補課時間</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>補課教室</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>補課節次</td>";
+                        if(JData["SERIALNO"].length != 0)
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>刪除或修改申請單</td>";
 
-              }else {
-                var row0 ="";
-                row0 = row0 + "<table class='table table-bordered col-md-8'><tbody><tr>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>上課班別</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>科目名稱</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>原上課時間</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>補課時間</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>補課教室</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>補課節次</td>";
-                if(JData["SERIALNO"].length != 0)
-                    row0 = row0 + "<td class='td1' style='text-align:center;'>刪除或修改申請單</td>";
-                row0 = row0 + "</tr>";
+                        row0 = row0 + "</tr>";
 
-                for(var i = 0 ; i < JData["CLASS_NAME"].length ; i++){
+                        for(var i = 0 ; i < JData["CLASS_NAME"].length ; i++)
+                        {
+                            row0 = row0 + "<tr><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_NAME"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_SUBJECT"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_DATE"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_DATE2"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_ROOM"][i];
 
-                  row0 = row0 + "<tr><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_NAME"][i];
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_SUBJECT"][i];
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_DATE"][i];
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_DATE2"][i];
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_ROOM"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_SECTION2"][i];
+                            if( JData["SERIALNO"][i] != null )
+                            {
+                              row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                              row0 = row0 + "<button id='delete' name='delete' class='btn-danger' type='button' onclick='DeleteRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + ")'; title='刪除'>刪除</button>" ;
+                              row0 = row0 + " <button id='edit' name='edit' class='btn-primary' type='button' onclick='EditRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + "," + 2 + ")' title='修改'>修改</button>" ;
+                            }
+                            row0 = row0 + "</td></tr>";
 
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_SECTION2"][i];
-                  if( JData["SERIALNO"][i] != null )
-                  {
-                    row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                    row0 = row0 + "<button id='delete' name='delete' class='btn-danger' type='button' onclick='DeleteRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + ")'; title='刪除'>刪除</button>" ;
-                    row0 = row0 + " <button id='edit' name='edit' class='btn-primary' type='button' onclick='EditRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + "," + 2 + ")' title='修改'>修改</button>" ;
-                  }
-                  row0 = row0 + "</td></tr>";
-
+                        }
+                        row0 = row0 + "</tbody></table>";
+                        $('#_content').append(row0);
+                    }
                 }
-                row0 = row0 + "</tbody></table>";
-                $('#_content').append(row0);
-              }
-            }
-
             },
             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
         });

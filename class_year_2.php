@@ -1,6 +1,10 @@
 <? include("inc/header.php"); ?>
     <? include("inc/navi.php"); ?>
         <? include("inc/sidebar.php"); ?>
+            <?  if($_GET["serialno"] == "")
+                    $serialno = "";
+                else
+                    $serialno = $_GET["serialno"]; ?>
 <style>
   h3{
     font-family: "微軟正黑體";
@@ -17,6 +21,7 @@
 <div id="page-wrapper">
     <div class="container-fluid" >
     <? include ("inc/page-header.php"); ?>
+    <div id="serialno" style="display: none;"><?=$serialno?></div>
     <div class="panel panel-primary">
         <div class="panel-heading" style="text-align:left">
             非請假調補課申請單填寫

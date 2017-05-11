@@ -60,23 +60,10 @@ $( // 表示網頁完成後才會載入
             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
         });
 
-        $ .ajax({
-            url: 'ajax/all_ajax.php',
-            data: { oper: 'qry_dpt_empl' ,dpt: $('#qry_dpt').val() },
-            type: 'POST',
-            dataType: "json",
-            success: function(JData) {
-                $ ('#qry_dpt_empl').empty();
-                row0 = "<option value='請選擇人員' selected>請選擇人員</option>";
-                for (var i = 0; i < JData.EMPL_NO.length ; i++)
-                {
-                    row0 = row0 + "<option value=" + JData.EMPL_NO[i] + ">" + JData.EMPL_CHN_NAME[i] + "</option>";
-                }
-                    $ ('#qry_dpt_empl').append(row0);
+        $ ('#qry_dpt_empl').empty();
+        row0 = "<option value='請選擇人員' selected>請選擇人員</option>";
+        $ ('#qry_dpt_empl').append(row0);
 
-            },
-            error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-        });
 
         $ .ajax({
             url: 'ajax/all_ajax.php',
