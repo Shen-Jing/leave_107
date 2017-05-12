@@ -1,7 +1,9 @@
 <?
+// 前置引入
 include("inc/header.php");
 include("inc/navi.php");
 include("inc/sidebar.php");
+// 取得 LEAVE 中所有 grp 的 id 和 name 並存入 $g
 $sql ="select distinct grpid, grpname
     from  sysgrp
     where sysid='LEAVE'
@@ -9,6 +11,7 @@ $sql ="select distinct grpid, grpname
 $g = $db -> query_array($sql);
 ?>
 <!-- Page Content -->
+<!-- 編輯群組的視窗 -->
 <div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -39,6 +42,7 @@ $g = $db -> query_array($sql);
   </div>
 </div>
 
+<!-- 新增群組的視窗 -->
 <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -76,10 +80,11 @@ $g = $db -> query_array($sql);
     <button class="add-opener btn btn-success">新增群組</button><br><br>
     <ol class="root vertical"><!-- content -->
       <?
+      // 將資料庫的 grp 化為 li 條列出來
       for ($i=0; $i < sizeof($g['GRPID']); $i++) {
         $grpid = $g['GRPID'][$i];
         $grpname = $g['GRPNAME'][$i];
-        echo "<li id='$grpid'>$grpname<span class='right'><button class='edit-opener btn btn-info btn-xs'>編輯</button> <button class='delete btn btn-danger btn-xs'>刪除</button></span>
+        echo "<li id='$grpid'><span class='left'>$grpname</span><span class='right'><button class='edit-opener btn btn-info btn-xs'>編輯</button> <button class='delete btn btn-danger btn-xs'>刪除</button></span>
         </li>";
       }
       ?>
