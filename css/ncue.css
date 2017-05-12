@@ -96,3 +96,7 @@ a.dt-button.blue {
 .modal-body.fullscr-iframe {
   max-height: inherit;
 }
+
+.clickable {
+    cursor: pointer;
+}

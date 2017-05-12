@@ -208,7 +208,6 @@ $( // 表示網頁完成後才會載入
             $('#bus-trip-end').data("DateTimePicker").date(e.date);
         });
 
-
         $('.bus-trip').hide();
 
         // 選擇假別變動時
@@ -274,12 +273,26 @@ $( // 表示網頁完成後才會載入
                 }
             }
             else {
-                $('#place-row').hide();
                 $('.bus-trip').hide();
                 // show備註
                 $('#remark').show();
                 // 起訖時間
                 $('#bus-trip-time').hide();
+                $('#meeting-date').hide();
+                if ($('input[name="abroad"]:checked').val() == "0") {
+                    // 沒有要出國 且 沒有要出差 => hide出差地點
+                    $('#place-row').hide();
+                }
+                else {
+                    // 出差地點show來填出國地點
+                    $('#place-row').show();
+                    $("input[name='eplace_text']").prop("disabled", false);
+                    $("input[name='eplace_text']").focus();
+                    // 並且將出差地點改為「自行輸入」一項
+                    $('#qry_eplace').val("23");
+                    // 並且出差地點不可更換
+                    $('#qry_eplace').prop("disabled", true);
+                }
             }
 
             // 若休假 => 是否刷國民旅遊卡
@@ -403,12 +416,12 @@ $( // 表示網頁完成後才會載入
         // 若「出差地點」的選擇改變
         $("#qry_eplace").change(function(){
             // 若出差地點選擇「自行輸入」 => enable input text讓使用者輸入
-            if ($('#qry_eplace').val() == "23") {
-                $('#place-row > td > div > input').prop("disabled", false);
-                $('#place-row > td > div > input').focus();
+            if ($('#qry_eplace').val() == "自行輸入") {
+                $("input[name='eplace_text']").prop("disabled", false);
+                $("input[name='eplace_text']").focus();
             }
             else {
-                $('#place-row > td > div > input').prop("disabled", true);
+                $("input[name='eplace_text']").prop("disabled", true);
             }
         });
         // 是否出國的radio checked改變
@@ -417,8 +430,8 @@ $( // 表示網頁完成後才會載入
             if ($('input[name="abroad"]:checked').val() == "1") {
                 // 出差地點show來填出國地點
                 $('#place-row').show();
-                $('#place-row > td > div > input').prop("disabled", false);
-                $('#place-row > td > div > input').focus();
+                $("input[name='eplace_text']").prop("disabled", false);
+                $("input[name='eplace_text']").focus();
                 // 並且將出差地點改為「自行輸入」一項
                 $('#qry_eplace').val("23");
                 // 並且出差地點不可更換
@@ -439,7 +452,7 @@ $( // 表示網頁完成後才會載入
             }
             else {
                 // 若沒有要出國就不開放填寫
-                $('#place-row > td > div > input').prop("disabled", true);
+                $("input[name='eplace_text']").prop("disabled", true);
                 // 且出差地點開放選取國內地點
                 $('#qry_eplace').prop("disabled", false);
 
@@ -452,6 +465,7 @@ $( // 表示網頁完成後才會載入
                 if ( jQuery.inArray( $('#qry_vtype').val(), vt ) != -1) {
                     // hide起訖時間
                     $('#bus-trip-time').show();
+                    $('#place-row').show();
                 }
                 else {
                     $('#bus-trip-time').hide();
@@ -659,7 +673,7 @@ $( // 表示網頁完成後才會載入
 	      .on('success.form.bv', function(e) {
             var date = new Date();
             var year = date.getFullYear() - 1911;
-            var postData = $(this).serialize()
+            var postData = $('#holidayform :visible').serialize()
             + "&oper=submit" + "&depart=" + $('#qry_dept').val() +
             "&title_id=" + $('#hide-titleid').text() +
             "&check=" + $('#hide-check').text() + "&voc=" + $('#vocation').text()

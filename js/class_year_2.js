@@ -2,7 +2,7 @@ var date = new Date();
 var year = date.getFullYear() - 1911;
 $(
     function (){
-
+        $ ('#class_year').empty();
         row0 = "<option selected disabled value = '' class='text-hide'>請選擇學年度</option>";
         $ ('#class_year').append(row0);
         for (var i = year - 1 ; i <= year + 1 ; i++)
@@ -27,69 +27,146 @@ $(
   }
 );
 
+function toDate(dateStr) {
+    const [year, month, day] = dateStr.split("/")
+    return new Date(year, month - 1, day)
+}
+
+// if($('#serialno').text() != "")
+// {
+//     // alert($('#serialno').text());
+//     var serialno = $('#serialno').text();
+//     $.ajax({
+//             url: 'ajax/class_year_2_ajax.php',
+//             data: { oper: 'qry_record', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val() , serialno: serialno },
+//             type: 'POST',
+//             dataType: "json",
+//             success: function(JData) {
+//                 $('#_content').empty();
+//                 if (JData.error_code)
+//                     toastr["error"](JData.error_message);
+//                 else
+//                 {
+//                     if (JData.length == "0")
+//                     {
+//                         var row_part_new = "<center style='color:red'>無任何記錄。</center>";
+//                         $('#_content').append(row_part_new);
+//                     }
+//                     else
+//                     {
+//                         var row0 ="";
+//                         row0 = row0 + "<table class='table table-bordered col-md-8'><tbody><tr>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>上課班別</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>科目名稱</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>原上課時間</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>補課時間</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>補課教室</td>";
+//                         row0 = row0 + "<td class='td1' style='text-align:center;'>補課節次</td>";
+//                         if(JData["SERIALNO"].length != 0)
+//                             row0 = row0 + "<td class='td1' style='text-align:center;'>刪除或修改申請單</td>";
+
+//                         row0 = row0 + "</tr>";
+
+//                         for(var i = 0 ; i < JData["CLASS_NAME"].length ; i++)
+//                         {
+//                             row0 = row0 + "<tr><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_NAME"][i];
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_SUBJECT"][i];
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_DATE"][i];
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_DATE2"][i];
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_ROOM"][i];
+
+//                             row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                             row0 = row0 + JData["CLASS_SECTION2"][i];
+//                             if( JData["SERIALNO"][i] != null )
+//                             {
+//                               row0 = row0 + "</td><td  style='text-align:center;'>" ;
+//                               row0 = row0 + "<button id='delete' name='delete' class='btn-danger' type='button' onclick='DeleteRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + ")'; title='刪除'>刪除</button>" ;
+//                               row0 = row0 + " <button id='edit' name='edit' class='btn-primary' type='button' onclick='EditRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + "," + 2 + ")' title='修改'>修改</button>" ;
+//                             }
+//                             row0 = row0 + "</td></tr>";
+
+//                         }
+//                         row0 = row0 + "</tbody></table>";
+//                         $('#_content').append(row0);
+//                     }
+//                 }
+
+//             },
+//             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+//         });
+// }
 
 function CRUD(oper, status) {
 
     if(oper == 0)
     {
+        var serialno = $('#serialno').text();
         //本次填寫紀錄
         $.ajax({
             url: 'ajax/class_year_2_ajax.php',
-            data: { oper: 'qry_record', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val() },
+            data: { oper: 'qry_record', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), serialno: serialno},
             type: 'POST',
             dataType: "json",
             success: function(JData) {
-              $('#_content').empty();
+                $('#_content').empty();
 
-              if (JData.error_code)
-                  toastr["error"](JData.error_message);
-              else{
-              if (JData.length == "0"){
-                  var row_part_new = "<center style='color:red'>無任何記錄。</center>";
-                  $('#_content').append(row_part_new);
+                if(JData.error_code)
+                    toastr["error"](JData.error_message);
+                else
+                {
+                    if (JData.length == "0")
+                    {
+                        var row_part_new = "<center style='color:red'>無任何記錄。</center>";
+                        $('#_content').append(row_part_new);
+                    }
+                    else
+                    {
+                        var row0 ="";
+                        row0 = row0 + "<table class='table table-bordered col-md-8'><tbody><tr>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>上課班別</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>科目名稱</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>原上課時間</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>補課時間</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>補課教室</td>";
+                        row0 = row0 + "<td class='td1' style='text-align:center;'>補課節次</td>";
+                        if(JData["SERIALNO"].length != 0)
+                            row0 = row0 + "<td class='td1' style='text-align:center;'>刪除或修改申請單</td>";
 
-              }else {
-                var row0 ="";
-                row0 = row0 + "<table class='table table-bordered col-md-8'><tbody><tr>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>上課班別</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>科目名稱</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>原上課時間</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>補課時間</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>補課教室</td>";
-                row0 = row0 + "<td class='td1' style='text-align:center;'>補課節次</td>";
-                if(JData["SERIALNO"].length != 0)
-                    row0 = row0 + "<td class='td1' style='text-align:center;'>刪除或修改申請單</td>";
-                row0 = row0 + "</tr>";
+                        row0 = row0 + "</tr>";
 
-                for(var i = 0 ; i < JData["CLASS_NAME"].length ; i++){
+                        for(var i = 0 ; i < JData["CLASS_NAME"].length ; i++)
+                        {
+                            row0 = row0 + "<tr><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_NAME"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_SUBJECT"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_DATE"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_DATE2"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_ROOM"][i];
 
-                  row0 = row0 + "<tr><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_NAME"][i];
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_SUBJECT"][i];
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_DATE"][i];
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_DATE2"][i];
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_ROOM"][i];
+                            row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                            row0 = row0 + JData["CLASS_SECTION2"][i];
+                            if( JData["SERIALNO"][i] != null )
+                            {
+                              row0 = row0 + "</td><td  style='text-align:center;'>" ;
+                              row0 = row0 + "<button id='delete' name='delete' class='btn-danger' type='button' onclick='DeleteRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + ")'; title='刪除'>刪除</button>" ;
+                              row0 = row0 + " <button id='edit' name='edit' class='btn-primary' type='button' onclick='EditRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + "," + 2 + ")' title='修改'>修改</button>" ;
+                            }
+                            row0 = row0 + "</td></tr>";
 
-                  row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                  row0 = row0 + JData["CLASS_SECTION2"][i];
-                  if( JData["SERIALNO"][i] != null )
-                  {
-                    row0 = row0 + "</td><td  style='text-align:center;'>" ;
-                    row0 = row0 + "<button id='delete' name='delete' class='btn-danger' type='button' onclick='DeleteRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + ")'; title='刪除'>刪除</button>" ;
-                    row0 = row0 + " <button id='edit' name='edit' class='btn-primary' type='button' onclick='EditRow(" + JData["CLASS_NO"][i] + "," + JData["SERIALNO"][i] + "," + 2 + ")' title='修改'>修改</button>" ;
-                  }
-                  row0 = row0 + "</td></tr>";
-
+                        }
+                        row0 = row0 + "</tbody></table>";
+                        $('#_content').append(row0);
+                    }
                 }
-                row0 = row0 + "</tbody></table>";
-                $('#_content').append(row0);
-              }
-            }
-
             },
             error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
         });
@@ -118,14 +195,7 @@ function CRUD(oper, status) {
 
                     for(var i = 0 ; i < JData["SCR_SELCODE"].length ; i++)
                     {
-                        if(i == 1)
-                        {
-                            row0 = row0 + "<option class_no = '' value='" + JData["SCR_SELCODE"][i] + "' selected>" + JData["SCR_SELCODE"][i] + JData["SUB_NAME"][i] + "</option>";
-                        }
-                        else
-                        {
-                            row0 = row0 + "<option class_no = '' value='" + JData["SCR_SELCODE"][i] + "'>" + JData["SCR_SELCODE"][i] + JData["SUB_NAME"][i] + "</option>";
-                        }
+                        row0 = row0 + "<option class_no = '' value='" + JData["SCR_SELCODE"][i] + "'>" + JData["SCR_SELCODE"][i] + JData["SUB_NAME"][i] + "</option>";
                     }
                     $('#subject_name').append(row0);
                 }
@@ -157,35 +227,22 @@ function CRUD(oper, status) {
             });
 
             //補課節次
+            $ ('#class_section2_1').empty();
             row0 = "<option selected disabled class='text-hide'>請選擇節次</option>";
             $ ('#class_section2_1').append(row0);
             for (var i = 1; i <= 13 ; i++)
             {
-                if(i == 1)
-                {
-                    row = "<option value=" +i+ " selected>" + i + " </option>";
-                    $ ('#class_section2_1').append(row);
-                }
-                else
-                {
-                    row = "<option value=" +i+ ">" + i + " </option>";
-                    $ ('#class_section2_1').append(row);
-                }
+                row = "<option value=" +i+ ">" + i + " </option>";
+                $ ('#class_section2_1').append(row);
             }
+
+            $ ('#class_section2_2').empty(0);
             row0 = "<option selected disabled class='text-hide'>請選擇節次</option>";
             $ ('#class_section2_2').append(row0);
             for (var i = 1; i <= 13 ; i++)
             {
-                if(i == 3)
-                {
-                    row = "<option value=" +i+ " selected>" + i + " </option>";
-                    $ ('#class_section2_2').append(row);
-                }
-                else
-                {
                     row = "<option value=" +i+ ">" + i + " </option>";
                     $ ('#class_section2_2').append(row);
-                }
             }
 
             var start_options = {
@@ -380,13 +437,14 @@ $("#no_holiday_form").bootstrapValidator({
                         {
                             if(JData.length == 7)
                             {
-                                // alert(JData);
                                 toastr["success"](JData);
                                 CRUD(0,"insert");
                             }
                             else
+                            {
                                 alert(JData);
-                                // toastr["error"](JData);
+                                toastr["error"](JData);
+                            }
                         }
 
                     },
@@ -412,14 +470,16 @@ $("#no_holiday_form").bootstrapValidator({
                             toastr["error"](JData.error_message);
                         else
                         {
-                            if(JData.length == 7)
+                            if(JData == "簽核完成!")
                             {
                                 toastr["success"](JData);
                                 CRUD(0,"insert");
                             }
                             else
+                            {
                                 alert(JData);
-                                // toastr["error"](JData);
+                                toastr["error"](JData);
+                            }
                         }
 
                     },
@@ -428,46 +488,10 @@ $("#no_holiday_form").bootstrapValidator({
                 break;
         }
 
-
         e.preventDefault();
         // e.unbind();
 
 });
-
-
-// function Insert()
-// {
-
-//     var class_year = $('#class_year').val();
-//     var class_acadm = $('#class_acadm').val();
-
-//     $.ajax({
-//         url: 'ajax/class_year_2_ajax.php',
-//         data: { oper: 'new', class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#subject_name').val(),
-//                 class_name: $('#class_name').text(), scr_period: $('#scr_period').text() , class_section2: $('#class_section2').val(), class_room: $('#class_room').val(),
-//                 class_memo: $('#class_memo').val(), cyear: $('#cyear').val(), cmonth: $('#cmonth').val(), cday: $('#cday').val(),
-//                 dyear: $('#dyear').val(), dmonth: $('#dmonth').val(), dday: $('#dday').val() },
-//         type: 'POST',
-//         dataType: "json",
-//         success: function(JData) {
-
-//             if (JData.error_code)
-//                 toastr["error"](JData.error_message);
-//             else
-//             {
-//                 if(JData.length == 7)
-//                 {
-//                     toastr["success"](JData);
-//                     CRUD(0,"insert");
-//                 }
-//                 else
-//                     toastr["error"](JData);
-//             }
-
-//         },
-//         error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-//     });
-// }
 
 function EditRow(classno, serialno)
 {
@@ -475,10 +499,10 @@ function EditRow(classno, serialno)
     var edit_class_code;
     var edit_class_name;
     var edit_scr_period;
-    var edit_cyear_origin;
+    var edit_cyear_origin = null;
     var edit_cmonth_origin;
     var edit_cday_origin;
-    var edit_dyear_origin;
+    var edit_dyear_origin = null;
     var edit_dmonth_origin;
     var edit_dday_origin;
     var edit_class_section2_1;
@@ -498,16 +522,14 @@ function EditRow(classno, serialno)
                 toastr["error"](JData.error_message);
             else
             {
-                // alert(JData);
+
                 $("#ChangeModal1").modal("hide");
                 $("#ChangeModal2 .modal-title").html("紀錄修改");
                 $("#ChangeModal2").modal("show"); //弹出框show
                 $('#update').empty();
                 $('#update').append("<button type='submit' class='btn btn-primary' name='" + classno + "' id='update_btn' value='"+ serialno + "'>修改資料儲存</button>");
 
-                // onclick='Update(" + classno + ", " + serialno + ")'
-
-                $('#edit_class_name, #edit_scr_period, #edit_class_section2_1, #edit_class_section2_2, #edit_class_room, #edit_class_memo').empty();
+                $('#edit_class_name, #edit_scr_period, #edit_class_section2_1, #edit_class_section2_2, #edit_class_room, #edit_class_memo, #edit_origin_time, #edit_change_time').empty();
 
                 edit_class_selcode = JData.CLASS_SELCODE;
                 edit_class_code = JData.CLASS_CODE;
@@ -523,17 +545,18 @@ function EditRow(classno, serialno)
                 edit_dday_origin = JData.CLASS_DATE2.toString().substring(5,7);
                 edit_class_memo = JData.CLASS_MEMO;
                 edit_class_room = JData.CLASS_ROOM;
-                // alert(edit_dyear_origin+"/"+edit_dmonth_origin+"/"+edit_dday_origin);
-                // edit_dyear_origin = toString(parseInt(edit_dyear_origin)+1911);
-                // var eco = toString(parseInt(edit_cyear_origin)+1911) + "/" + edit_cmonth_origin + "/" + edit_cday_origin;
-                // var edo = toString(parseInt(edit_dyear_origin)+1911) + "/" + edit_dmonth_origin + "/" + edit_dday_origin;
-                // alert(edit_dyear_origin);
+
                 $('#edit_class_name').append(edit_class_code + edit_class_name);
                 $('#edit_scr_period').append(edit_scr_period);
-                // $('#edit_class_section2_1').val(edit_class_section2_1);
-                // $('#edit_class_section2_2').val(edit_class_section2_2);
+
                 $('#edit_class_room').val(edit_class_room);
                 $('#edit_class_memo').val(edit_class_memo);
+
+                var _eco = edit_cyear_origin + "/" + edit_cmonth_origin + "/" + edit_cday_origin;
+                var _edo = edit_dyear_origin + "/" + edit_dmonth_origin + "/" + edit_dday_origin;
+
+                var eco = toDate(_eco);
+                var edo = toDate(_edo);
 
                 //補課節次
                 row0 = "<option disabled class='text-hide'>請選擇節次</option>";
@@ -560,7 +583,7 @@ function EditRow(classno, serialno)
                 //原上課日期及調補課日期
                 var edit_start_options = {
                     ignoreReadonly: true,
-                    defaultDate: edit_cyear_origin + "/" + edit_cmonth_origin + "/" + edit_cday_origin,
+                    defaultDate: eco,
                     maxDate: date,
                     format: 'YYYY/MM/DD',
                     tooltips: {
@@ -588,7 +611,7 @@ function EditRow(classno, serialno)
                 }
                 var edit_end_options = {
                     ignoreReadonly: true,
-                    defaultDate: edit_dyear_origin + "/" + edit_dmonth_origin + "/" + edit_dday_origin,
+                    defaultDate: edo,
                     format: 'YYYY/MM/DD',
                     tooltips: {
                         clear: "清除所選",
@@ -613,11 +636,14 @@ function EditRow(classno, serialno)
                     },
                     locale: 'zh-tw',
                 }
+                edit_start_options.useCurrent = false;
                 edit_end_options.useCurrent = false;
-
 
                 $('#edit_origin_time').datetimepicker(edit_start_options);
                 $('#edit_change_time').datetimepicker(edit_end_options);
+                $('#edit_origin_time').data("DateTimePicker").date(eco);
+                $('#edit_change_time').data("DateTimePicker").date(edo);
+
                 $("#edit_origin_time").on("dp.change", function (e) {
                     // 調補課日期的最早為原上課日期所選
                     $('#edit_change_time').data("DateTimePicker").minDate(e.date);
@@ -745,14 +771,15 @@ $("#update_form").bootstrapValidator({
                 {
                     if(JData.length == 7)
                     {
-                        alert(JData);
                         toastr["success"](JData);
                         CRUD(0,"update");
                         $("#ChangeModal2").modal("hide");
                     }
                     else
-                        // alert(JData);
+                    {
+                        alert(JData);
                         toastr["error"](JData);
+                    }
                 }
 
             },
@@ -760,43 +787,3 @@ $("#update_form").bootstrapValidator({
     });
     e.preventDefault();
 });
-
-
-
-
-
-// function Update(classno, serialno)
-// {
-
-//     $.ajax({
-//         url: 'ajax/class_year_2_ajax.php',
-//         data: { oper: 'update', class_no: classno, serial_no: serialno, class_year: $('#class_year').val(), class_acadm: $('#class_acadm').val(), class_subject: $('#edit_subject_name').val(),
-//                 class_name: $('#edit_class_name').text(), scr_period: $('#edit_scr_period').text() , class_section2: $('#edit_class_section2').val(), class_room: $('#edit_class_room').val(),
-//                 class_memo: $('#edit_class_memo').val(), cyear: $('#edit_cyear').val(), cmonth: $('#edit_cmonth').val(), cday: $('#edit_cday').val(),
-//                 dyear: $('#edit_dyear').val(), dmonth: $('#edit_dmonth').val(), dday: $('#edit_dday').val() },
-//         type: 'POST',
-//         dataType: "json",
-//         success: function(JData) {
-
-//             if (JData.error_code)
-//                 toastr["error"](JData.error_message);
-//             else
-//             {
-//                 if(JData.length == 7)
-//                 {
-//                     toastr["success"](JData);
-//                     CRUD(0,"update");
-//                     $("#ChangeModal2").modal("hide");
-//                 }
-//                 else
-//                     // alert(JData);
-//                     toastr["error"](JData);
-//             }
-
-//         },
-//         error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-//     });
-
-// }
-
-

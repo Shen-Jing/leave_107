@@ -542,10 +542,24 @@ function message(content, type, time) {
 }
 
 $(function() {
-
-    $('#side-menu').metisMenu();
-
+	$('#side-menu').metisMenu();
+	
+	// 17/05/10新增panel摺疊功能
+	$(".panel-heading span.clickable").on('click', function(e) { togglePanel(this); });
 });
+
+function togglePanel(obj){
+	var $this = $(obj);
+	if (!$this.hasClass('panel-collapsed')) {
+		$this.parents('.panel').find('.panel-body').slideUp();
+		$this.addClass('panel-collapsed');
+		$this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		$this.parents('.panel').find('.panel-body').slideDown();
+		$this.removeClass('panel-collapsed');
+		$this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+}
 
 //Loads the correct sidebar on window load,
 //collapses the sidebar on window resize.

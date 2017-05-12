@@ -1,27 +1,45 @@
 <? include("inc/header.php"); ?>
 <?
-$userid = $_SESSION['_ID'];
-$empl_no = $_SESSION['empl_no'];
-$empl_name = $_SESSION['empl_name'];
-$title_id = $_SESSION['title_id'];
-$depart = $_SESSION['depart'];
-
-//驗證serialno假單申請人
 if(!isset($_GET['sn'])){
   exit;
 }
+// serialno 只允許純數字
 if(preg_match("/^\d+$/", $_GET['sn']) !== 1){
   exit;
 }
+
 $sn = $_GET['sn'];
-$sql = "SELECT count(*) count
-        FROM holidayform 
-        WHERE POCARD='$empl_no'
-        AND serialno='$sn'
-        AND condition in ('0','2')";
-$count = $db -> fetch_cell($sql);
-if($count != 1){
-  exit;
+
+$userid    = $_SESSION['_ID'];
+if(!isset($_GET['fra'])){
+	$empl_no   = $_SESSION['empl_no'];
+	$empl_name = $_SESSION['empl_name'];
+	$depart    = $_SESSION['depart'];
+}
+else{
+	$sql = "SELECT EMPL_CHN_NAME, POCARD, DEPART
+			FROM  PSFEMPL P,HOLIDAYFORM H 
+			WHERE SERIALNO=$sn 
+			AND p.empl_no=h.pocard";
+	$data = $db -> fetch_row_assoc($sql);
+
+	$empl_name = $data['EMPL_CHN_NAME'];
+	$empl_no   = $data['POCARD'];
+	$depart    = $data['DEPART'];
+}
+
+// 是否來自查詢及修改同仁假單請求
+if(!isset($_GET['fra'])){
+	//驗證serialno假單申請人
+	$sql = "SELECT count(*) count
+			FROM holidayform 
+			WHERE POCARD='$empl_no'
+			AND serialno='$sn'
+			AND condition in ('0','2')";
+	$count = $db -> fetch_cell($sql);
+	if($count != 1){
+		exit;
+	}
 }
 ?>
 
@@ -43,10 +61,9 @@ $ismobile = $mbd->isMobile() & !$mbd->isTablet();
 		<form name="holidayform" id="holidayform" class="form-inline" action="update_form_ajax.php">
 			<table class="table table-condensed table-hover table-bordered">
 				<tr>
-					<td id="hide-depart" style="display:none">
-						<?=$depart ?>
-					</td>
+					<td id="hide-depart" style="display:none"><?=$depart ?></td>
 					<td id="hide-check" style="display:none">fe</td>
+					<td id="hide-titleid" style="display:none"></td>
 					<td class="td1 col-sm-2">員工編號</td>
 					<td class="col-sm-4"><span id="empl_no"><?=$empl_no ?></span></td>
 					<td class="td1 col-sm-2">姓名</td>
@@ -55,12 +72,10 @@ $ismobile = $mbd->isMobile() & !$mbd->isTablet();
 				<tr>
 					<td class="td1 col-sm-2">請選擇單位</td>
 					<td class="col-sm-4">
-						<select name="depart" id="qry_dept" class="form-control"> </select>
+						<select name="depart" id="qry_dept" class="form-control"></select>
 					</td>
 					<td class="td1 col-sm-2">職稱</td>
-					<td class="col-sm-4" id="qry_title">
-						<input type="hidden" name="title" value="<?=$title_id ?>">
-					</td>
+					<td class="col-sm-4" id="qry_title"></td>
 				</tr>
 				<tr>
 					<td class="td1 col-sm-2">假別</td>

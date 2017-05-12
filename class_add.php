@@ -91,183 +91,183 @@
 
                                           <!-- Modal Body -->
                                           <div class="modal-body">
-
+                                            <div style="margin-bottom:25px;">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         請選擇目前學年度:
                                                         <select class="form-control" name="qry_class_year" id="qry_class_year" style='display: inline-block; width: auto;'></select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="col-md-2" >
                                                     <div class="form-group">
                                                         學期:
                                                         <select class="form-control" name="qry_acadm" id="qry_acadm" style='display: inline-block; width: auto;'></select>
                                                     </div>
                                                 </div>
-                                                <div  id="class-modal">
-                                                </div>
-
-
-                                          </div>
-
-
-                                          <!-- Modal Body -->
-                                          <div class="modal-body">
-                                            <form method='POST' name="editform" id="editform" class="form-horizontal">
-                                            <div class="panel-body">
-                                              <div class="panel panel-primary">
-                                              <div class="panel-heading">
-                                                  <font STYLE="font-family:微軟正黑體">教師本次差假以填寫之紀錄</font>
                                               </div>
-                                              <div class="table-responsive">
-
-                                                <table class="table table-striped table-bordered dt-responsive nowrap" >
 
 
+                                                <form method='POST' name="editform" id="editform" class="form-horizontal">
+                                                  <div style="margin-bottom:5px;">
+                                                <div class="panel-body">
+                                                  <div class="panel panel-primary"  >
+                                                  <div class="panel-heading">
+                                                      <font STYLE="font-family:微軟正黑體">教師本次差假以填寫之紀錄</font>
+                                                  </div>
+                                                  <div class="table-responsive">
+
+                                                    <table class="table table-striped table-bordered dt-responsive nowrap" >
 
 
-                                                  <div class="form-group">
-                                                      <!--link rel="stylesheet" href="style.css"-->
-                                                      <div id="class_content">
+
+
+                                                      <div class="form-group">
+                                                          <!--link rel="stylesheet" href="style.css"-->
+                                                          <div id="class_content">
+                                                          </div>
                                                       </div>
+
+                                                  </table>
                                                   </div>
 
-                                              </table>
-                                              </div>
-
-                                              </div>
-                                              </div>
-
-
-                                              <div class="panel-body" id="data_modify">
-                                                <div class="panel panel-primary">
-                                                  <div class="panel-heading" style="text-align:left">
-                                            			    加班申請作業
-                                            			</div>
-                                            			<div class="panel-body panel-height">
-                                            				<table class="table table-bordered" >
-                                                      <thead>
-                                            					<tr>
-                                            						<td class="td1" align="center">請假期間</td>
-                                            						<td colspan="3" id="holiday_time"><font size="4">
-
-                                            						</td>
-                                            					</tr>
-                                            					</thead>
-
-                                                      <thead>
-                                            					<tr>
-                                            						<td class="td1" align="center">請假事由</td>
-                                            						<td colspan="3" id="holidy_mark"><font size="4">
-
-                                            						</td>
-                                            					</tr>
-                                            					</thead>
-
-                                            					<thead>
-                                            					<tr>
-                                            						<td class="col-md-2 td1">科目名稱</td>
-                                            						<td class="col-md-4">
-
-
-                                            									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='subject_name' name='subject_name' onChange=''></select>
-
-                                            									<font size='2' color='darkred'>(如果沒有選項，表示您學年與學期選錯了，請返回上一步) </font>
-
-
-                                            						</td>
-                                                        <td class="col-md-2 td1" align="center">上課班別</td>
-                                            						<td class="col-md-4" id='class-name'>
-
-                                            						</td>
-                                            					</tr>
-                                            					</thead>
-
-                                                      <thead>
-                                            					<tr>
-                                            						<td class="col-md-2 td1" align="center">原上課日期</td>
-                                            						<td class="col-md-4">
-                                            							<div class='form-group'>
-                                                            <div class='col-md-12'>
-
-                                                              <input type='text' class="form-control" id='odate' name="original_date">
-                                            								</div>
-                                            							</div>
-                                            						</td>
-
-                                                        <td class="col-md-2 td1" align="center">原上課節次等</td>
-                                          							<td class="col-md-4" id="scr_period"></td>
-                                            					</tr>
-                                            					</thead>
-
-                                                      <thead>
-                                            					<tr>
-                                            						<td class="col-md-2 td1" align="center">調補課日期</td>
-                                            						<td class="col-md-4">
-                                            							<div class='form-group'>
-                                                            <div class='col-md-12'>
-
-                                                              <input type='text' class="form-control" id='ndate' name="new_date">
-                                            								</div>
-                                            							</div>
-                                            						</td>
-
-                                                        <td class="col-md-2 td1" align="center">補課節次</td>
-                                          							<td class="col-md-4" >
-                                                          <div class='form-group'>
-                                                            <div class='col-md-12'>
-                                            									第<select class='form-control' style='width:auto; display: inline-block;' name='class_section21' id='class_section21' onChange=''></select>節~<br>
-                                            									第<select class='form-control' style='width:auto; display: inline-block;' id='class_section22' name='class_section22' onChange=''></select>節
-                                            								</div>
-                                            							</div>
-                                                        </td>
-                                            					</tr>
-                                            					</thead>
-
-                                                      <thead>
-                                            					<tr>
-
-                                            						<td class="td1" align="center">補課教室</td>
-                                            						<td colspan="3">
-                                                          <div class='form-group'>
-                                                          <input type="text" class="form-control" name="class_room" id="class_room" value="" size="25" maxlength="30"><font size="4">
-                                                          </div>
-                                            						</td>
-
-                                            					</tr>
-                                            					</thead>
-                                                      <thead>
-                                            					<tr>
-
-                                            						<td class="td1" align="center">備註</td>
-                                            						<td colspan="3">
-                                                          <div class='form-group'>
-                                                          <input type="text" class="form-control" name="class_memo" id="class_memo" value="" size="25" maxlength="30" ><font size="4">
-                                                          </div>
-                                            						</td>
-
-                                            					</tr>
-                                                      <tr>
-                                            						<td colspan="4" align="center" id="action_btn">
-
-
-                                            						</td>
-                                            					</tr>
-                                            					</thead>
-
-
-
-
-
-                                            				</table>
-                                            			</div>
-
+                                                  </div>
+                                                  </div>
                                                 </div>
 
-                                                </div>
-                                                <button type="button" class="btn btn-primary" name="check" onclick='NewData()'>新增資料</button>
-                                              </form>
+                                                  <div class="panel-body" id="data_modify" >
+                                                    <div class="panel panel-primary" >
+                                                      <div class="panel-heading" style="text-align:left">
+                                                			    申請單填寫作業
+                                                			</div>
+                                                			<div class="panel-body panel-height">
+                                                				<table class="table table-bordered" >
+                                                          <thead>
+                                                					<tr>
+                                                						<td class="td1" align="center">請假期間</td>
+                                                						<td colspan="3" id="holiday_time"><font size="4">
+
+                                                						</td>
+                                                					</tr>
+                                                					</thead>
+
+                                                          <thead>
+                                                					<tr>
+                                                						<td class="td1" align="center">請假事由</td>
+                                                						<td colspan="3" id="holidy_mark"><font size="4">
+
+                                                						</td>
+                                                					</tr>
+                                                					</thead>
+
+                                                					<thead>
+                                                					<tr>
+                                                						<td class="col-md-2 td1">科目名稱</td>
+                                                						<td class="col-md-4">
+
+
+                                                									<select class='form-control' style='width:auto; display: inline-block;' data-style= 'btn-default'  id='subject_name' name='subject_name' onChange=''></select>
+
+                                                									<font size='2' color='darkred'>(如果沒有選項，表示您學年與學期選錯了，請返回上一步) </font>
+
+
+                                                						</td>
+                                                            <td class="col-md-2 td1" align="center">上課班別</td>
+                                                						<td class="col-md-4" id='class-name'>
+
+                                                						</td>
+                                                					</tr>
+                                                					</thead>
+
+                                                          <thead>
+                                                					<tr>
+                                                						<td class="col-md-2 td1" align="center">原上課日期</td>
+                                                						<td class="col-md-4">
+                                                							<div class='form-group'>
+                                                                <div class='col-md-12'>
+
+                                                                  <input type='text' class="form-control" id='odate' name="original_date">
+                                                								</div>
+                                                							</div>
+                                                						</td>
+
+                                                            <td class="col-md-2 td1" align="center">原上課節次等</td>
+                                              							<td class="col-md-4" id="scr_period"></td>
+                                                					</tr>
+                                                					</thead>
+
+                                                          <thead>
+                                                					<tr>
+                                                						<td class="col-md-2 td1" align="center">調補課日期</td>
+                                                						<td class="col-md-4">
+                                                							<div class='form-group'>
+                                                                <div class='col-md-12'>
+
+                                                                  <input type='text' class="form-control" id='ndate' name="new_date">
+                                                								</div>
+                                                							</div>
+                                                						</td>
+
+                                                            <td class="col-md-2 td1" align="center">補課節次</td>
+                                              							<td class="col-md-4" >
+                                                              <div class='form-group'>
+                                                                <div class='col-md-12'>
+                                                									第<select class='form-control' style='width:auto; display: inline-block;' name='class_section21' id='class_section21' onChange=''></select>節~<br>
+                                                									第<select class='form-control' style='width:auto; display: inline-block;' id='class_section22' name='class_section22' onChange=''></select>節
+                                                								</div>
+                                                							</div>
+                                                            </td>
+                                                					</tr>
+                                                					</thead>
+
+                                                          <thead>
+                                                					<tr>
+
+                                                						<td class="td1" align="center">補課教室</td>
+                                                						<td colspan="3">
+                                                              <div class='form-group'>
+                                                              <input type="text" class="form-control" name="class_room" id="class_room" value="" size="25" maxlength="30"><font size="4">
+                                                              </div>
+                                                						</td>
+
+                                                					</tr>
+                                                					</thead>
+                                                          <thead>
+                                                					<tr>
+
+                                                						<td class="td1" align="center">備註</td>
+                                                						<td colspan="3">
+                                                              <div class='form-group'>
+                                                              <input type="text" class="form-control" name="class_memo" id="class_memo" value="" size="25" maxlength="30" ><font size="4">
+                                                              </div>
+                                                						</td>
+
+                                                					</tr>
+                                                          <tr>
+                                                						<td colspan="4" align="center" id="action_btn">
+
+
+                                                						</td>
+                                                					</tr>
+                                                					</thead>
+
+
+
+
+
+                                                				</table>
+                                                			</div>
+
+                                                    </div>
+
+                                                    </div>
+                                                    
+                                                  </form>
+
+
                                           </div>
+
+
+
                                           <!-- Modal Footer -->
                                           <div class="modal-footer">
                                               <button type="button" class="btn btn-default" data-dismiss="modal">

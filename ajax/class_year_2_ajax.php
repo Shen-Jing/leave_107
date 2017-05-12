@@ -29,78 +29,6 @@
    $Sstr="";
    $Sacadm_return = "";
    $Snight_return = "";
-   //**************************************************
-   //來自 來自 class_query_2.php 之修改功能，按了修改鈕 // =>    目前未處理部分
-   //**************************************************
-   // $class_no  ='';  $update='';
-   // $serialno   = @$_POST["serialno"];
-   // $class_no  = @$_POST["class_no"];
-   // $update    = @$_POST["update"];
-
-   //-----------------------------------------------------------------------------------------------------
-   //*session_register('class_subject'); //科目名稱
-   // (!@$_POST["class_subject"])  ? $class_subject = '' : $class_subject = @$_POST["class_subject"];
-   // if (@$_SESSION["class_subject"] == '' || (@$_SESSION['class_subject'] !='' and  @$_POST["class_subject"] !=''))
-   //    @$_SESSION["class_subject"] = $class_subject;
-   //-----------------------------------------------------------------------------------------------------
-   //*session_register('cyear'); session_register('cmonth');  session_register('cday');  //原上課時間
-
-   // (!@$_POST["cyear"])    ? $cyear=$year        : $cyear   =@$_POST["cyear"];
-   // (!@$_POST["cmonth"]) ? $cmonth=$month  : $cmonth=@$_POST["cmonth"];
-   // (!@$_POST["cday"])     ? $cday=$day          : $cday    =@$_POST["cday"]; //$cday-->temp
-
-   // if (@$_SESSION["cyear"]==""  || (@$_SESSION['cyear'] != ""  and  @$_POST["cyear"] != ""))
-   //    @$_SESSION["cyear"]=$cyear;
-   // if (@$_SESSION["cmonth"]==""  || (@$_SESSION['cmonth'] != ""  and  @$_POST["cmonth"] != ""))
-   //    @$_SESSION["cmonth"]=$cmonth;
-   // if (@$_SESSION["cday"]==""  || (@$_SESSION['cday'] != ""  and  @$_POST["cday"] != ""))
-   //    @$_SESSION["cday"]=$cday;
-   //-----------------------------------------------------------------------------------------------------
-   //*session_register('dyear');  session_register('dmonth');  session_register('dday');  //補課時間
-   // (!@$_POST["dyear"])    ? $dyear =$year       : $dyear   =@$_POST["dyear"];
-   // (!@$_POST["dmonth"]) ? $dmonth=$month  : $dmonth=@$_POST["dmonth"];
-   // (!@$_POST["dday"])     ? $dday  =$day        : $dday    =@$_POST["dday"];
-
-   // if (@$_SESSION["dyear"]==""  || (@$_SESSION['dyear'] != ""  and  @$_POST["dyear"] != ""))
-   //    @$_SESSION["dyear"]=$dyear;
-   // if (@$_SESSION["dmonth"]==""  || (@$_SESSION['dmonth'] != ""  and  @$_POST["dmonth"] != ""))
-   //    @$_SESSION["dmonth"]=$dmonth;
-   // if (@$_SESSION["dday"]==""  || (@$_SESSION['dday'] != ""  and  @$_POST["dday"] != ""))
-   //    @$_SESSION["dday"]=$dday;
-   //-----------------------------------------------------------------------------------------------------
-   //*session_register('class_section2');  //補課節次
-   // (!@$_POST["class_section2"])  ? $class_section2=''  : $class_section2=@$_POST["class_section2"];
-   // if (@$_SESSION["class_section2"]=='' || (@$_SESSION['class_section2'] !='' and  @$_POST["class_section2"] !=''))
-   //    @$_SESSION["class_section2"]=$class_section2;
-   //-----------------------------------------------------------------------------------------------------
-   //*session_register('class_room');  //補課教室
-   // (!@$_POST["class_room"])  ? $class_room=''  : $class_room=@$_POST["class_room"];
-   // if (@$_SESSION["class_room"]=='' || (@$_SESSION['class_room'] !='' and  @$_POST["class_room"] !=''))
-   //    @$_SESSION["class_room"]=$class_room;
-   //-----------------------------------------------------------------------------------------------------
-   //*session_register('class_memo');  //備註
-   //*session_register('memo_f');//控制備註清空
-   // if ($update=='u')
-   // {
-   //    if (@$_POST["class_memo"]==''  and  @$_SESSION['class_memo'] =='')
-   //    {//第一次進來
-   //       $memo=$temp_memo;
-   //       @$_SESSION["memo_f"]='1';
-   //    }
-   //    else
-   //       $memo = @$_POST["class_memo"];
-
-   //    if (@$_SESSION["memo_f"]=="1")//只要有異動，不管是否清空
-   //       @$_SESSION["class_memo"]=$memo;
-   // }
-   // else
-   // {
-   //    (!@$_POST["class_memo"])  ? $class_memo=''  : $class_memo=@$_POST["class_memo"];
-   //    if (@$_SESSION["class_memo"]=='' || (@$_SESSION['class_memo'] !='' and  @$_POST["class_memo"] !=''))
-   //       @$_SESSION["class_memo"]=$class_memo;
-   // }
-
-   //-----------------------------------------------------------------------------------------------------
 
 //***************************************************
 //非請假補填調補課申請單  class_add_2.php  來的              =>    目前未處理部分
@@ -130,7 +58,6 @@
    }
 
 
-
    if($_POST['oper'] == "qry_record")
    {
       //***************************************************
@@ -139,44 +66,48 @@
 
       $class_year   = $_POST['class_year']; //學年度
       $class_acadm = $_POST['class_acadm']; //學期
-      @$_SESSION['class_year'] = $class_year;
-      @$_SESSION['class_acadm'] = $class_acadm;
+      // @$_SESSION['class_year'] = $class_year;
+      // @$_SESSION['class_acadm'] = $class_acadm;
 
-      if (@$_POST['class_year'] == '')
-      {  //來自 store
-         $class_year   = @$_GET['year']; //學年度
-         $class_acadm = @$_GET['acadm']; //學期
-      }
+      // if (@$_POST['class_year'] == '')
+      // {  //來自 store
+      //    $class_year   = @$_GET['year']; //學年度
+      //    $class_acadm = @$_GET['acadm']; //學期
+      // }
 
-      if (@$_SESSION['class_year'] == '' || @$_SESSION['class_year'] != $class_year || @$_SESSION['class_acadm'] != $class_acadm)
-      {
-         @$_SESSION['class_year'] = $class_year;
-         @$_SESSION['class_acadm'] = $class_acadm;
-      }
+      // if (@$_SESSION['class_year'] == '' || @$_SESSION['class_year'] != $class_year || @$_SESSION['class_acadm'] != $class_acadm)
+      // {
+      //    @$_SESSION['class_year'] = $class_year;
+      //    @$_SESSION['class_acadm'] = $class_acadm;
+      // }
 
 
-      if ( @$_POST['serialno'] == '')  //從未休假修改申請單
-            $serialno= $year.$month.$day.$_SESSION["empl_no"];
+      if ( $_POST['serialno'] == '')  //從未休假修改申請單
+         $serialno= $year.$month.$day.$_SESSION["empl_no"];
       else
-            $serialno= @$_POST['serialno']; //來自非請假調補課修改  class_add_2.php
+         $serialno= $_POST['serialno']; //來自非請假調補課修改  class_add_2.php
 
 
       $name='';
-      if (@$_GET['serialno'] !='')
+
+      if ($_POST['serialno'] !='')
       {          //來自 class_apply.php
-         @$Sthis_serialno = @$_GET['serialno'];
-         $serialno= @$_GET['serialno'];
+         $Sthis_serialno = $_POST['serialno'];
+         $serialno= $_POST['serialno'];
          $query2 = @$_GET['query'];     //來自 class_apply.php
-         $sql="select   empl_chn_name
-               from  psfempl
-               where  empl_no=".$_SESSION["empl_no"];
+         $sql="select empl_chn_name from psfempl where empl_no='$_SESSION[empl_no]'";
+
+         // echo json_encode($sql);
+         // exit;
+
          $data = $db -> query_array($sql);
          $name = $data["EMPL_CHN_NAME"][0];
       }
 
+
       $SQLStr = "SELECT * FROM haveclass WHERE class_serialno='$serialno'";
 
-      // echo json_encode($serialno);
+      // echo json_encode($SQLStr);
       // exit;
 
       // echo json_encode($query2 . " " . $query2_ck);
@@ -306,20 +237,6 @@
       // $_SESSION["scr_period"]= $scr_period;   //原上課節次等
    }
 
-   // if($_POST['oper'] == 'qry_dates')
-   // {
-   //    $date = array();
-   //    $date["cyear"] = $year ;
-   //    $date["cmonth"] = $month ;
-   //    $date["cday"] = $day ;
-
-   //    $date["dyear"] = $year ;
-   //    $date["dmonth"] = $month ;
-   //    $date["dday"] = $day ;
-
-   //    echo json_encode($date);
-   //    exit;
-   // }
 
    if($_POST['oper'] == "del")
    {
@@ -737,7 +654,7 @@
       $update = "UPDATE haveclass SET CLASS_SERIALNO ='$this_serialno', CLASS_NO = '$class_no', CLASS_DEPART = '$depart', CLASS_NAME = '$class_name', CLASS_CODE = '$class_code', CLASS_SUBJECT = '$class_subject', CLASS_ID = '$class_id', CLASS_DATE = '$class_date', CLASS_WEEK = '$class_week' , CLASS_SECTION = '$class_section', CLASS_DATE2 = '$class_date2', CLASS_WEEK2 ='$class_week2' ,CLASS_SECTION2 = '$class_section2', CLASS_ROOM = '$_POST[class_room]', CLASS_MEMO = '$_POST[class_memo]', CLASS_SELCODE = '$selcode', CLASS_YEAR = '$_POST[class_year]', CLASS_ACADM = '$_POST[class_acadm]' WHERE CLASS_SERIALNO = '$serialno' AND CLASS_NO = '$class_no' ";
       // echo json_encode($update);
       // exit;
-      
+
       $result = $db -> query_trsac($update);
       // echo json_encode($result);
       // exit;

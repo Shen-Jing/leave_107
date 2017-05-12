@@ -12,8 +12,8 @@ if ($_POST['oper'] == 0) {
   $a['data'] = "";
 
   $a['data'][] = array(
-    "<input value='' type='number' id='sysid-1' class='form-control' size='5' placeholder='序號' readonly>",
-    "<input value='' type='text' id='prgname-1' class='form-control' size='100' placeholder='新增差假原因'>",
+    "<input value='' type='number' id='sysid-1' class='form-control' placeholder='序號' readonly>",
+    "<input value='' type='text' id='prgname-1' class='form-control' size='50' placeholder='新增差假原因'>",
     "<button type='button' class='btn-success' name='modify' id='modify' title='修改儲存' onclick='CRUD(1, -1)' title='新增儲存'><i class='fa fa-save'></i></button>"
   );
   for($i = 0; $i < count($row['SYSID']); ++$i){
@@ -21,8 +21,8 @@ if ($_POST['oper'] == 0) {
     $prgname = $row['PRGNAME'][$i];
 
     $a['data'][] = array(
-      "<input value='$sysid' type='number' id='sysid$sysid' class='form-control' size='5' >",
-      "<input value='$prgname' type='text' id='prgname$sysid' class='form-control' size='100'>",
+      "<input value='$sysid' type='number' id='sysid$sysid' class='form-control'>",
+      "<input value='$prgname' type='text' id='prgname$sysid' class='form-control' size='50'>",
       "<button type='button' class='btn-success' name='modify' id='modify' title='修改儲存' onclick='CRUD(2, $sysid)' title='儲存修改'><i class='fa fa-save'></i></button>" .
       "<button type='button' class='btn-danger' name='delete' onclick='CRUD(3, $sysid)' title='刪除'><i class='fa fa-times'></i></button>"
     );
