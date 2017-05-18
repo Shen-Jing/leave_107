@@ -14,7 +14,7 @@ function init_table() {
         $('#update_table').DataTable({
             // 無資料時收起
             fnInitComplete: function() {
-                if ($(this).find('tbody tr').length <= 1) {
+                if (utb.data().count() == 0) {
                     togglePanel($(this).parent().parent());
                 }
             },
