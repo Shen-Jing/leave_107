@@ -3,6 +3,7 @@ $(function() {
 
     initTable();
 
+    initSearchModal();
 
 
     $('#unpassed').on('change', function() { oTable.ajax.reload(); });
@@ -34,6 +35,7 @@ function initYearMonthsSel() {
 function initTable() {
     oTable =
         $('#oTable').DataTable({
+            "dom": 'Bfrtip',
             "responsive": true,
             "processing": true,
             "language": {
@@ -73,9 +75,68 @@ function initTable() {
                     }
                 },
                 { "className": "dt-center", "targets": "_all" }
+            ],
+            "buttons": [{
+                    text: '選擇人員',
+                    action: function(e, dt, node, config) {
+                        $('#Modalsearch').modal('show');
+                    },
+                },
+                {
+                    text: '顯示全部',
+                    action: function(e, dt, node, config) {
+                        $('#qry_emps').val('').trigger('change');
+                    }
+                }
             ]
         });
+    $('#oTable').on('click', 'tbody tr', function() {
+        eval($(this).find('td > button').attr('onclick'));
+    });
+}
 
+function initSearchModal() {
+    $.post(
+        'ajax/update_all_ajax.php', { oper: 'qrydept' },
+        function(data) {
+            for (var i = 0; i < data.length; i++) {
+                $('#qry_dept')
+                    .append($("<option></option>")
+                        .attr("value", data[i].DEPT_NO)
+                        .text(data[i].DEPT_FULL_NAME));
+            }
+
+            $('#qry_dept').on('change', function() {
+                fnQrydept();
+            });
+
+            var fnQrydept = function() {
+                $.post(
+                    'ajax/update_all_ajax.php', { oper: 'qryemps', dept: $('#qry_dept').val() },
+                    function(data) {
+                        $('#qry_emps').html('').val('').append('<option value="">請選擇人員</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            var item = data[i].EMPL_CHN_NAME;
+                            $('#qry_emps')
+                                .append($("<option></option>")
+                                    .attr("value", item)
+                                    .text(item)
+                                );
+                        }
+                    },
+                    'json'
+                )
+            };
+
+            $('#qry_emps').on('change', function() {
+                oTable.columns(1)
+                    .search(this.value, false, false)
+                    .draw();
+            });
+
+        },
+        'json'
+    );
 }
 
 function openHoildayForm(sn) {

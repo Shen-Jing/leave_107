@@ -1,5 +1,3 @@
-<? define("DEVMODE", 1, true); ?>
-
 <? include("inc/header.php"); ?>
 
 <? include("inc/navi.php"); ?>
@@ -80,6 +78,39 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Modalsearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h4 class="modal-title">請選擇人員</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 col-lg-12">
+                        <div class="form-group">
+                            部門
+                            <select class="form-control" id="qry_dept">
+                                <option value="">請選擇部門</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <div class="form-group">
+                            人員
+                            <select class="form-control" id="qry_emps"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
             </div>
         </div>
     </div>

@@ -10,11 +10,50 @@ $userid = $_SESSION['empl_no'];
 
 switch(@$_POST['oper'])
 {
+	case "qrydept":
+		goto QRYDEPT;
+	case "qryemps":
+		goto QRYEMPS;
     case "load":
         goto LOAD;
     default:
         exit;
 }
+
+QRYDEPT:
+
+$sql = "SELECT substr(min(dept_no), 0, 2) DEPT_NO, min(dept_full_name) DEPT_FULL_NAME
+		FROM stfdept
+		WHERE use_flag is null			
+		GROUP BY substr(dept_no,1,2)
+		";
+
+$data = $db -> query_array($sql, true);
+
+echo json_encode($data); 
+
+exit;
+
+QRYEMPS:
+
+if(empty($_POST['dept']))
+	exit;
+$dept = $_POST['dept'];
+
+$sql = "SELECT empl_chn_name
+		FROM   psfempl,psfcrjb
+		WHERE  empl_no=crjb_empl_no 
+		AND    crjb_seq>='1'
+		AND    crjb_quit_date is null
+		AND    substr(empl_no,1,1) in ('0','5','7','3','4')
+		AND    substr(crjb_depart,1,2)='$dept'
+		";
+
+$data = $db -> query_array($sql, true);
+
+echo json_encode($data); 
+
+exit;
 
 
 LOAD:
