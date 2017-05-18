@@ -127,6 +127,7 @@ function CRUD(oper, id) {
     "lengthChange": true,
     "processing": false,
     "serverSide": false,
+    "dom": 'Bfrtip',
     "ajax": {
         url: 'ajax/all_holiday_query_ajax.php',
         data: { oper: 0, flag:flagval,tyearval:tyval,tmonthval:tmval,tdayval:tdval,syearval:syval,smonthval:smval,sdayval:sdval },
@@ -154,6 +155,9 @@ function CRUD(oper, id) {
         { "name": "D15" },
         { "name": "D16" },
         { "name": "D17" }
+    ],
+    "buttons": [
+      'excel'
     ]
 
 });
