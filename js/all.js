@@ -168,14 +168,6 @@ $( // 表示網頁完成後才會載入
                 $('#eplace').empty();
                 $('#eplace_row').show();
 
-
-                // if ($('input[name="abroad"]:checked').val() == "0") {
-                //     // 起訖時間
-                //     // $('#bus-trip-time').text();
-                //     // 出國會議日程
-                //     // $('#meeting-date').text();
-                // }
-
             }
             else
             {
@@ -225,6 +217,11 @@ $( // 表示網頁完成後才會載入
                             APPDATE : $(this).closest('tr').children()[11].textContent , voc_type: voc_type, p_year: yyval, p_month: mmval, dept_no : dept_no },
                     type: 'POST',
                     dataType: "json",
+                    beforeSend:function(){
+                        $("#data").hide();
+                        $("#myModal").modal("show");
+                        $('#loadingIMG').show();
+                    },
                     success: function(JData) {
                         // alert(JData);
                         var haveclass, abroad;
@@ -288,8 +285,8 @@ $( // 表示網頁完成後才會載入
                         //     row0 = row0 + "<option value=" + JData.EMPL_NO[i] + ">" + JData.EMPL_CHN_NAME[i] + "</option>";
                         // }
                         //     $ ('#qry_dpt_empl').append(row0);
-                        $("#myModal").modal("show");
-
+                        $('#loadingIMG').hide();
+                        $("#data").show();
                     },
                     error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
                 });
