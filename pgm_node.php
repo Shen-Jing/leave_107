@@ -1,7 +1,9 @@
 <?
+// 前置引入
 include("inc/header.php");
 include("inc/navi.php");
 include("inc/sidebar.php");
+// 取得 LEAVE 中所有 pgm 的資料並存入 $d
 $sql ="select distinct pgmid,pgmname,pgmlevel,pgmsort,pgmurl,pgmtype ,parent_folder,folder_img
     from syspgm
     where sysid='LEAVE'
