@@ -35,7 +35,7 @@
 //***************************************************
    $query2 = @$_POST['query2'];  //來自 class_apply.php
 
-   $serialno = @$_GET["serialno"];
+   $serialno = $_POST["serialno"];
    $Sthis_serialno =  $serialno;//未請假修改申請單
    if ($serialno != '')
    {
@@ -85,15 +85,10 @@
       if ( $_POST['serialno'] == '')  //從未休假修改申請單
          $serialno= $year.$month.$day.$_SESSION["empl_no"];
       else
+      {
+         $name='';
          $serialno= $_POST['serialno']; //來自非請假調補課修改  class_add_2.php
-
-
-      $name='';
-
-      if ($_POST['serialno'] !='')
-      {          //來自 class_apply.php
          $Sthis_serialno = $_POST['serialno'];
-         $serialno= $_POST['serialno'];
          $query2 = @$_GET['query'];     //來自 class_apply.php
          $sql="select empl_chn_name from psfempl where empl_no='$_SESSION[empl_no]'";
 
@@ -103,7 +98,6 @@
          $data = $db -> query_array($sql);
          $name = $data["EMPL_CHN_NAME"][0];
       }
-
 
       $SQLStr = "SELECT * FROM haveclass WHERE class_serialno='$serialno'";
 

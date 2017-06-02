@@ -30,12 +30,12 @@
                 <div class="row">
                     <div align="center">
                         <div class='form-group'>
-                            <div class="col-md-4">請選擇目前學年度:
+                            <div class="col-md-6">請選擇目前學年度:
                                 <select class='form-control' style='width:auto; display: inline-block;' id="class_year" name='class_year'></select>
                             </div>
                         </div>
                         <div class='form-group'>
-                            <div class="col-md-4">請選擇學期:
+                            <div class="col-md-6">請選擇學期:
                                 <select class='form-control' style='width:auto; display: inline-block;' id="class_acadm" name='class_acadm'>
                                     <option selected disabled value = '' class='text-hide'>請選擇學期</option>
                                     <option value='1'>1</option>
