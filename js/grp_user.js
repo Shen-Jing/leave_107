@@ -105,13 +105,13 @@ $(function(){
   });
   $('#open').click(function() {
     $('.user ol').slideDown();
-    $('.user ol').children('i').removeClass('fa-caret-square-o-up');
-    $('.user ol').children('i').addClass('fa-caret-square-o-down');
+    $('.user ol').siblings('i').removeClass('fa-caret-square-o-up');
+    $('.user ol').siblings('i').addClass('fa-caret-square-o-down');
   });
   $('#close').click(function() {
     $('.user ol').slideUp();
-    $('.user ol').children('i').removeClass('fa-caret-square-o-down');
-    $('.user ol').children('i').addClass('fa-caret-square-o-up');
+    $('.user ol').siblings('i').removeClass('fa-caret-square-o-down');
+    $('.user ol').siblings('i').addClass('fa-caret-square-o-up');
   });
   function usersInsert(users, grp)
   {
