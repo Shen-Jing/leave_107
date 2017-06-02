@@ -45,6 +45,8 @@ $u = $db -> query_array($sql);
         for ($i=0, $j=0; $i < sizeof($g['GRPID']); $i++) {
           $grpid = $g['GRPID'][$i];
           $grpname = $g['GRPNAME'][$i];
+          // 預設展開
+          //echo "<li id='$grpid' class='grp-li'>$grpname <i class='fa fa-caret-square-o-down'></i>
           echo "<li id='$grpid' class='grp-li' style='display:none;'>$grpname <i class='fa fa-caret-square-o-up'></i>
           <ol class='grp' style='display: none'>";
           for (; $j < sizeof($gu['GRPID']); $j++)
