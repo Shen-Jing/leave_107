@@ -45,8 +45,6 @@ $u = $db -> query_array($sql);
         for ($i=0, $j=0; $i < sizeof($g['GRPID']); $i++) {
           $grpid = $g['GRPID'][$i];
           $grpname = $g['GRPNAME'][$i];
-          // 預設展開
-          //echo "<li id='$grpid' class='grp-li'>$grpname <i class='fa fa-caret-square-o-down'></i>
           echo "<li id='$grpid' class='grp-li' style='display:none;'>$grpname <i class='fa fa-caret-square-o-up'></i>
           <ol class='grp' style='display: none'>";
           for (; $j < sizeof($gu['GRPID']); $j++)
@@ -79,6 +77,9 @@ $u = $db -> query_array($sql);
         <option value='8'>工友</option>
         <option value='9'>兼任教師</option>
       </select>
+      <br/>
+      <button class='btn btn-info btn-xs' id="open">全展開</button>
+      <button class='btn btn-info btn-xs' id="close">全縮合</button>
       <br/>
       <ol class="root user vertical"><!-- content -->
         <?

@@ -103,6 +103,16 @@ $(function(){
       $(this).addClass('fa-caret-square-o-up');
     }
   });
+  $('#open').click(function() {
+    $('.user ol').slideDown();
+    $('.user ol').children('i').removeClass('fa-caret-square-o-up');
+    $('.user ol').children('i').addClass('fa-caret-square-o-down');
+  });
+  $('#close').click(function() {
+    $('.user ol').slideUp();
+    $('.user ol').children('i').removeClass('fa-caret-square-o-down');
+    $('.user ol').children('i').addClass('fa-caret-square-o-up');
+  });
   function usersInsert(users, grp)
   {
     for (var i = 0; i < users.length; i++)
