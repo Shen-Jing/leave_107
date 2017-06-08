@@ -1,3 +1,4 @@
+<? include("inc/header.php"); ?>
     <? include("inc/navi.php"); ?>
         <? include("inc/sidebar.php"); ?>
 <style>
@@ -65,6 +66,7 @@
 					<tr>
 						<td colspan="4" align="center">
 							<button type="submit" class="btn btn-primary" name="action" >送出計算</button>
+<? include("inc/header.php"); ?>
 						</td>
 					</tr>
 				</table>
