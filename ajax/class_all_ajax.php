@@ -28,6 +28,107 @@
 
         echo json_encode($data);
         exit;
+    }else if($_POST['oper'] == "view")
+    {
+      $sn=$_POST['serialno'];
+
+      $data = array();
+      if ($sn !=''){ //來自 class_apply.php
+        $sql="select empl_chn_name,poremark,
+              substr(CODE_CHN_ITEM,1,2)  code_chn_item
+		          from holidayform,psfempl,psqcode
+		          where  empl_no=pocard
+		          and  serialno='$sn'
+		          and CODE_KIND='0302'
+		          and CODE_FIELD=POVTYPE";
+		            //echo $sql;
+        $row = $db -> query_array($sql);
+        $name=$row["EMPL_CHN_NAME"][0];
+        $povtype=$row["CODE_CHN_ITEM"][0];
+        $poremark=$row["POREMARK"][0];
+
+      $data = array('NAME'=> $name, 'POVTYPE' => $povtype, 'POREMARK' => $poremark );
+      }
+
+      //echo $sn;
+      if (substr($level,0,1)=='n')
+		    $SQLStr ="select * from haveclass
+					       where class_serialno='$sn'
+					       and   substr(class_code,1,1) ='N' ";
+      else
+		    $SQLStr ="select * from haveclass
+					       where class_serialno='$sn'
+					       and   substr(class_code,1,1) !='N' ";
+      $row = $db -> query_array($SQLStr);
+      $class_memo='-';
+		  $class_name    = '-';
+		  $class_subject = '-';
+		  $class_date    = '-';
+		  $class_date2   = '-';
+		  $class_room    = '-';
+		  $class_section = '-';
+		  $class_code    = '-';
+		  $class_week    = '-';
+		  $class_week2   = '-';
+		  $class_memo    = '-';
+		  $class_selcode = '-';
+	    $sign_name    ='-';
+	    $acadm_date   ='-';
+	    $acadm2_date  ='-';
+	    $acadm3_date  ='-';
+	    $acadm_reason ='-';
+	    $acadm2_reason='-';
+	    $acadm3_reason='-';
+      for($i = 0 ; $i < count($row['CLASS_NAME']) ; $i++)
+      {
+        $class_memo='';
+		    $data["dtl"]['CLASS_NAME'][$i]    = $row['CLASS_NAME'][$i];
+		    $data["dtl"]['CLASS_SUBJECT'][$i] = $row['CLASS_SUBJECT'][$i];
+		    $data["dtl"]['CLASS_DATE'][$i]   = $row['CLASS_DATE'][$i]."(".$row['CLASS_WEEK'][$i].")";
+		    $data["dtl"]['CLASS_DATE2'][$i]   = $row['CLASS_DATE2'][$i]."(".$row['CLASS_WEEK2'][$i].")";
+		    $data["dtl"]['CLASS_ROOM'][$i]    = $row['CLASS_ROOM'][$i];
+		    $data["dtl"]['CLASS_SECTION2'][$i] = $row['CLASS_SECTION2'][$i];
+		    $data["dtl"]['CLASS_SELCODE'][$i] = $row['CLASS_SELCODE'][$i];
+        if($row['CLASS_MEMO'][$i]!="")
+        {
+          $data["dtl"]['CLASS_MEMO'][$i] = $row['CLASS_MEMO'][$i];
+        }else {
+          $data["dtl"]['CLASS_MEMO'][$i]=$class_memo;
+        }
+
+      }
+
+      echo json_encode($data);
+      exit;
+    }else if($_POST['oper']=="sign")
+    {
+      $sn=$_POST['serialno'];
+      $level=$_PSOT['level'];
+      if (substr($level,0,1)=='n')
+			$SQLStr ="select  nvl(empl_chn_name,'-') empl_chn_name,
+							  nvl(night_date,'-') acadm_date,
+							  nvl(night2_date,'-')	acadm2_date,
+							  nvl(night3_date,'-')  acadm3_date,
+							  nvl(night_reason,'-') acadm_reason,
+							  nvl(night2_reason,'-') acadm2_reason,
+							  nvl(night3_rreason,'-') acadm3_reason
+					      from   holidayform,psfempl
+					      where  night_sign = empl_no
+					      and    serialno='$sn'";
+      else
+			$SQLStr ="select  nvl(empl_chn_name,'-') empl_chn_name,
+							 nvl(acadm_date,'-')    acadm_date,
+							 nvl(acadm2_date,'-')   acadm2_date,
+							 nvl(acadm3_date,'-')   acadm3_date,
+							 nvl(acadm_reason,'-')  acadm_reason,
+							 nvl(acadm2_reason,'-') acadm2_reason,
+							 nvl(acadm3_rreason,'-') acadm3_reason
+					     from   holidayform,psfempl
+					     where  acadm_sign = empl_no
+					     and    serialno='$sn'";
+      $row = $db -> query_array($SQLStr);
+      echo json_encode($row);
+      exit;
     }
     if($_POST['oper'] == 0)
     {
@@ -96,7 +197,7 @@
 		      if (strlen($povtimee) > 2)
 			       $povtimee=substr($povtimee,0,2).":".substr($povtimee,2,2);
           $time=$povdays."天".$povhours."時";
-          $tt="待補";
+
           $a['data'][] = array(
             $deptname,
             $poname,
@@ -110,12 +211,15 @@
             $acadm_date,
             $acadm2_date,
             $acadm3_date,
-            $tt
+            "<button type='button' class='btn-primary' name='view' id='view' onclick='View($serialno,$s_dept)' title='查看內容'>查看內容</button>"
           );
         }
       }
       echo json_encode($a);
+      exit;
     }
+
+
 
 
 

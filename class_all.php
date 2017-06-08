@@ -82,10 +82,66 @@
                                 </div>
                             </div>
                         </div>
+
+
                 </div>
                 <!-- /.container-fluid -->
             </div>
             <!-- /#page-wrapper -->
+            <!-- Modal -->
+            <div class="modal fade" id="fullscrModal" tabindex="-1" role="dialog" aria-labelledby="fullscrModalLabel" aria-hidden="true">
+                <div class="modal-dialog fullscr-iframe">
+                    <div class="modal-content fullscr-iframe">
+                      <div class="panel-body">
+                        <div class="panel panel-primary"  >
+                        <div class="panel-heading">
+                            <font STYLE="font-family:微軟正黑體"><div id="title_name"></div></font>
+                        </div>
+                        <div class="table-responsive">
+
+                          <table class="table table-striped table-bordered dt-responsive nowrap" >
+
+
+
+
+                            <div class="form-group">
+                                <!--link rel="stylesheet" href="style.css"-->
+                                <div id="class_content">
+                                </div>
+                            </div>
+
+                        </table>
+                        </div>
+
+                        </div>
+
+                        <div class="panel panel-primary"  >
+                        <div class="panel-heading">
+                            <font STYLE="font-family:微軟正黑體">該假單簽核流程</font>
+                        </div>
+                        <div class="table-responsive">
+
+                          <table class="table table-striped table-bordered dt-responsive nowrap" >
+
+
+
+
+                            <div class="form-group">
+                                <!--link rel="stylesheet" href="style.css"-->
+                                <div id="class_content2">
+                                </div>
+                            </div>
+
+                        </table>
+                        </div>
+
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <? include("inc/footer.php"); ?>
-</body>
-</html>
