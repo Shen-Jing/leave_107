@@ -93,25 +93,24 @@ function CRUD(oper, id) {
         ],
     });
 
-
-    $.ajax({
-        url: 'ajax/busi_travel_ajax.php',
-        data: { oper: oper , year: yyval, month: mmval, department: dptval, SERIALNO: id },
-        type: 'POST',
-        dataType: "json",
-        success: function(JData) {
-            if (JData.error_code)
-                toastr["error"](JData.error_message);
-            else{
-                    if (oper == 2) { //更新
+    if (oper == 2) { //更新
+        $.ajax({
+            url: 'ajax/busi_travel_ajax.php',
+            data: { oper: oper , year: yyval, month: mmval, department: dptval, SERIALNO: id },
+            type: 'POST',
+            dataType: "json",
+            success: function(JData) {
+                if (JData.error_code)
+                    toastr["error"](JData.error_message);
+                else{
                         if(JData)
                             toastr["success"]("出差銷核成功!");
                         else
                             toastr["error"]("出差銷核有誤!");
                         CRUD(0); //reload
-                }
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
-    });
+                    }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {console.log(xhr.responseText);alert(xhr.responseText);}
+        });
+    }
 }
