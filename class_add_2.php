@@ -23,13 +23,11 @@
         </div>
         <div class="panel-body panel-height">
                 <div class="row">
-                    <div align="center">
                         <div class='form-group'>
-                            <div class="col-md-4">請選擇年份:
+                            <div class="col-md-12">請選擇年份:
                                 <select class='form-control' style='width:auto; display: inline-block;' id="class_year" name='class_year'></select>
                             </div>
                         </div>
-                    </div>
                 </div>
             <!-- Modal Body -->
             <div class="modal-body">

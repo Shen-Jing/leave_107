@@ -93,14 +93,12 @@
 							<div class="form-group">
 								<div class="row">
 									<div class="col-md-12">
-										<div class="col-md-3">
+										<div class="col-md-6">
 											<font>從</font>
 											<input type='text' class="form-control" id='begin_time' name="begin_time" readonly="true" style='width:auto; display: inline-block;'>
 										</div>
-										<!-- <div class="col-md-1">
-											<font>到</font>
-										</div> -->
-										<div class="col-md-3">
+
+										<div class="col-md-6">
 											<font>到</font>
 											<input type='text' class="form-control" id='end_time' name="end_time" readonly="true" style='width:auto; display: inline-block;'>
 										</div>
@@ -115,11 +113,11 @@
 						<td class="col-md-3">
 							<div class='form-group'>
 								<div class="row">
-									<div class='col-md-5'>
+									<div class='col-md-6'>
 										<font color='darkred' size='2'>開始加班刷卡資料</font>
 										<select class='form-control' style='width:auto; display: inline-block;' id="btime" name='btime'></select>
 									</div>
-									<div class="col-md-5">
+									<div class="col-md-6">
 										<font color='red' size='2'>1.例假日請選實際刷進時間。<br>
 									                             2.上班日請選「得下班時間」<br>
 																 例如：8:11上班則選17:11</font>
@@ -131,11 +129,11 @@
 						<td class="col-md-2" colspan="2">
 							<div class='form-group'>
 								<div class="row">
-									<div class='col-md-5'>
+									<div class='col-md-6'>
 										<font color='darkred' size='2'>結束加班刷卡資料</font>
 										<select class='form-control' style='width:auto; display: inline-block;' id='etime' name='etime' ></select>
 									</div>
-									<div class="col-md-5">
+									<div class="col-md-6">
 										<font color='red' size='2'>1.請選實際刷退時間<br>
 																	2.畢業典禮「等」不必刷退請選17:00</font>
 									</div>

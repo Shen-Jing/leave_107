@@ -17,13 +17,13 @@
                                     </div>
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     年份
                                                     <select class="form-control" name="qry_year" id="qry_year" style='display: inline-block; width: auto;'></select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     月份
                                                     <select class="form-control" name="qry_month" id="qry_month" style='display: inline-block; width: auto;'></select>

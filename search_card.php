@@ -16,14 +16,15 @@
                                         查詢條件
                                     </div>
                                     <div class="panel-body">
-                                    <div class="row">
-                                    	請選擇年份
-                                    	<select class="form-control" name="qry_year" id="qry_year" style='display: inline-block;'></select>
-
-                                    	請選擇月份
-                                    	<select class="form-control" name="qry_month" id="qry_month" style='display: inline-block;'></select>
-
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                請選擇年份<select class="form-control" name="qry_year" id="qry_year" style='display: inline-block; width: auto;'></select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                請選擇月份
+                                                <select class="form-control" name="qry_month" id="qry_month" style='display: inline-block; width: auto;'></select>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>

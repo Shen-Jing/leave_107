@@ -48,7 +48,6 @@
                 where  code_kind='0302'
                 and     code_field !='**'
                 order by code_field ";
-                // and code_field in ('03','04','01','05','07','08','09','23')";
         $data = $db -> query_array($sql2);
 
         echo json_encode($data);
@@ -56,8 +55,6 @@
     }
     else if($_POST["oper"] == "voc_detail")
     {
-        // echo json_encode("!!!!");
-        // exit;
 
         $permit_commt = 0;
         $eplace = 0;
@@ -83,8 +80,7 @@
         }
 
         $j = count($_POST["voc_type"]);
-        // echo $j;
-        // exit;
+
 
         if($permit_commt)
         {
@@ -186,9 +182,6 @@
         $data["class_abroad"] = $class_arr;
 
 
-        // echo $_POST["voc_type"][0]."/".$_POST["voc_type"][1]."/".$_POST["voc_type"][2];
-        // echo $j."/".$permit_commt."/".$eplace."/".$trip."/".$nouse."/".$budget;
-
 
         echo json_encode($data);
         exit;
@@ -196,7 +189,6 @@
     }
     else
     {
-        // if($_POST['oper'] == 0)
         if($_POST["empl_no"] == 'null' || $_POST['empl_no'] == "請選擇人員")
         {
             if ( $_POST['dpt'] == 'null' || $_POST['dpt'] == "請選擇單位" )
@@ -299,8 +291,7 @@
                     order by depart,h.POVDATEB desc ,h.POVHOURS desc,depart";
         }
 
-        // echo "<script> alert(".$SQLStr.")</script>";
-        // exit;
+
 
         $row = $db -> query_array($SQLStr);
 
@@ -341,7 +332,7 @@
 
         }
         echo json_encode($a);
-        //exit;
+
     }
 
 ?>

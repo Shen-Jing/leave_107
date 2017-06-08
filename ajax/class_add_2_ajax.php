@@ -20,8 +20,6 @@
 
   		$sql = "select * from haveclass where class_serialno='$serialno' order by class_no ";
 
-  		// echo json_encode($sql);
-  		// exit;
 
   		$row = $db -> query_array($sql);
 

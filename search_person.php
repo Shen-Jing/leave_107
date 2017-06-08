@@ -13,8 +13,8 @@
                                     </div>
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
                                                     請選擇查詢學年度(教師)或年度(職員)
                                                     <select class="form-control" name="qry_year" id="qry_year" style='display: inline-block; width: auto;'></select>
                                                 </div>
@@ -35,7 +35,6 @@
                                                 <div class="form-group">
                                                     <div>
                                                     </div>
-                                                    <!--link rel="stylesheet" href="style.css"-->
                                                     <div id="_content1">
                                                     </div>
                                                     <div id="loading1" class="text-center" style="display:none">
@@ -63,7 +62,6 @@
                                                 <div class="form-group">
                                                     <div>
                                                     </div>
-                                                    <!--link rel="stylesheet" href="style.css"-->
                                                     <div id="_content2">
                                                     </div>
                                                     <div id="loading2" class="text-center" style="display:none">

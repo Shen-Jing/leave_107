@@ -204,8 +204,7 @@
 				$SQLStr = "SELECT  saly_salary_n,saly_reasearch_al_n,nvl(saly_chief_al_n,0) chief from     school.tot_sal where   saly_empl_no ='$empl_no' and     saly_yy='$year' and     saly_mm='$month'";   //主管
 			}
 
-			// echo json_encode($SQLStr);
-			// exit;
+
 
 			$data2 = $db -> query_array($SQLStr);
 
@@ -286,8 +285,7 @@
 			$sql = "SELECT empl_no,empl_name,nvl(dept_short_name,'-') dept_short_name,holiday_senior,shall_holiday, already_holiday,apply_work_day,salary,no_rest_money,travel_money FROM ps_senior,stfdept	WHERE empl_no IN (SELECT crjb_empl_no FROM   psfcrjb WHERE crjb_seq > '1' AND crjb_quit_date is NULL AND substr(crjb_empl_no,1,1)='0') AND depart= dept_no ORDER BY depart";
 		}
 
-		// echo json_encode($sql);
-		// exit;
+
 
 		$count = $db -> query_array($sql);
 
@@ -346,14 +344,6 @@
 		$a["spans"]["tot_no_rest"] = $tot_no_rest;
 		$a["spans"]["tot_travel"] = $tot_travel;
 		$a["spans"]["tot_sum"] = $tot_sum;
-
-		// echo "<tr>";
-		// echo "<td align=\"center\" colspan=\"8\"><font color='darkred'>全部統計&nbsp;&nbsp;".$t."&nbsp;&nbsp;人";
-		// echo "<td align=\"center\"><font color='darkred'>$tot_no_rest";
-		// echo "<td align=\"center\"><font color='darkred'>$tot_travel";
-		// echo "<td align=\"center\"><font color='darkred'>$tot_sum";
-		// echo "</tr>";
-		// echo "</table>";
 
 		echo json_encode($a);
 		exit;

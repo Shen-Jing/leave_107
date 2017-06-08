@@ -31,7 +31,7 @@
    $Snight_return = "";
 
 //***************************************************
-//非請假補填調補課申請單  class_add_2.php  來的              =>    目前未處理部分
+//非請假補填調補課申請單  class_add_2.php  來的
 //***************************************************
    $query2 = @$_POST['query2'];  //來自 class_apply.php
 
@@ -43,8 +43,7 @@
       $sql = "select substr(pocard,1,3) byear,substr(pocard,4,2) bmonth,substr(pocard,6,2) bday, acadm_return,night_return
              from no_holidayform
              where pocard='$serialno'";
-             // echo json_encode($sql);
-             // exit;
+
 
       $data = $db -> query_array($sql);
       if (empty($data["message"]))
@@ -61,25 +60,11 @@
    if($_POST['oper'] == "qry_record")
    {
       //***************************************************
-      //填調補課申請單學年度及學期  class_year_2.php  來的     =>    目前處理部分
+      //填調補課申請單學年度及學期  class_year_2.php  來的
       //***************************************************
 
       $class_year   = $_POST['class_year']; //學年度
       $class_acadm = $_POST['class_acadm']; //學期
-      // @$_SESSION['class_year'] = $class_year;
-      // @$_SESSION['class_acadm'] = $class_acadm;
-
-      // if (@$_POST['class_year'] == '')
-      // {  //來自 store
-      //    $class_year   = @$_GET['year']; //學年度
-      //    $class_acadm = @$_GET['acadm']; //學期
-      // }
-
-      // if (@$_SESSION['class_year'] == '' || @$_SESSION['class_year'] != $class_year || @$_SESSION['class_acadm'] != $class_acadm)
-      // {
-      //    @$_SESSION['class_year'] = $class_year;
-      //    @$_SESSION['class_acadm'] = $class_acadm;
-      // }
 
 
       if ( $_POST['serialno'] == '')  //從未休假修改申請單
@@ -92,8 +77,6 @@
          $query2 = @$_GET['query'];     //來自 class_apply.php
          $sql="select empl_chn_name from psfempl where empl_no='$_SESSION[empl_no]'";
 
-         // echo json_encode($sql);
-         // exit;
 
          $data = $db -> query_array($sql);
          $name = $data["EMPL_CHN_NAME"][0];
@@ -101,16 +84,9 @@
 
       $SQLStr = "SELECT * FROM haveclass WHERE class_serialno='$serialno'";
 
-      // echo json_encode($SQLStr);
-      // exit;
-
-      // echo json_encode($query2 . " " . $query2_ck);
-      // exit;
 
       $rec_query = $db -> query_array($SQLStr);
 
-      // echo json_encode($rec_query);
-      // exit;
 
       $rec_data = array();
       for($i = 0 ; $i < count($rec_query["CLASS_NAME"]) ; $i++)

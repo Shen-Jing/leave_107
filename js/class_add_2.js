@@ -20,7 +20,6 @@ $(
 $('#class_year').change( // 抓取區域選完的資料
     function(e) {
         if ($('#class_year').val() !== "") {
-            // alert($('#class_year').val());
             CRUD(0); //query
         }
     }
@@ -32,10 +31,6 @@ function CRUD(oper) {
     var yyval, empl_no, depart;
 
     yyval = $ ('#class_year').val();
-    // empl_no = $ ('#qry_dpt_empl').val();
-    // depart = $ ('#depart').text();
-
-    // alert("CRUD");
 
     if(oper == 0)
     {

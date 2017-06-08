@@ -1,9 +1,6 @@
 <?php
-  session_start();
-  include '../inc/connect.php';
-	//加班作業  1000429
-	//**********************************************************
-    //require("check.php");
+  	session_start();
+ 	include '../inc/connect.php';
     $empl_no = $_SESSION['empl_no'];
     $empl_name = $_SESSION['empl_name'];
 

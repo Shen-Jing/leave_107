@@ -130,7 +130,6 @@
                                 <td colspan="3">
                                     <div class='form-group'>
                                         <input type="text" class="form-control" name="class_room" id="class_room">
-                                        <!-- <font size="4"> -->
                                     </div>
                                 </td>
                             </tr>
@@ -142,7 +141,6 @@
                                 <div class='form-group'>
                                     <td colspan="3">
                                         <input type="text" class="form-control" name="class_memo" id="class_memo">
-                                        <!-- <font size="4"> -->
                                     </td>
                                 </div>
                             </tr>

@@ -143,7 +143,6 @@ $( // 表示網頁完成後才會載入
 
             var voc_type = [""] ;
 
-            // alert(typeval);
             $('#haveclass').empty();
             $('#abroad').empty();
 
@@ -192,7 +191,6 @@ $( // 表示網頁完成後才會載入
             if (typeval == "11") {
                 voc_type.push('nouse');
 
-                // $('#nouse').text();
             }
             else
                 $('#nouse').hide();
@@ -278,13 +276,7 @@ $( // 表示網頁完成後才會載入
                         }
                         $('#haveclass').text(haveclass);
                         $('#abroad').text(abroad);
-                        // $ ('#qry_dpt_empl').empty();
-                        // row0 = "<option value='請選擇人員' selected>請選擇人員</option>";
-                        // for (var i = 0; i < JData.EMPL_NO.length ; i++)
-                        // {
-                        //     row0 = row0 + "<option value=" + JData.EMPL_NO[i] + ">" + JData.EMPL_CHN_NAME[i] + "</option>";
-                        // }
-                        //     $ ('#qry_dpt_empl').append(row0);
+
                         $('#loadingIMG').hide();
                         $("#data").show();
                     },
